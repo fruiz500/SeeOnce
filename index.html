@@ -1,0 +1,651 @@
+﻿<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" manifest="seeonce.appcache">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>SeeOnce</title>
+
+    <meta name="Keywords" content="passlok, URSA, browser, encryption, decryption, symmetric, public key, signature, AES, ECDH, Diffie, Hellman, elliptic curve, advanced, javascript, PGP, PRISM, PassLok">
+    <meta name="Description" content="SeeOnce privacy">
+    <meta name="author" content="F. Ruiz">
+    <meta name="robots" content="index">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<link rel="apple-touch-icon" href="seeonce-touch-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+<!--CSS stylesheet containing the Blue color scheme-->
+<style>
+html {
+	-webkit-text-size-adjust: 100%;
+	overflow-y:scroll;
+}
+body {
+	font-family: Sans-Serif;
+	margin-left: 1%;
+	margin-right: 1%;
+	overflow: auto;
+	background-color: #0099cc;
+	color: #ffffff;
+}
+	.black_overlay{
+		display: none;
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		width: 100%;
+		height: 100%;
+		z-index:1001;
+		-moz-opacity: 0.5;
+		opacity:.50;
+		filter: alpha(opacity=50);
+		background-color: black;
+	}
+	.white_content {
+		display: none;
+		position: absolute;
+		top: 10%;
+		left: 10%;
+		width: 80%;
+		height: 80%;
+		padding: 0px;
+		border: 0px solid gray;
+		z-index:1002;
+		overflow: auto;
+		background-color: #0099cc;
+	}
+	.cssbutton {
+		-webkit-border-radius: 0;
+	  	-moz-border-radius: 0;
+  		border-radius: 15px;
+  		font-family: Arial;
+		font-size:22px;
+  		padding: 14px;
+  		text-decoration: none;
+		border:0px;
+		margin-right: -2px;
+  		color: #CACACA;
+  		background: #0044cc;
+	}
+	.cssbutton:hover {
+		text-decoration: none;
+		cursor: pointer;
+		background: #003399;
+	}
+	.cssbutton:disabled{
+		color: #aeaeae;
+  		background: #4F6AA1;
+		cursor: default;
+	}
+	.cssbutton:disabled:hover{
+		color: #aeaeae;
+  		background: #4F6AA1;
+		cursor: default;
+	}
+	.custom-file-input{
+		color: #0099cc;
+	}
+	.custom-file-input::-webkit-file-upload-button {
+  		visibility: hidden;
+	}
+	.custom-file-input::before {
+ 	 	content: 'Select a file';
+ 		display: inline-block;
+		-webkit-border-radius: 15px;
+  		-moz-border-radius: 15px;
+  		border-radius: 15px;
+  		font-family: Arial;
+		font-size:22px;
+  		padding: 14px;
+		border:0px;
+ 		outline: none;
+  		white-space: nowrap;
+  		-webkit-user-select: none;
+  		cursor: pointer;
+  		text-decoration: none;
+  		color: #CACACA;
+  		background: #0044cc;
+	}
+	.custom-file-input:hover::before {
+  		background: #003399;
+	}
+	.custom-file-input:active::before {
+  		background: #003399;
+	}
+	.cssbox {
+		-webkit-border-radius: 15px;
+  		-moz-border-radius: 15px;
+  		border-radius: 15px;
+		font-size:medium;
+  		padding: 15px;
+  		text-decoration: none;
+		width: 100%;
+		-webkit-appearance: none;
+		box-sizing: border-box;
+   	 	-webkit-box-sizing:border-box;
+    	-moz-box-sizing: border-box;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+  		color: #000000;
+  		background: #D7FFD7;		
+  		border: 1px solid #D3D3D3;
+		overflow: auto;
+	}
+	.helpitem {
+		font-size: medium;
+		cursor: pointer;
+		padding: 1px;
+	}
+	.helpitem:hover {
+		background-color: #0088bb;
+	}
+	.helptext{
+		font-size: medium;
+		display: none;
+	}
+	.intLink { cursor: pointer; }
+	.blink {
+    	-webkit-animation: blink .75s linear infinite;
+    	-moz-animation: blink .75s linear infinite;
+    	-ms-animation: blink .75s linear infinite;
+    	-o-animation: blink .75s linear infinite;
+    	animation: blink .75s linear infinite;
+	}
+		@-webkit-keyframes blink {
+    		0% { opacity: 1; }
+    		50% { opacity: 1; }
+			50.01% { opacity: 0; }
+			100% { opacity: 0; }
+		}
+		@-moz-keyframes blink {
+    		0% { opacity: 1; }
+    		50% { opacity: 1; }
+    		50.01% { opacity: 0; }
+    		100% { opacity: 0; }
+		}
+		@-ms-keyframes blink {
+   			0% { opacity: 1; }
+    		50% { opacity: 1; }
+			50.01% { opacity: 0; }
+			100% { opacity: 0; }
+		}
+		@-o-keyframes blink {
+			0% { opacity: 1; }
+    		50% { opacity: 1; }
+    		50.01% { opacity: 0; }
+    		100% { opacity: 0; }
+		}
+		@keyframes blink {
+    		0% { opacity: 1; }
+    		50% { opacity: 1; }
+    		50.01% { opacity: 0; }
+    		100% { opacity: 0; }
+		}
+		
+input[type=checkbox]{
+ 	/* Larger checkboxes */
+  	-ms-transform: scale(1.7); /* IE */
+	-moz-transform: scale(1.7); /* FF */
+  	-webkit-transform: scale(1.7); /* Safari and Chrome */
+  	-o-transform: scale(1.7); /* Opera */
+ 	padding: 0px;
+	cursor: pointer;
+	border:1px solid #eeeeee;
+}
+input[type=radio]{
+  	/* Larger radio buttons */
+  	-ms-transform: scale(1.7); /* IE */
+ 	-moz-transform: scale(1.7); /* FF */
+  	-webkit-transform: scale(1.7); /* Safari and Chrome */
+  	-o-transform: scale(1.7); /* Opera */
+ 	padding: 0px;
+	cursor: pointer;
+	border:1px solid #eeeeee;
+}
+
+select {
+	-webkit-appearance: button;
+	-moz-appearance: button;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	font-size: medium;
+	width: 30%;
+	margin: 0;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border:1px solid #dedede;
+	color: #666666;
+	background: #D7FFD7;
+}
+
+img.intLink { border: 0; }
+
+#toolBar1 {
+	padding-top: 1px;
+	padding-left: 2px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	background: #0044cc;
+}
+#toolBar1 select {
+	font-size: 10px;
+	width: 80px;
+	padding: 4px;
+	border-radius: 8px;
+}
+#mainBox {
+	width: 100%;
+	padding: 12px;
+	margin-left: auto;
+	margin-right: auto; 
+}
+</style>
+
+<!--License notice and SSL force-->
+<script src="js-head/license.js"></script>
+
+<!--Tweet NaCl crypto library by Dmitry Chestnykh and Devi Mandiri. https://github.com/dchest/tweetnacl-js-->
+<script src="js-opensrc/nacl.js"></script>
+
+<!--scrypt-async-js KDF by Dmitry Chestnykh. Edited to make it synchronous. https://github.com/dchest/scrypt-async-js-->
+<script src="js-opensrc/scrypt-async.js"></script>
+
+<!--lz-string compression algorithm. https://github.com/pieroxy/lz-string-->
+<script src="js-opensrc/lz-string.js"></script>
+
+<!--FastClick, used only on mobile devices. https://github.com/ftlabs/fastclick-->
+<script src="js-opensrc/fastclick.js"></script>
+
+<!--ORIGINAL SeeOnce code, LARGELY DERIVED FROM PASSLOK. localStorage replaced by chrome.storage.local-->
+
+<!--this only loads the blacklist regular expression and its length-->
+<script src="js-head/wordlist.js"></script>
+
+<!--Key and Lock functions-->
+<script src="js-head/KeyLock.js"></script>
+
+<!--cryptographic functions-->
+<script src="js-head/crypto.js"></script>
+
+<!--extra functions for mail, etc.-->
+<script src="js-head/extra.js"></script>
+
+<!--local Directory functions-->
+<script src="js-head/localDir.js"></script>
+
+<!--functions for switching screens, etc.-->
+<script src="js-head/switching.js"></script>
+
+<!--text steganography-->
+<script src="js-head/stego.js"></script>
+
+<!--special functions that work only with Chrome apps and extensions-->
+<script src="js-head/Chromestuff.js"></script>
+
+</head>
+
+<body>
+
+<!--Main screen-->
+<div id="mainScr" style="max-width: 1000px;	margin-left: auto; margin-right: auto; display:block;">
+  <div align="center">
+  <div id="logo" style="height:90px;"><img style="max-width:100%;max-height:100%;" src="data:image/png;base64,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">
+  </div>
+
+<!--message area and local directory box, plus buttons-->
+	<div id="mainMsg" style="font-size:x-large;height:60px;">Please paste the locked message into the box</div><br /><br />
+    
+<!--buttons above the main box-->
+<div id="topBtns" style="display: block;">
+   <button class="cssbutton" id="replyBtn" value="Lock" style="color:lime;" title="lock message (alt-L)" accesskey="l">Lock</button><!--
+--><button class="cssbutton" id="hideBtn" value="Hide" style="" title="switch recipients, or turn the message into regular text (alt-S)" accesskey="s">Switch</button><!--
+--><button class="cssbutton" id="makeChatBtn" value="Chat" style="" title="send a chat invitation by email and start chat (alt-C)" accesskey="c">Chat</button><!--
+--><button class="cssbutton" id="selectBtn" value="Select" style="" title="select the text in the box">Select</button><!--
+--><button class="cssbutton" id="clearBtn" value="Clear" style="" title="clear the text in the box">Clear</button>
+</div>
+
+</div>
+
+<!--toolbar for rich text editing; this first section contains lists for style, fonts, etc.-->   
+<div id="toolBar1" style="display:none;">
+<select id="formatBlock" title="headings, etc.">
+<option selected>- formatting -</option>
+<option value="h1">Title 1 &lt;h1&gt;</option>
+<option value="h2">Title 2 &lt;h2&gt;</option>
+<option value="h3">Title 3 &lt;h3&gt;</option>
+<option value="h4">Title 4 &lt;h4&gt;</option>
+<option value="h5">Title 5 &lt;h5&gt;</option>
+<option value="h6">Subtitle &lt;h6&gt;</option>
+<option value="p">Paragraph &lt;p&gt;</option>
+<option value="pre">Preformatted &lt;pre&gt;</option>
+</select>
+<select id="fontName" title="font type">
+<option class="heading" selected>- font -</option>
+<option>Arial</option>
+<option>Arial Black</option>
+<option>Courier New</option>
+<option>Times New Roman</option>
+<option>Verdana</option>
+<option>Comic Sans MS</option>
+<option>Impact</option>
+<option>Trebuchet MS</option>
+<option>Symbol</option>
+</select>
+<select id="fontSize" title="font size">
+<option class="heading" selected>- size -</option>
+<option value="1">Very small</option>
+<option value="2">A bit small</option>
+<option value="3">Normal</option>
+<option value="4">Medium-large</option>
+<option value="5">Big</option>
+<option value="6">Very big</option>
+<option value="7">Maximum</option>
+</select>
+<select id="foreColor" title="text color">
+<option class="heading" selected>- color -</option>
+<option value="brown">Brown</option>
+<option value="red">Red</option>
+<option value="orange">Orange</option>
+<option value="green">Green</option>
+<option value="blue">Blue</option>
+<option value="purple">Violet</option>
+<option value="violet">Pink</option>
+<option value="yellow">Yellow</option>
+<option value="cyan">Cyan</option>
+<option value="white">White</option>
+<option value="gray">Gray</option>
+<option value="black">Black</option>
+</select>
+<select id="backColor" title="color behind the text">
+<option class="heading" selected>- back color -</option>
+<option value="brown">Brown</option>
+<option value="red">Red</option>
+<option value="orange">Orange</option>
+<option value="green">Green</option>
+<option value="blue">Blue</option>
+<option value="purple">Violet</option>
+<option value="violet">Pink</option>
+<option value="yellow">Yellow</option>
+<option value="cyan">Cyan</option>
+<option value="white">White</option>
+<option value="gray">Gray</option>
+<option value="black">Black</option>
+</select>
+
+<!--rich text editing buttons; images are loaded as data-->
+<div id="toolBar2">
+<img class="intLink" title="Bold" src="data:image/gif;base64,R0lGODlhFgAWAID/AMDAwAAAACH5BAEAAAAALAAAAAAWABYAQAInhI+pa+H9mJy0LhdgtrxzDG5WGFVk6aXqyk6Y9kXvKKNuLbb6zgMFADs=" />
+<img class="intLink" title="Italic" src="data:image/gif;base64,R0lGODlhFgAWAKEDAAAAAF9vj5WIbf///yH5BAEAAAMALAAAAAAWABYAAAIjnI+py+0Po5x0gXvruEKHrF2BB1YiCWgbMFIYpsbyTNd2UwAAOw==" />
+<img class="intLink" title="Underline" src="data:image/gif;base64,R0lGODlhFgAWAKECAAAAAF9vj////////yH5BAEAAAIALAAAAAAWABYAAAIrlI+py+0Po5zUgAsEzvEeL4Ea15EiJJ5PSqJmuwKBEKgxVuXWtun+DwxCCgA7" />
+<img class="intLink" title="Strikethrough" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWBAMAAAA2mnEIAAAAGFBMVEUAAABGRkZxcXGrq6uOjo7CwsINDQ3p6emLJhauAAAAAXRSTlMAQObYZgAAAEVJREFUGNNjoCYoDjaBs1UZDGFMVmUGJhibXcidFa7GUVAVygpSUlJMS0uBqmFgFhSA6TVgYIOxmcUZ2BxgbEFnF2o6HQD3yAWvJ+vXvwAAAABJRU5ErkJggg==" />
+<img class="intLink" title="Subscript" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWBAMAAAA2mnEIAAAAGFBMVEUAAACCgoJISEh0pePr7/WgssrS0tLH1vP156UFAAAAAXRSTlMAQObYZgAAAElJREFUGNNjoB5gDBQRFICy2YQCAhNgEomqAghFSg5wNosSkniQGktwAURYlFEp2d0AIiyYpKTGbICwJBihnd2kBM5mNjagzPEAztoHvc+7u1sAAAAASUVORK5CYII=" />
+<img class="intLink" title="Superscript" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWBAMAAAA2mnEIAAAAGFBMVEUAAACCgoJISEigssrr7/V0pePS0tLH1vPtoVcWAAAAAXRSTlMAQObYZgAAAEpJREFUGNNjoC5gCTaAs5ndAxASrBA2o6GIoICpA5jNJmhg6B5SApFPUhZgDQ2AalRyQBioJABnMxqpwYWFGZUMYMKCSUpqlDocAJ7SBzNIUMnCAAAAAElFTkSuQmCC" />
+<img class="intLink" title="Left align" src="data:image/gif;base64,R0lGODlhFgAWAID/AMDAwAAAACH5BAEAAAAALAAAAAAWABYAQAIghI+py+0Po5y02ouz3jL4D4JMGELkGYxo+qzl4nKyXAAAOw==" />
+<img class="intLink" title="Center align" src="data:image/gif;base64,R0lGODlhFgAWAID/AMDAwAAAACH5BAEAAAAALAAAAAAWABYAQAIfhI+py+0Po5y02ouz3jL4D4JOGI7kaZ5Bqn4sycVbAQA7" />
+<img class="intLink" title="Right align" src="data:image/gif;base64,R0lGODlhFgAWAID/AMDAwAAAACH5BAEAAAAALAAAAAAWABYAQAIghI+py+0Po5y02ouz3jL4D4JQGDLkGYxouqzl43JyVgAAOw==" />
+<img class="intLink" title="Justify" src="data:image/gif;base64,R0lGODlhFgAWAIAAAMDAwAAAACH5BAEAAAAALAAAAAAWABYAAAIghI+py+0Po2yh2nvnxNxq2XVfFHIjVGLnk2brC8fyXAAAOw==" />
+<img class="intLink" title="Numbered list" src="data:image/gif;base64,R0lGODlhFgAWAMIGAAAAADljwliE35GjuaezxtHa7P///////yH5BAEAAAcALAAAAAAWABYAAAM2eLrc/jDKSespwjoRFvggCBUBoTFBeq6QIAysQnRHaEOzyaZ07Lu9lUBnC0UGQU1K52s6n5oEADs=" />
+<img class="intLink" title="Dotted list" src="data:image/gif;base64,R0lGODlhFgAWAMIGAAAAAB1ChF9vj1iE33mOrqezxv///////yH5BAEAAAcALAAAAAAWABYAAAMyeLrc/jDKSesppNhGRlBAKIZRERBbqm6YtnbfMY7lud64UwiuKnigGQliQuWOyKQykgAAOw==" />
+<img class="intLink" title="Quote" src="data:image/gif;base64,R0lGODlhFgAWAIQXAC1NqjFRjkBgmT9nqUJnsk9xrFJ7u2R9qmKBt1iGzHmOrm6Sz4OXw3Odz4Cl2ZSnw6KxyqO306K63bG70bTB0rDI3bvI4P///////////////////////////////////yH5BAEKAB8ALAAAAAAWABYAAAVP4CeOZGmeaKqubEs2CekkErvEI1zZuOgYFlakECEZFi0GgTGKEBATFmJAVXweVOoKEQgABB9IQDCmrLpjETrQQlhHjINrTq/b7/i8fp8PAQA7" />
+<img class="intLink" title="Delete indentation" src="data:image/gif;base64,R0lGODlhFgAWAMIHAAAAADljwliE35GjuaezxtDV3NHa7P///yH5BAEAAAcALAAAAAAWABYAAAM2eLrc/jDKCQG9F2i7u8agQgyK1z2EIBil+TWqEMxhMczsYVJ3e4ahk+sFnAgtxSQDqWw6n5cEADs=" />
+<img class="intLink" title="Add indentation" src="data:image/gif;base64,R0lGODlhFgAWAOMIAAAAADljwl9vj1iE35GjuaezxtDV3NHa7P///////////////////////////////yH5BAEAAAgALAAAAAAWABYAAAQ7EMlJq704650B/x8gemMpgugwHJNZXodKsO5oqUOgo5KhBwWESyMQsCRDHu9VOyk5TM9zSpFSr9gsJwIAOw==" />
+<img class="intLink" title="Horizontal rule" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWBAMAAAA2mnEIAAAAGFBMVEUAAADIyMimpqbp6enz8/P8/PzZ2dldXV27aT9/AAAAAXRSTlMAQObYZgAAAD5JREFUGNNjoBg4GSDYSgpYFCQKgkECiC0aGuLi7GwsAGILKYGBABYt5QUwVoiZuJhJAITN6mxs7Apk0wIAACMpB/oWEo0pAAAAAElFTkSuQmCC" />
+<img class="intLink" title="Hyperlink" src="data:image/gif;base64,R0lGODlhFgAWAOMKAB1ChDRLY19vj3mOrpGjuaezxrCztb/I19Ha7Pv8/f///////////////////////yH5BAEKAA8ALAAAAAAWABYAAARY8MlJq7046827/2BYIQVhHg9pEgVGIklyDEUBy/RlE4FQF4dCj2AQXAiJQDCWQCAEBwIioEMQBgSAFhDAGghGi9XgHAhMNoSZgJkJei33UESv2+/4vD4TAQA7" />
+<img class="intLink" title="Remove hyperlink" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWBAMAAAA2mnEIAAAAGFBMVEUAAAD08fHXzcxjY2OMhoafn5+uLyrktrTVXxhsAAAAAXRSTlMAQObYZgAAAGxJREFUGNNjwAAFMAZjEkMCYyKUU6aQoAaTYU90TIcrFwBCCFANDWIKDVUAMZkcBUVZBQWDQGwWERcnJhcXETBbBUEyKzubsjobK4PYrEZCwsxCQqZgc4KNTVmMjQOQzIfbW5jOgOYehDspAwBt9Q/S3exo3wAAAABJRU5ErkJggg==" />
+<img class="intLink" title="Remove formatting" src="data:image/gif;base64,R0lGODlhFgAWAIQbAD04KTRLYzFRjlldZl9vj1dusY14WYODhpWIbbSVFY6O7IOXw5qbms+wUbCztca0ccS4kdDQjdTLtMrL1O3YitHa7OPcsd/f4PfvrvDv8Pv5xv///////////////////yH5BAEKAB8ALAAAAAAWABYAAAV84CeOZGmeaKqubMteyzK547QoBcFWTm/jgsHq4rhMLoxFIehQQSAWR+Z4IAyaJ0kEgtFoLIzLwRE4oCQWrxoTOTAIhMCZ0tVgMBQKZHAYyFEWEV14eQ8IflhnEHmFDQkAiSkQCI2PDC4QBg+OAJc0ewadNCOgo6anqKkoIQA7" />
+<img class="intLink" title="Undo" src="data:image/gif;base64,R0lGODlhFgAWAOMKADljwliE33mOrpGjuYKl8aezxqPD+7/I19DV3NHa7P///////////////////////yH5BAEKAA8ALAAAAAAWABYAAARR8MlJq7046807TkaYeJJBnES4EeUJvIGapWYAC0CsocQ7SDlWJkAkCA6ToMYWIARGQF3mRQVIEjkkSVLIbSfEwhdRIH4fh/DZMICe3/C4nBQBADs=" />
+<img class="intLink" title="Redo" src="data:image/gif;base64,R0lGODlhFgAWAMIHAB1ChDljwl9vj1iE34Kl8aPD+7/I1////yH5BAEKAAcALAAAAAAWABYAAANKeLrc/jDKSesyphi7SiEgsVXZEATDICqBVJjpqWZt9NaEDNbQK1wCQsxlYnxMAImhyDoFAElJasRRvAZVRqqQXUy7Cgx4TC6bswkAOw==" />
+</div></div>
+<div id="mainBox" contentEditable="true" class="cssbox" style=""></div>
+
+<div align="center">
+<!--buttons below the main box-->
+<div id="botBtns" style="display: block;">
+<button class="cssbutton" id="helpBtn" value="Help" style="" title="get help on using SeeOnce (alt-H)" accesskey="h">Help</button><!--
+--><button class="cssbutton" id="niceEditBtn" value="Rich" style="" title="toggle rich text editor (alt-R)" accesskey="r">Rich</button><!--
+--><button class="cssbutton" id="resetBtn" value="Reset" style="" title="reset this conversation, use if unlocking fails" disabled>Reset</button><!--
+--><button class="cssbutton" id="moveBtn" value="Move" style="" title="backup and optionally delete all data">Backup</button>
+</div>
+<div id="fileBtns" style="display: block;">
+<hr style="width:25%;">
+        <input class="custom-file-input" type="file" id="fileBtn" style="" title="open dialog to select file to load"/>
+        <button class="cssbutton" id="saveFileBtn" value="Save file" title="save file to default Downloads folder in original format, or as a text file if type is not recognized" disabled>Save file</button>
+  </div>
+  </div>
+  </div>
+
+<!--Key dialog-->
+<div id="keyScr" class="white_content" align="center" style="display: block;">
+<br/>
+      	<div id="keyMsg" style="font-size:x-large;height:90px;"><span style="color:pink;font-weight:bold">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div><br /><br />
+
+		<input type="password" class="cssbox" autocomplete="off" id="pwd" onKeyUp="pwdKeyup(event);" style="width:95%;" name="text" placeholder="Enter your secret Key here." align="center"><br /><br />
+		<input type="checkbox" id="showKey" title="reveal box contents"> &nbsp;Show&nbsp;
+
+	 	<button class="cssbutton" id="acceptKeyBtn" value="OK" style="" title="accept Key" disabled>OK</button>
+        <div id="firstTimeKey" align="left" style="font-size:x-large;width:95%;display:none;">
+<p>Before you do anything else, you must choose a secret Key, which you will memorize and <strong>won't tell anyone</strong>, and then click <strong>OK</strong>.</p>
+<p>Its measured strength will appear above it, as you begin to type. If it is worse than Medium, <em>things will be very slow.</em></p>
+<p>Make sure to use $ymbol$, numb3rs, caPiTals, unusual words and mespelingss.</p>
+<p>The <strong>Suggest</strong> button will get you started with five words, which you can modify at will.</p>
+<p>Your Key will not be stored or sent anywhere.</p>
+        <div align="center"><button class="cssbutton" id="suggestKeyBtn" value="Suggest" title="suggest a Key made of five common words">Suggest</button></div>
+        </div>
+        <span id="fiveMin"><p>You will need to re-enter your Key if you don't use it for 5 min.</p></span>
+</div>
+
+<!--Name dialog-->
+<div id="nameScr" class="white_content" align="center" style="display: none;">
+<br/>
+      	<div id="nameMsg" style="">This message was locked with a new Key. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div><br /><br />
+
+		<select id='nameList2' class="cssbox" size='10' style="width:30%;" title="select the sender"></select><br /><br />
+		<input type="text" class="cssbox" id="nameBox" onKeyUp="nameKeyup(event);" style="width:60%;" name="name" placeholder="Enter the name here." align="center"><br /><br />
+	 	<button class="cssbutton" id="acceptNameBtn" value="OK" style="" title="accept name" disabled>OK</button>
+</div>
+
+<!--Select dialog-->
+<div id="selectScr" class="white_content" align="center" style="display: none;">
+<br/>
+      	<div id="selectMsg" style="">Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button</div><br /><br />
+		<select id='nameList' class="cssbox" size='10' style="width:30%;" title="select the recipient"></select><br /><br />
+		<button class="cssbutton" id="cancelSelectBtn" value="Cancel" style="" title="cancel selection">Cancel</button>
+	 	<button class="cssbutton" id="acceptSelectBtn" value="OK" style="" title="accept selection" disabled>OK</button><br><br>        Warning: the contents of invitations are <strong>NOT SECURE</strong><br>If the main box contains sensitive information, you should cancel now and try again after you have changed it.<br><br>
+<button class="cssbutton" id="inviteBtn" value="Invite" style="" title="make an invitation for a new user (alt-I)" accesskey="i">Invite a new user</button>
+</div>
+
+<!--Chat dialog, to enter the chat type-->
+<div id="chatScr" class="white_content" align="center">
+<br><br><br>
+		<span id="chatmsg" style="font-size:x-large;">Choose the type of chat, then click OK</span><br/><br />
+    	<input type="radio" name="chatmodes" id="dataChat"  title="chat with text messages and file exchange" checked/>&nbsp; Text and files&nbsp;&nbsp;
+        <input type="radio" name="chatmodes" id="audioChat" title="like Text chat, plus audio"/>&nbsp; Audio&nbsp;&nbsp;
+        <input type="radio" name="chatmodes" id="videoChat" title="like audio chat, plus video"/>&nbsp; Video
+        <br /><br />
+    	<button class="cssbutton" id="cancelChatBtn" value="Cancel" title="cancel chat invitation">Cancel</button>&nbsp;
+       <button class="cssbutton" id="submitChatBtn" value="OK" title="make chat invitation">OK</button>
+</div>
+
+<!--Cover text entry dialog-->
+<div id="coverScr" class="white_content" align="center" style="display: none;">
+    <br />
+    <div align="center">
+<span id="coverMsg">Please enter the cover text for hiding and click <strong>OK</strong></span><br /><br />
+		<textarea class="cssbox" rows="5" autocomplete="off" id='coverBox' style="width:95%;max-height:600px" name='coverBox' placeholder="Enter the cover text here." align="center"></textarea><br />
+       <button class="cssbutton" id="cancelCoverBtn" value="cancel" style="" title="close cover text dialog">Cancel</button>&nbsp;
+	 	<button class="cssbutton" id="acceptCoverBtn" value="OK" style="" title="accept cover text">OK</button>
+<br><br><input type="checkbox" id="rememberCoverCheck" title="remember the text for this session"> &nbsp;Remember
+	</div>
+</div>
+
+<!--Shadow backdrop-->
+<div id="shadow" class="black_overlay" style="display: block;">
+</div>
+
+<!--Help screen-->
+<div id="helpScr" style="display:none;">
+<h2 style="color:lime;font-size:x-large;">Welcome to SeeOnce</h2>
+<button class="cssbutton" id="help2mainBtnTop" value="< Back" style="float:left;" title="return to main screen (alt-M)" accesskey='m'>&#9668; Back</button>
+<br />
+&nbsp;&nbsp;&nbsp;<span id='helpmsg'>For help on how to do things, click on each title below. Click again to hide.</span><br><br>
+<hr>
+
+<div id="aa1" class="helpitem">
+<h3>What is SeeOnce?</h3>
+</div>
+<div id="a1" class="helptext">
+<p>SeeOnce makes your favorite email private by encrypting it end-to-end so only the recipient can see it, and then <strong><em>only once</em></strong>. The data held by the email provider becomes unreadable by anyone as soon as the recipient unlocks it.</p>
+<p>You can also use SeeOnce for real-time secure chat sessions involving text, files, audio, or even video. The connection is direct between participants, with a server getting involved only at the start so you can find each other.</p>
+<p>SeeOnce runs on a browser and is platform-independent. The chat component, however, does not yet run on IE or Safari, or under iOS.</p>
+<p>SeeOnce is <em>still in experimental phase</em>, as it has not yet been duly vetted by experts. Bear this in mind before entrusting sensitive information to it.</p>
+</div>
+<hr>
+
+<div id="aa2" class="helpitem">
+<h3>How do I use SeeOnce?</h3>
+</div>
+<div id="a2" class="helptext">
+<p>The first time SeeOnce ran on your machine, you were asked to come up with a secret Key. You must remember this Key and <em>never give it to anyone</em>, not even your friends. SeeOnce gives you a score as you type it and tells you how long it will take to process it. The lower the score, the longer it takes, so it is better to come up with a good Key. SeeOnce doesn't store it or send it anywhere at all.</p>
+<p>After that, <strong>as soon as you paste</strong> into SeeOnce a locked message you have received, it unlocks automatically, and this normally <em>only once</em>. If you load SeeOnce from an email link, you don't even have to copy and paste. The first time you get a message from someone, or if the sender's Key has changed, SeeOnce will ask you to provide a name for this person.</p>
+<p>To <strong>reply to a message</strong>, just type your reply into SeeOnce, either plain or with formatting (the formatting tools are shown by clicking the <strong>Rich</strong> button).Then click the <strong>Lock</strong> button. A locked message containing a link is generated. You can then send it through your default email by clicking the <strong>Email</strong> button, if enabled in your browser and the contents are not too long. SeeOnce may ask you to identify the person you are replying to, before the message is locked.</p>
+<p>If you want your locked message to look like normal text rather than encrypted gibberish, click the <strong>Hide</strong> button after locking. You will then be asked for a cover text, which you can store for the session by clicking a checkbox.</p>
+<p>To send a message to a person other than the last message's sender, click <strong>Switch</strong> and select the new recipient. If that person is not yet on the list, you can still send the message to him/her by clicking a special <strong>Invite</strong> button. But be careful, because the contents of invitation messages are NOT SECURE.</p>
+</div>
+<hr>
+
+<div id="aa3" class="helpitem">
+<h3>Can I change my Key?</h3>
+</div>
+<div id="a3" class="helptext">
+<p>You must type in your old Key if you are trying to read a message you just received, otherwise the message will fail to unlock. If you want to change your Key after reading it, however, you only need to reload SeeOnce and start using a new Key.</p>
+<p>You will be forced to do a <strong>Reset</strong> for all current conversations but your message will be secure and you'll be able to continue the conversations normally. Your correspondents will be warned that your Key has changed.</p>
+</div>
+<hr>
+
+<div id="aa4" class="helpitem">
+<h3>Can I change machines?</h3>
+</div>
+<div id="a4" class="helptext">
+<p>SeeOnce depends on ephemeral keys for its operation, and those are stored within the browser. This means that messages will fail to unlock if you move to a new machine or a different browser (except in the Chrome app, see below), but there is a way around this:</p>
+<p>When you click the <strong>Backup</strong> button, a special backup item containing the stored data appears in the box. It is encrypted by your secret Key. You can now copy it and save it somewhere. An email draft can be handy for this. When you paste the backup into SeeOnce, the data will be loaded back so you can continue conversations on a different machine.</p>
+<p>As soon as the backup is made SeeOnce asks if you also want to wipe the storage. If you click the button again, all  SeeOnce data stored in this machine is erased.</p>
+<p>In the Chrome app version of SeeOnce, the ephemeral data is synced across devices as soon as you log into your Chrome account, so you can continue conversations in course using different machines. All the sensitive synced data is encrypted. The wipe operation only affects the local copy of the data.</p>
+</div>
+<hr>
+
+<div id="aa5" class="helpitem">
+<h3>How does Chat work?</h3>
+</div>
+<div id="a5" class="helptext">
+<p>If you click the <strong>Chat</strong> button, a dialog asks you what kind of real-time chat you want to set up. There are three choices: text and files, this plus audio, and all this plus video.</p>
+<p>After you click <strong>OK</strong>, SeeOnce makes a chat invite exactly as when locking a message. You then send it to the other participant. At the same time, a chat window opens asking you to supply an alias for the current chat. After you do this, the chat session waits for the other person to join. If the chat window fails to open, check that the browser is not blocking pop-ups from SeeOnce.</p>
+<p>When the recipient gets your chat invite, he/she will unlock it like any other SeeOnce message and then the chat window will open and ask for an alias. When he/she supplies this, you'll be connected directly to one another. You both may also be asked to grant permission to feed audio or video when the connection takes place.</p>
+<p>If you want to invite a third person to the chat, copy the chat URL from its adress bar and send it securely to the third person. You can reload SeeOnce for this purpose; the chat won't be affected.</p>
+<p>If you get disconnected, just reload the chat window and type your alias again. The chat ceases to exist when all participants close their chat windows.</p>
+</div>
+<hr>
+
+<div id="aa6" class="helpitem">
+<h3>Can I send files?</h3>
+</div>
+<div id="a6" class="helptext">
+<p>Chat has its own secure file-sending process, so we refer here to sending files by email. You have two choices:</p>
+<p>1. Encrypt the files using AES with a utility such as <a href="http://www.7-zip.org/" target="_blank">7-zip</a> (Windows), <a href="http://www.kekaosx.com/" target="_blank">Keka</a> (OSX), or p7zip (Linux), then lock the encryption password inside a SeeOnce reply, and attach the encrypted archive to your email.</p>
+<p>2. You can load a file smaller than a megabyte as text, using the button at the lower left corner of the screen (labeled <strong>Select a file</strong> in Chrome, something else in other browsers), and then lock it as a regular message. After unlocking, the recipient can save the file using the <strong>Save file</strong> button.</p>
+</div>
+<hr>
+
+<div id="aa7" class="helpitem">
+<h3>Are there any potential insecurities?</h3>
+</div>
+<div id="a7" class="helptext">
+<p>We have tried to make SeeOnce extremely easy to use without impacting security, but tradeoffs do exist. There are two main issues that you must be aware of:</p>
+<p>1. <strong>Users are not authenticated</strong>. This means that someone could gain access to your correspondent's email account and impersonate him/her without your realizing it. From time to time you should ask your correspondent to send you something that only he/she could produce (for instance, a selfie picture where he/she does something you requested in your previous message). If your correspondent switches Key he/she should tell you about it, because SeeOnce will warn you that the Key has changed. To further protect you against a "man in the middle," follow the instructions at the end of this help item.</p>
+<p>2. <strong>Not all messages have the same level of security</strong>, which builds up with each message exchanged. Invitations have no security at all, as they can be read by anyone anytime. First replies and replies made right after a reset are secure against third parties reading them, but they can be read indefinitely both by sender and recipient. The replies to those can be read more than once, but only until a new reply is made. Finally, the next reply from either end, and beyond, becomes unreadable by anyone as soon as the recipient sees it.</p>
+<div id='bb7' class="helpitem">
+  <p><em>Click here for instructions against a "man in the middle."</em></p>
+</div>
+<div id="b7" class="helptext">
+   <p>The easy way: ask your correspondent to read over the phone (or in an audio or video SeeOnce chat session) a substantial portion of the special SeeOnce link made on his/her side when making a reply, or the beginning of any locked item, which should match what you're getting. Fifteen characters or so will be enough. But if you are communicating exclusively by email, you can send a person whom you know and who knows you the following message or something like it, which implements something called the "interlock protocol":</p>
+   <p><br />
+     <em>Dear So-and-So:</em><br />
+     <em>I want to make sure there is no "man in the middle" of our SeeOnce exchange. Here's what I want you to do:</em></p>
+      <ol>
+        <li><em>Write me a locked reply where you ask me to take a picture or video of myself doing something of your choice. Then split the locked message (the gibberish after the link) into two and send me the first half only.</em></li>
+        <li><em>When I receive your first half, I will also write a reply asking you to do something in a picture or short video. I'll send you half of the locked message first. When you get it, go ahead and send me the other half of your locked message.</em></li>
+        <li><em>When I get your second half, I'll put the two halves together and unlock your message. Then, following your instructions I'll send you the picture or video right away, unlocked, along with the second half of my locked request.</em></li>
+        <li><em>When you get it, please verify that what I sent conforms to your instructions. If so, put together the two halves of my locked message, unlock it, and send me what I ask in the message as soon as possible, unlocked as well. Then I'll know that there is no one in-between us.</em></li>
+   </ol>
+      <p><em>Many thanks. Sincerely, This-and-That</em></p>
+</div>
+</div>
+<hr>
+
+<div id="aa8" class="helpitem">
+<h3>What's underneath SeeOnce?</h3>
+</div>
+<div id="a8" class="helptext">
+<p>SeeOnce is the little sibling of PassLok privacy (<a href="https://passlok.com" target="_blank">https://passlok.com</a>), from which it takes its PFS and Read-once encryption modes. Under these modes, encryption keys are changed for every message, so that previous messages become impossible to decrypt by anyone. While PassLok gives users control over which mode to use, SeeOnce replies default to Read-once mode and switch to PFS mode when Read-once is unavailable. Invitations are encrypted with the user's own Lock, which makes them not secure, but they only contain instructions for using SeeOnce.</p>
+<p>Likewise, while PassLok includes a complete directory management system for other user's Locks (public keys), SeeOnce makes this automatic by including the sender's Lock in special links and locked messages.</p>
+<p>You can get full details on SeeOnce's cryptography from the <a href="http://www.weebly.com/uploads/2/4/1/8/24187628/passlok_technical_document.pdf" target="_blank">PassLok technical document.</a>.</p>
+</div>
+<hr>
+
+<div id="aa9" class="helpitem">
+<h3>Keyboard shortcuts</h3>
+</div>
+<div id="a9" class="helptext">
+<p>The main functions in SeeOnce can be accessed directly from the keyboard. The button tooltips tell you what the shortcut is for each button that has a shortcut, but below is a list just in case:</p>
+    <ul>
+    <p>Alt-L: <strong>L</strong>ock</p>
+    <p>Alt-S: <strong>S</strong>witch or Hide</p>
+    <p>Alt-H: <strong>H</strong>elp and back</p>
+    <p>Alt-R: <strong>R</strong>ich text editing toggle</p>
+    <p>Alt-I: <strong>I</strong>nvite someone new</p>
+    <p>Alt-C: <strong>C</strong>hat function</p>
+    </ul>
+</div>
+<hr>
+
+<div id="aa10" class="helpitem">
+<h3>Privacy Policy</h3>
+</div>
+<div id="a10" class="helptext">
+<p>SeeOnce  is a self-contained piece of code that does not rely on servers  to do its job. Therefore:</p>
+<p><strong>1. We cannot give your secret Key to anyone</strong> (not even yourself) because we don't have it. Your Key is never stored or transmitted, and gets deleted from memory  after five minutes of not being used. We don't have ephemeral keys, either.</p>
+<p><strong>2. We cannot give your private data to anyone</strong> because SeeOnce does not send anything out of your device. When you download the app from the web server, you get only the code, without any cookies, plugins, or anything of that sort. We get back <em>nothing</em> from you.</p>
+<p><strong>3. We cannot eavesdrop on your chat sessions, or enable anyone to do so.</strong> Establishing a chat session does involve contacting a signaling server (Firebase) and giving it your IP address and a disposable chatroom name so that others can contact you; the signaling server never sees the content of your chat, which is between participants only. The SeeOnce web server doesn't even see the connection data.</p>
+<p><strong>3. We will never weaken the cryptography methods contained within SeeOnce at the request of a third party, private or public.</strong> This also means no backdoors will ever be added. We would rather shut down SeeOnce than be forced to do this, which would betray the very essence of our efforts. If we learn that a counterfeit version of SeeOnce is circulating, whether placed by hackers or government agencies, we will make the fact known to users.</p>
+<p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
+<p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
+</div>
+<hr>
+
+<address>
+SeeOnce 1.0 &#169; F. Ruiz 2015
+</address>
+<ul>
+  <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
+  <li> tweetNaCl JavaScript implementation by D. Chestnykh and D. Mandiri 2015</li>
+  <li> scrypt key stretching implementation by D. Chestnykh 2014</li>
+  <li> lz-string compression by pieroxy 2014</li>
+  <li> file In/Out based on an article from the This Could Be Better blog 2012</li>
+  <li> webRTC chat by Muaz Khan, modified by F. Ruiz 2015</li>
+  <li> unicode hiding algorithm by Adrian Crenshaw 2013</li>
+</ul>
+<address>
+This document may be used, modified or redistributed under GNU GPL license, version 3.0 or higher.
+</address><br>
+<button class="cssbutton" id="help2mainBtnBottom" value="< Back" style="float:left;" title="return to main screen (alt-M)">&#9668; Back</button>
+</div>
+
+<!--Body script: window reformatting, special functions-->
+<script src="js-body/bodyscript.js"></script>
+
+<!--initialization, button connections-->
+<script src="js-body/initbuttons.js"></script>
+
+</body>
+</html>
