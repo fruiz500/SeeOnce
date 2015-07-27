@@ -2,7 +2,7 @@
 
 Automatic client-based forward-secrecy encryption for email
 
-SeeOnce is essentially a subset of PassLok, also available on GitHub, including the forward secrecy encryption modes, selected automatically according to context, plus one text steganography algorithm. It is designed for extreme simplicity, so that users are spared having to worry about key management while involving no servers, and without sacrificing security.
+SeeOnce is essentially a subset of [PassLok](https://github.com/fruiz500/passlok), also available on GitHub, including the forward secrecy encryption modes, selected automatically according to context, plus one text steganography algorithm. It is designed for extreme simplicity, so that users are spared having to worry about key management while involving no servers, and without sacrificing security.
 
 These are the principles guiding the design of SeeOnce:
 * Perfect portability. Runs on any computer or mobile device.
