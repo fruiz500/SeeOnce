@@ -1,7 +1,7 @@
 ﻿//detects that all the characters in the text are legal output
 function legalItem(text){
 	if(text.trim() == '') return false;
-	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=~!@$";	//base64 plus other characters used in SeeOnce strings	
+	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@$%";	//base64 plus other characters used in SeeOnce strings	
 	for (var i = 0; i < text.length; i++){
 		var index = keyAlphabet.indexOf(text[i]);
 		if(index == -1){
@@ -11,7 +11,7 @@ function legalItem(text){
 	return true
 }
 
-//This function checks for legal SeeOnce output and calls the encoder. Otherwise it calls the decoder
+//This function checks for legal SeeOnce output and calls the encoder
 function textStego(){
 	acceptCoverBtn.disabled = true;
 	if(coverBox.value.trim() == ''){			//stop to get the cover text if empty
@@ -24,25 +24,19 @@ function textStego(){
 		shadow.style.display = 'none';		
 	}
 	
-	//now get the core item only, taking out all the other text
-	var textArray = XSSfilter(mainBox.innerHTML).split('='),
-		cleanText = '';
-	for(var i=0; i < textArray.length; i++){
-		var firstChar = textArray[i].slice(0,1);
-		if(firstChar == '$'|| firstChar == '!' || firstChar == '@' || firstChar == '~') var cleanText = textArray[i]
-	}
-		
-	mainMsg.innerHTML = '<span class="blink" style="color:cyan">PROCESSING</span>';		//Get blinking message started
-setTimeout(function(){																	//the rest after a 20 ms delay
+	var cleanText = extractCipher(mainBox.innerHTML);
+
 	if(legalItem(cleanText)){							//legal item found: encode it
-		var turns = toLetters(cleanText);
-		if(!rememberCoverCheck.checked) coverBox.value = '';
-		if(turns){var turnText = 'It was repeated ' + turns + ' times. '}else{var turnText = ''}
-		mainMsg.innerHTML = 'Message encoded into letters of this text. ' + turnText + 'Please complete it if necessary'
+		mainMsg.innerHTML = '<span class="blink" style="color:cyan">PROCESSING</span>';		//Get blinking message started
+		setTimeout(function(){																	//the rest after a 20 ms delay
+			var turns = toLetters(cleanText);
+			if(!rememberCoverCheck.checked) coverBox.value = '';
+			if(turns){var turnText = 'It was repeated ' + turns + ' times. '}else{var turnText = ''}
+			mainMsg.innerHTML = 'Message encoded into letters of this text. ' + turnText + 'Please complete it if necessary'
+		},20);						//end of timeout
 	}else{												//no legal item found
 		mainMsg.innerHTML = 'Only SeeOnce output can be hidden'
 	}
-},20);						//end of timeout
 }
 
 //makes the binary equivalent (string) of an ASCII string
@@ -137,14 +131,14 @@ function encodableBits(cover){
 //encodes text as special letters and spaces in the cover text, which replace the original ones
 function toLetters(text){
 	var textBin = toBin(text),
-		coverText = addSpaces(coverBox.value.trim()).replace(/\n/g,'<br>'),
+		coverText = addSpaces(coverBox.value.trim()).replace(/\n\n/g,'<br><br>').replace(/\n/g,' '),
 		cover = coverText,
 		capacity = encodableBits(cover);
 	if (capacity < textBin.length){						//repeat the cover text if it is too short
 		var turns = Math.ceil(textBin.length / capacity);
 		var index = 0;
 		while (index < turns){
-			cover = cover + '<br>' + coverText;
+			cover = cover + '<br><br>' + coverText;
 			index++;
 		};
 		capacity = encodableBits(cover)
