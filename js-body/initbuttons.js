@@ -90,27 +90,27 @@ window.onload = function() {
 	foreColor.addEventListener("change", function() {formatDoc('foreColor',this[this.selectedIndex].value);this.selectedIndex=0;});
 	backColor.addEventListener("change", function() {formatDoc('backColor',this[this.selectedIndex].value);this.selectedIndex=0;});
 
-	document.images[0].addEventListener("click", function() {formatDoc('bold')});
-	document.images[1].addEventListener("click", function() {formatDoc('italic')});
-	document.images[2].addEventListener("click", function() {formatDoc('underline')});
-	document.images[3].addEventListener("click", function() {formatDoc('strikethrough')});
-	document.images[4].addEventListener("click", function() {formatDoc('subscript')});
-	document.images[5].addEventListener("click", function() {formatDoc('superscript')});
-	document.images[6].addEventListener("click", function() {formatDoc('justifyleft')});
-	document.images[7].addEventListener("click", function() {formatDoc('justifycenter')});
-	document.images[8].addEventListener("click", function() {ormatDoc('justifyright')});
-	document.images[9].addEventListener("click", function() {formatDoc('justifyfull')});
-	document.images[10].addEventListener("click", function() {formatDoc('insertorderedlist')});
-	document.images[11].addEventListener("click", function() {formatDoc('insertunorderedlist')});
-	document.images[12].addEventListener("click", function() {formatDoc('formatBlock','blockquote')});
-	document.images[13].addEventListener("click", function() {formatDoc('outdent')});
-	document.images[14].addEventListener("click", function() {formatDoc('indent')});
-	document.images[15].addEventListener("click", function() {formatDoc('inserthorizontalrule')});
-	document.images[16].addEventListener("click", function() {var sLnk=prompt('Write the URL here','http:\/\/');if(sLnk&&sLnk!=''&&sLnk!='http://'){formatDoc('createlink',sLnk)}});
-	document.images[17].addEventListener("click", function() {formatDoc('unlink')});
-	document.images[18].addEventListener("click", function() {formatDoc('removeFormat')});
-	document.images[19].addEventListener("click", function() {formatDoc('undo')});
-	document.images[20].addEventListener("click", function() {formatDoc('redo')});
+	document.images[1].addEventListener("click", function() {formatDoc('bold')});
+	document.images[2].addEventListener("click", function() {formatDoc('italic')});
+	document.images[3].addEventListener("click", function() {formatDoc('underline')});
+	document.images[4].addEventListener("click", function() {formatDoc('strikethrough')});
+	document.images[5].addEventListener("click", function() {formatDoc('subscript')});
+	document.images[6].addEventListener("click", function() {formatDoc('superscript')});
+	document.images[7].addEventListener("click", function() {formatDoc('justifyleft')});
+	document.images[8].addEventListener("click", function() {formatDoc('justifycenter')});
+	document.images[9].addEventListener("click", function() {ormatDoc('justifyright')});
+	document.images[10].addEventListener("click", function() {formatDoc('justifyfull')});
+	document.images[11].addEventListener("click", function() {formatDoc('insertorderedlist')});
+	document.images[12].addEventListener("click", function() {formatDoc('insertunorderedlist')});
+	document.images[13].addEventListener("click", function() {formatDoc('formatBlock','blockquote')});
+	document.images[14].addEventListener("click", function() {formatDoc('outdent')});
+	document.images[15].addEventListener("click", function() {formatDoc('indent')});
+	document.images[16].addEventListener("click", function() {formatDoc('inserthorizontalrule')});
+	document.images[17].addEventListener("click", function() {var sLnk=prompt('Write the URL here','http:\/\/');if(sLnk&&sLnk!=''&&sLnk!='http://'){formatDoc('createlink',sLnk)}});
+	document.images[18].addEventListener("click", function() {formatDoc('unlink')});
+	document.images[19].addEventListener("click", function() {formatDoc('removeFormat')});
+	document.images[20].addEventListener("click", function() {formatDoc('undo')});
+	document.images[21].addEventListener("click", function() {formatDoc('redo')});
 	
 //for the collapsible help items
 	aa1.addEventListener('click', function() {openClose('a1')});
@@ -125,6 +125,7 @@ window.onload = function() {
 	aa10.addEventListener('click', function() {openClose('a10')});
 
 	bb7.addEventListener('click', function() {openClose('b7')});
+	bb8.addEventListener('click', function() {openClose('b8')});
 	
 };
 

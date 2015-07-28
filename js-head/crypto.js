@@ -45,11 +45,11 @@ function makeInvite(){
 	var nonce = nacl.randomBytes(9),
 		nonce24 = makeNonce24(nonce),
 		noncestr = nacl.util.encodeBase64(nonce).replace(/=+$/,''),
-		text = LZString.compressToBase64(mainBox.innerHTML + "<br><br>SeeOnce is now ready to lock your reply so that only I can unlock it, and then <em>only once</em>.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Lock</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower left.");
+		text = LZString.compressToBase64(mainBox.innerHTML);
   	var cipherstr = PLencrypt(text,nonce24,myLockbin);
 	setTimeout(function(){mainMsg.innerHTML = "This invitation can be unlocked by anyone<br>It is <span class='blink'>NOT SECURE</span><br>Copy and send or click <strong>Email</strong>"},20);
 	mainBox.innerHTML = "@" + myLock + noncestr + cipherstr;
-	mainBox.innerHTML = "The gibberish below is my invitation to communicate securely using SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net";
+	mainBox.innerHTML = "The gibberish below is my invitation to communicate securely using SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
 
 	closeBox();
 	replyBtn.innerHTML = 'Email';
@@ -120,10 +120,10 @@ function Encrypt(isChat){
 	
 	if(isChat){
 		mainMsg.innerHTML = 'Invitation to chat for ' + name + ' in the box.<br>Copy and send or click <strong>Email</strong>'
-		mainBox.innerHTML = "The gibberish below is a locked invitation to a secure real-time chat with SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net";
+		mainBox.innerHTML = "The gibberish below is a locked invitation to a secure real-time chat with SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
 		
 	}else{
-		mainBox.innerHTML = "The gibberish below is a secure message for you, which I have locked with SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net";	
+		mainBox.innerHTML = "The gibberish below is a secure message for you, which I have locked with SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";	
 	}
 
 	replyBtn.innerHTML = 'Email';
@@ -232,7 +232,7 @@ function Decrypt(){
 			var plain = PLdecrypt(cipherstr,nonce24,nacl.util.decodeBase64(theirLock));
 			if(!plain) failedDecrypt();
 			if(XSSfilter(plain).slice(0,9) != 'filename:') plain = LZString.decompressFromBase64(plain);
-			mainBox.innerHTML = plain.trim();
+			mainBox.innerHTML = plain.trim() + "<br><br>SeeOnce is now ready to lock your reply so that only I can unlock it, and then <em>only once</em>.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Lock</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower left.";
 		}catch(err){failedDecrypt()}
 		if(isNewLock){
 			mainMsg.innerHTML = '<span style="color:orange">This is a new invitation</span><br>It <em>can</em> be unlocked again'
