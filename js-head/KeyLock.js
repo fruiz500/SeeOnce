@@ -8,7 +8,7 @@ function keyStrength(pwd,display) {
 	var entropy = entropycalc(pwd);
 
 	if(entropy == 0){
-		var msg = 'This is a known <span style="color:magenta">bad Key!</span>';
+		var msg = 'This is a known <span style="color:magenta">bad Password!</span>';
 	}else if(entropy < 20){
 		var msg = '<span style="color:magenta">Terrible!</span>';
 	}else if(entropy < 40){
@@ -27,7 +27,7 @@ function keyStrength(pwd,display) {
 	
 	var seconds = time10/10000*Math.pow(2,iter-8);			//to tell the user how long it will take, in seconds
 
-	keyMsg.innerHTML = 'Key strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process';
+	keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process';
 	return iter
 };
 
@@ -95,17 +95,17 @@ function reduceVariants(string){
 	return string.toLowerCase().replace(/[óòöôõo]/g,'0').replace(/[!íìïîi]/g,'1').replace(/[z]/g,'2').replace(/[éèëêe]/g,'3').replace(/[@áàäâãa]/g,'4').replace(/[$s]/g,'5').replace(/[t]/g,'7').replace(/[b]/g,'8').replace(/[g]/g,'9').replace(/[úùüû]/g,'u');
 }
 
-//myKey is a 32-byte uint8 array private key deriving from the user's string Key, for DH and local encryption. myLockbin is the derived public Key. theirLock is the correspondent's public key. Suffix "bin" means it is binary.
+//myKey is a 32-byte uint8 array private key deriving from the user's Password, for DH and local encryption. myLockbin is the derived public Key. theirLock is the correspondent's public key. Suffix "bin" means it is binary.
 var	myKey,
 	myLockbin,
 	myLock;
 
-//If the timer has run out, the Key is deleted from box, and the stretched binary secret key is deleted from memory
+//If the timer has run out, the Password is deleted from box, and the stretched binary secret key is deleted from memory
 function readKey(){
 	clearTimeout(keytimer);
 	var period = 300000;
 	
-	//start timer to reset Key box
+	//start timer to reset Password box
 	keytimer = setTimeout(function() {
 		pwd.value = '';
 		myKey = '';
@@ -122,28 +122,28 @@ function readKey(){
 	if (key == ""){
 		any2key();
 		if(callKey == 'initkey'){
-			keyMsg.innerHTML = '<span style="color:lime"><strong>Welcome to SeeOnce</strong></span><br />Please enter your secret Key'
+			keyMsg.innerHTML = '<span style="color:lime"><strong>Welcome to SeeOnce</strong></span><br />Please enter your secret Password'
 		}else{
-			keyMsg.innerHTML = 'Please enter your secret Key';
+			keyMsg.innerHTML = 'Please enter your secret Password';
 			shadow.style.display = 'block'
 		}
-		throw ('secret Key needed')
+		throw ('Password needed')
 	}
 }
 
-//converts user Key into binary format, resumes operation
+//converts user Password into binary format, resumes operation
 function acceptKey(){
 	var key = pwd.value.trim();
 	if(key == ''){
-		keyMsg.innerHTML = 'Please enter your Key';
-		throw("no Key")
+		keyMsg.innerHTML = 'Please enter your Password';
+		throw("no Password")
 	}
 	if(key.length < 4){
-		keyMsg.innerHTML = '<span style="color:orange">This Key is too short</span>';
-		throw("short Key")
+		keyMsg.innerHTML = '<span style="color:orange">This Password is too short</span>';
+		throw("short Password")
 	}
 	if(firstInit){
-		mainMsg.innerHTML = '<span class="blink" style="color:orange">LOADING...</span> for best speed, use at least a Medium Key'
+		mainMsg.innerHTML = '<span class="blink" style="color:orange">LOADING...</span> for best speed, use at least a Medium Password'
 	}
 	key2any();
 	
@@ -152,14 +152,14 @@ function acceptKey(){
 		if(!myLockbin){
 			myLockbin = nacl.box.keyPair.fromSecretKey(myKey).publicKey;
 			myLock = nacl.util.encodeBase64(myLockbin).replace(/=+$/,'');
-			mainMsg.innerHTML = "Now paste into the box the message you got, including all the gibberish at the end.<br>Or write a new message and click <b>Lock"
+			mainMsg.innerHTML = "Now paste into the box the message you got, including all the gibberish.<br>Or write a new message and click <b>Lock"
 		}
 		if(firstInit) {
 			initSession();
 			if(mainBox.innerHTML != '') unlockItem();
 			firstInit = false
 		}
-		if (callKey == 'encrypt'){					//now complete whatever was being done when the Key was found missing
+		if (callKey == 'encrypt'){					//now complete whatever was being done when the Password was found missing
 			Encrypt()
 		}else if(callKey == 'decrypt'){
 			Decrypt()
@@ -205,7 +205,7 @@ function initSession(){
 	}	
 }
 
-//stretches a password string with a salt string to make a 256-bit Uint8Array Key
+//stretches a password string with a salt string to make a 256-bit Uint8Array Password
 function wiseHash(pwd,salt){
 	var iter = keyStrength(pwd,false),
 		secArray = new Uint8Array(32),
@@ -246,14 +246,14 @@ function makeNonce24(nonce){
 	return result
 }
 
-//encrypt string with a shared Key
+//encrypt string with a shared key
 function PLencrypt(plainstr,nonce24,sharedKey){
 	var plain = nacl.util.decodeUTF8(plainstr),
 		cipher = nacl.secretbox(plain,nonce24,sharedKey);
 	return nacl.util.encodeBase64(cipher).replace(/=+$/,'')
 }
 
-//decrypt string with a shared Key
+//decrypt string with a shared key
 function PLdecrypt(cipherstr,nonce24,sharedKey){
 	var cipher = nacl.util.decodeBase64(cipherstr),
 		plain = nacl.secretbox.open(cipher,nonce24,sharedKey);
@@ -264,11 +264,11 @@ function PLdecrypt(cipherstr,nonce24,sharedKey){
 //takes appropriate UI action if decryption fails
 function failedDecrypt(){
 	if(callKey == 'encrypt'){
-		mainMsg.innerHTML = 'The stored data failed to unlock. Please check your Key<br>Or reset the exchange';
+		mainMsg.innerHTML = 'The stored data failed to unlock. Please check your Password<br>Or reset the exchange';
 	}else if(locDir[theirLock][2] == 'lock'){
 		mainMsg.innerHTML = '<span style="color:orange;">Messages can be unlocked <em>only once</em></span>';
 	}else if(mainBox.innerHTML.charAt(0) == '~'){
-		mainMsg.innerHTML = 'The backup has failed to unlock. Please check your Key';
+		mainMsg.innerHTML = 'The backup has failed to unlock. Please check your Password';
 	}else{
 		mainMsg.innerHTML = 'Unlock has Failed. Try resetting the exchange';
 		mainBox.innerHTML = ''

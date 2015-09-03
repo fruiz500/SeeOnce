@@ -21,7 +21,7 @@ window.onload = function() {
    	showKey.addEventListener('click', showsec);
 
 	acceptKeyBtn.addEventListener('click', acceptKey);
-	
+
 	mainBox.addEventListener('paste', pasteItem);
 	function pasteItem() {setTimeout(function(){unlockItem();}, 0);}
 
@@ -48,7 +48,7 @@ window.onload = function() {
 	hideBtn.addEventListener('click', hideBtnAction);
 
 	resetBtn.addEventListener('click', resetPFS);
-	
+
 	moveBtn.addEventListener('click', moveDB);
 
    	makeChatBtn.addEventListener('click', startChat);
@@ -66,13 +66,13 @@ window.onload = function() {
 	cancelCoverBtn.addEventListener('click', cancelCover);
 
 	acceptCoverBtn.addEventListener('click', textStego);
-	
+
 	nameList.addEventListener('change', loadLock);
 
 	nameList2.addEventListener('change', loadName);
-	
+
 	cancelSelectBtn.addEventListener('click', cancelSelect);
-	
+
 	acceptSelectBtn.addEventListener('click', acceptSelect);
 
 	acceptNameBtn.addEventListener('click', storeNewLock);
@@ -111,26 +111,27 @@ window.onload = function() {
 	document.images[19].addEventListener("click", function() {formatDoc('removeFormat')});
 	document.images[20].addEventListener("click", function() {formatDoc('undo')});
 	document.images[21].addEventListener("click", function() {formatDoc('redo')});
-	
-//for the collapsible help items
-	aa1.addEventListener('click', function() {openClose('a1')});
-	aa2.addEventListener('click', function() {openClose('a2')});
-	aa3.addEventListener('click', function() {openClose('a3')});
-	aa4.addEventListener('click', function() {openClose('a4')});
-	aa5.addEventListener('click', function() {openClose('a5')});
-	aa6.addEventListener('click', function() {openClose('a6')});
-	aa7.addEventListener('click', function() {openClose('a7')});
-	aa8.addEventListener('click', function() {openClose('a8')});
-	aa9.addEventListener('click', function() {openClose('a9')});
-	aa10.addEventListener('click', function() {openClose('a10')});
 
-	bb7.addEventListener('click', function() {openClose('b7')});
+//for the collapsible help items
+	aa1.addEventListener('click', function() {openHelp('a1')});
+	aa2.addEventListener('click', function() {openHelp('a2')});
+	aa3.addEventListener('click', function() {openHelp('a3')});
+	aa4.addEventListener('click', function() {openHelp('a4')});
+	aa5.addEventListener('click', function() {openHelp('a5')});
+	aa6.addEventListener('click', function() {openHelp('a6')});
+	aa7.addEventListener('click', function() {openHelp('a7')});
+	aa8.addEventListener('click', function() {openHelp('a8')});
+	aa9.addEventListener('click', function() {openHelp('a9')});
+	aa10.addEventListener('click', function() {openHelp('a10')});
+	aa11.addEventListener('click', function() {openHelp('a11')});
+
 	bb8.addEventListener('click', function() {openClose('b8')});
-	
+	bb9.addEventListener('click', function() {openClose('b9')});
+
 };
 
 var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
-	
+
 mainBox.innerHTML = window.location.hash.slice(1);			//correspondent's message from address bar
 
 var theirLock = mainBox.innerHTML.slice(1,44),

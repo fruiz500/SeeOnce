@@ -19,9 +19,7 @@ function lockItem(){
 	} else if(!mainBox.innerHTML.trim()){
 		mainMsg.innerHTML = 'Please write your message and then click <b>Lock</b>'	
 	} else if(!theirLock){
-		fillList(nameList);
-		selectScr.style.display = 'block';
-		shadow.style.display = 'block'
+		selectUser()
 	}
 }
 
@@ -49,7 +47,7 @@ function makeInvite(){
   	var cipherstr = PLencrypt(text,nonce24,myLockbin);
 	setTimeout(function(){mainMsg.innerHTML = "This invitation can be unlocked by anyone<br>It is <span class='blink'>NOT SECURE</span><br>Copy and send or click <strong>Email</strong>"},20);
 	mainBox.innerHTML = "@" + myLock + noncestr + cipherstr;
-	mainBox.innerHTML = "The gibberish below is my invitation to communicate securely using SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
+	mainBox.innerHTML = "The gibberish below is my invitation to communicate securely using SeeOnce. Click on it to unlock it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
 
 	closeBox();
 	replyBtn.innerHTML = 'Email';
@@ -76,7 +74,8 @@ function Encrypt(isChat){
 	if (lastLockCipher) {								//if dummy exists, decrypt it first
 		var lastLock = keyDecrypt(lastLockCipher)
 	} else {											//use permanent public key if dummy doesn't exist
-		var lastLock = theirLock
+		var lastLock = theirLock;
+		var firstMessage = true
 	}
 	
 	var secdum = nacl.randomBytes(32),				//new dummy private key and its matching public key
@@ -104,26 +103,26 @@ function Encrypt(isChat){
 		}		
 	}
 	
-	locDir[theirLock][0] = keyEncrypt(nacl.util.encodeBase64(secdum));			//new Key is stored in the permanent database
+	locDir[theirLock][0] = keyEncrypt(nacl.util.encodeBase64(secdum));			//new Password is stored in the permanent database
 	if(type == '%'){locDir[theirLock][2] = 'reset'}else{locDir[theirLock][2] = 'unlock'};		//and the turn string too
 	storeData(theirLock);
 	var cipherstr = PLencrypt(text,nonce24,sharedKey);
 	mainBox.innerHTML = type + myLock + noncestr + newLockCipher + cipherstr;
 		
-	if(type == '!'){
-		mainMsg.innerHTML = "This message for " + name + " will become unlockable as soon as it is read<br>Copy and send or click <strong>Email</strong>"
+	if(type == '%' || firstMessage){
+		mainMsg.innerHTML = "This message for " + name + " will never become unlockable<br>Copy and send or click <strong>Email</strong>"	
 	}else if(type == '$'){
 		mainMsg.innerHTML = "This message for " + name + " will become unlockable after you get a reply<br>Copy and send or click <strong>Email</strong>"
 	}else{
-		mainMsg.innerHTML = "This message for " + name + " will reset the conversation on the other end, and will become unlockable after you get a reply<br>Copy and send or click <strong>Email</strong>"	
+		mainMsg.innerHTML = "This message for " + name + " will become unlockable as soon as it is read<br>Copy and send or click <strong>Email</strong>"
 	}
 	
 	if(isChat){
 		mainMsg.innerHTML = 'Invitation to chat for ' + name + ' in the box.<br>Copy and send or click <strong>Email</strong>'
-		mainBox.innerHTML = "The gibberish below is a locked invitation to a secure real-time chat with SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
+		mainBox.innerHTML = "The gibberish below is a locked invitation to a secure real-time chat with SeeOnce. Click on it to unlock it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
 		
 	}else{
-		mainBox.innerHTML = "The gibberish below is a secure message for you, which I have locked with SeeOnce. Click on it to unlock it. You will be asked to supply a Key or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";	
+		mainBox.innerHTML = "The gibberish below is a secure message for you, which I have locked with SeeOnce. Click on it to unlock it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://SeeOnce.net#" + mainBox.innerHTML + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://SeeOnce.net<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";	
 	}
 
 	replyBtn.innerHTML = 'Email';
@@ -141,7 +140,7 @@ function Decrypt(){
 	cipherstr = cipherstr.replace(/#/g,'');				//extra filtering for mailto and link artifacts
 	
 	var	type = cipherstr.slice(0,1);						//get encryption type. @=symmetric, $=PFS, !=Read-once, ~=Key-encrypted
-	cipherstr = cipherstr.replace(/[^a-zA-Z0-9+/ ]+/g, '');					//remove anything that is not base64
+	cipherstr = cipherstr.replace(/[^a-zA-Z0-9+\/ ]+/g, '');					//remove anything that is not base64
 	if(type == '!' || type == '$' || type == '%' || type == '@'){
 		theirLock = cipherstr.slice(0,43);					//retrieve sender's Lock from message
 		cipherstr = cipherstr.slice(43);
@@ -178,7 +177,7 @@ function Decrypt(){
 			var lastKey = myKey;
 		}		
 
-		if(type == '$'){																//PFS mode
+		if(type == '$' || type == '%'){												//PFS mode
 			if(lastKeyCipher){
 				var newLock = PLdecrypt(newLockCipher,nonce24,makeShared(theirLock,lastKey));
 			}else{
@@ -213,7 +212,7 @@ function Decrypt(){
 		locDir[theirLock][1] = keyEncrypt(newLock);							//store the new dummy Lock
 		locDir[theirLock][2] = 'lock';
 		if(isNewLock){
-			mainMsg.innerHTML = '<span style="color:orange">This message was locked with a new Key</span><br>It <em>can</em> be unlocked again'
+			mainMsg.innerHTML = '<span style="color:orange">This message was locked with a new Password</span><br>It <em>can</em> be unlocked again'
 		}else if(type == '%'){
 			mainMsg.innerHTML = 'The conversation has been reset<br>This message <em>can</em> be unlocked again'
 		}else if(type == '!'){
@@ -232,7 +231,7 @@ function Decrypt(){
 			var plain = PLdecrypt(cipherstr,nonce24,nacl.util.decodeBase64(theirLock));
 			if(!plain) failedDecrypt();
 			if(XSSfilter(plain).slice(0,9) != 'filename:') plain = LZString.decompressFromBase64(plain);
-			mainBox.innerHTML = plain.trim() + "<br><br>SeeOnce is now ready to lock your reply so that only I can unlock it, and then <em>only once</em>.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Lock</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower left.";
+			mainBox.innerHTML = plain.trim() + "<br><br>SeeOnce is now ready to lock your reply so that only I can unlock it.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Lock</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower left.<br><br>It will be possible to unlock this reply again, but every message exchanged after that will be unlocked <em>only once</em>.";
 		}catch(err){failedDecrypt()}
 		if(isNewLock){
 			mainMsg.innerHTML = '<span style="color:orange">This is a new invitation</span><br>It <em>can</em> be unlocked again'
@@ -260,13 +259,13 @@ function Decrypt(){
 //extracts locked item from a piece of text
 function extractCipher(string){
 	var cipherstr = XSSfilter(string.replace(/&[^;]+;/g,'').replace(/\s/g,''));
-	if(cipherstr.match('[#=](.*)=')) cipherstr = cipherstr.match('[#=](.*)=')[1];		//remove URL and text around item
+	if(cipherstr.match('[#=](.*)=')) cipherstr = cipherstr.match('#(.*)=')[1];		//remove URL and text around item
 	var	firstChar = cipherstr.charAt(0);
 	if(firstChar == '$'|| firstChar == '!' || firstChar == '@' || firstChar == '%' || firstChar == '~'){ return cipherstr }
 	else {return ''}
 }
 
-//encrypts a string with the secret Key, 12 char nonce
+//encrypts a string with the secret Password, 12 char nonce
 function keyEncrypt(plainstr){
 	plainstr = encodeURI(plainstr).replace(/%20/g,' ');
 	var	nonce = nacl.randomBytes(9),
@@ -276,7 +275,7 @@ function keyEncrypt(plainstr){
 	return '~' + noncestr + cipherstr
 }
 
-//decrypts a string encrypted with the secret Key, 12 char nonce
+//decrypts a string encrypted with the secret Password, 12 char nonce
 function keyDecrypt(cipherstr){
 	readKey();
 	cipherstr = cipherstr.slice(1);							//take out the initial '~'

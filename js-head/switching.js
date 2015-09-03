@@ -11,7 +11,6 @@ function showsec(){
 function clearMain(){
 	mainBox.innerHTML = '';
 	if(theirName){mainMsg.innerHTML = 'Replying to ' + theirName}else{mainMsg.innerHTML = ''}
-	saveFileBtn.disabled = true;
 	changeButtons()
 }
 
@@ -31,11 +30,24 @@ function selectMain(){
     }
 }
 
+//for opening the select User screen
+function selectUser(){
+	fillList(nameList);
+	selectScr.style.display = 'block';
+	shadow.style.display = 'block';
+	if(nameList.length == 0){			//don't display box if there is nothing there
+		nameListSpace.style.display = 'none';
+		selectMsg.innerHTML = 'No stored users. Invite a new user with the lower button'
+	}else{
+		nameListSpace.style.display = 'block';
+		selectMsg.innerHTML = 'Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button'
+	}
+}
+
 //to change or disable buttons depending on main box contents
 function changeButtons(){
 	var text = mainBox.innerHTML.trim(),
 		type = extractCipher(text).slice(0,1);
-	if(text.slice(0,9) == 'filename:') {saveFileBtn.disabled = false} else {saveFileBtn.disabled = true}
 	if(type == '!' || type == '$' || type == '@' || type == '%' || type == '~'){			//regular output
 		hideBtn.innerHTML = 'Hide';
 		replyBtn.innerHTML = 'Email'
@@ -85,10 +97,8 @@ var fromSwitch = false;				//to keep track if the user change dialog was loaded 
 function hideBtnAction(){
 	if(hideBtn.innerHTML == 'Hide'){textStego();}			//nornmal hiding action
 	else {
-		fillList(nameList);									//display dialog to change recipient
-		fromSwitch = true;
-		selectScr.style.display = 'block';
-		shadow.style.display = 'block'
+		fromSwitch = true;									//display dialog to change recipient
+		selectUser()
 	}
 }
 
@@ -97,10 +107,17 @@ function openNewLock(){
 	nameScr.style.display = 'block';
 	shadow.style.display = 'block';
 	fillList(nameList2);
-	nameBox.value = ''
+	nameBox.value = '';
+	if(nameList2.length == 0){
+		nameListSpace2.style.display = 'none';
+		nameMsg.innerHTML = 'Please type the name of the person who sent you this invitation into the box below, then click <strong>OK</strong>'
+	}else{
+		nameListSpace2.style.display = 'block';
+		nameMsg.innerHTML = 'This message was locked with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong>'
+	}
 }
 
-//displays Keys strength and resets Key timer
+//displays Password strength and resets timer
 function pwdKeyup(evt){
 	clearTimeout(keytimer);
 	keytimer = setTimeout(function() {pwd.value = ''}, 300000);
@@ -120,26 +137,26 @@ function nameKeyup(evt){
 	if(nameBox.value.trim() == ''){acceptNameBtn.disabled = true;}else{acceptNameBtn.disabled = false;}
 }
 
-//called when the Key box is empty
+//called when the Password box is empty
 function any2key(){
 	closeBox();
 	cancelIntroGreeting();
 	shadow.style.display = 'block';
 	keyScr.style.display = 'block';
-	keyMsg.innerHTML = 'Please enter your Key';
+	keyMsg.innerHTML = 'Please enter your Password';
 	if(!isMobile) pwd.focus()
 }
 
-//close screens and reset Key timer when leaving the Key box. Restarts whatever was being done when the Key was found missing.
+//close screens and reset Password timer when leaving the Password box. Restarts whatever was being done when the Password was found missing.
 function key2any(){
 	clearTimeout(keytimer);
-	keytimer = setTimeout(function() {pwd.value = ''}, 300000)	//reset timer for 5 minutes, then delete Key
+	keytimer = setTimeout(function() {pwd.value = ''}, 300000)	//reset timer for 5 minutes, then delete Password
 	keytime = new Date().getTime();
 	keyScr.style.display = 'none';
 	shadow.style.display = 'none';
 }
 
-//writes five random dictionary words in the Key box
+//writes five random dictionary words in the Password box
 function suggestKey(){
 	var output = '';
 	var wordlist = wordListExp.toString().slice(1,-2).split('|')
@@ -215,12 +232,25 @@ function toggleRichText() {
 	textheight();
 }
 
-//to open and close help items
+//to open and close items
 function openClose(theID) {
-	if (document.getElementById(theID).style.display === "block") {
+	if (document.getElementById(theID).style.display == "block") {
 		document.getElementById(theID).style.display = "none"
 	} else {
 		document.getElementById(theID).style.display = "block"
+	}
+}
+
+//as above, but closes everything else in help
+function openHelp(theID){
+	var helpItems = document.getElementsByClassName('helptext');
+	for(var i=0; i < helpItems.length; i++){
+		helpItems[i].style.display = 'none'
+	}
+	document.getElementById(theID).style.display = "block";
+	if(isMobile){									//scroll to the item
+		location.href = '#';
+		location.href = '#a' + theID
 	}
 }
  

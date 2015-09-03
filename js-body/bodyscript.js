@@ -1,7 +1,4 @@
 ﻿//this is the part of the javascript code that must be within the body
-
-//  Clear out "sorry, no JavaScript" warning and display the type of source
-	showGreeting();
 	
 //detect browser and device
 	var isMobile = (typeof window.orientation != 'undefined'),
@@ -19,6 +16,9 @@
 		isFile = (window.location.protocol == 'file:');
 	textheight();
 
+//  Clear out "sorry, no JavaScript" warning and display the type of source
+	showGreeting();
+
 //set global variable indicating if there is a Chrome sync data area. Works for Chrome apps and extension
 var ChromeSyncOn = false;
 if(isChrome){
@@ -34,11 +34,7 @@ if(isChrome){
 function showGreeting(){
 	var protocol = window.location.protocol,
 		msgStart = "<span style='color:lime;font-size:xx-large;'><strong>Welcome to SeeOnce</strong></span><br />",
-		msgEnd = "<br>Enter your Key. Then click OK";
-		
-	//display special greeting the first time the program runs. The Chrome app does this differently
-	if(!ChromeSyncOn){if(!localStorage){introGreeting();}else if(!localStorage['locDir']){introGreeting();}}
-	
+		msgEnd = "<br>Enter your Password and click OK";	
 	if(protocol == 'file:'){
 		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd	
 	}else if(protocol == 'https:'){
@@ -49,10 +45,15 @@ function showGreeting(){
 		mainScr.style.backgroundColor = '#ffd0ff';
 		keyMsg.innerHTML = msgStart + '<span style="color:orange">WARNING: running from an insecure source!</span>' + msgEnd
 	}
+		
+	//display special greeting the first time the program runs. The Chrome app does this differently
+	if(!ChromeSyncOn){if(!localStorage){introGreeting();}else if(!localStorage['locDir']){introGreeting();}}
 }
 
 //special instructions the first time it runs
 function introGreeting(){
+	firstTimeKey.style.display = 'block';
+	keyMsg.innerHTML = 'The strength will appear here<br>Enter the Password and click <strong>OK</strong>';
 	if(isiPhone || isAndroidPhone){
 		keyScr.style.width = '100%';			//more space needed for phones
 		keyScr.style.height = '100%';
@@ -60,7 +61,6 @@ function introGreeting(){
 		keyScr.style.left = 0;
 		firstTimeKey.style.fontSize = 'large'	//smaller font
 	}
-	firstTimeKey.style.display = 'block'
 }
 function cancelIntroGreeting(){
 	keyScr.style.width = '';
@@ -94,8 +94,8 @@ function textheight(){
 
 //functions for reading a file into the box, and for saving it later
 function saveURLAsFile(){
-	var URLToWrite = mainBox.innerHTML.trim().replace(/<br>/g,'\n'),
-		URLToWriteSplit = URLToWrite.split('\n'),
+	var URLToWrite = mainBox.innerHTML.trim(),
+		URLToWriteSplit = URLToWrite.split('<br>'),
 		fileNameToSaveAs = URLToWriteSplit[0].split(':')[1];
 	if(URLToWriteSplit.length > 1){
 		var content = URLToWriteSplit[1].trim()
@@ -106,6 +106,11 @@ function saveURLAsFile(){
 	if(content.slice(0,4).toLowerCase()=='data'){							//regular save of encoded file		
 		downloadLink.download = fileNameToSaveAs;
 		downloadLink.innerHTML = "Download File"
+	} else if(URLToWrite){																//to save contents as rich text file
+		var textFileAsBlob = new Blob([URLToWrite], {type:'text/plain'});
+		downloadLink.download = 'SeeOnce_saved.html';
+		downloadLink.innerHTML = "Download File";
+		content = window.URL.createObjectURL(textFileAsBlob);
 	}
 	if (window.URL != null)
 	{
@@ -122,8 +127,10 @@ function saveURLAsFile(){
 		downloadLink.style.display = "none";
 		document.body.appendChild(downloadLink);
 	}
-	downloadLink.click();
-	mainMsg.innerHTML = 'File saved with filename ' + downloadLink.download
+	if(content){
+		downloadLink.click();
+		mainMsg.innerHTML = 'File saved with filename ' + downloadLink.download
+	}
 }
 
 function destroyClickedElement(event)

@@ -412,7 +412,7 @@ img.intLink { border: 0; }
 <div id="fileBtns" style="display: block;">
 <hr style="width:25%;">
         <input class="custom-file-input" type="file" id="fileBtn" style="" title="open dialog to select file to load"/>
-        <button class="cssbutton" id="saveFileBtn" value="Save file" title="save file to default Downloads folder in original format, or as a text file if type is not recognized" disabled>Save file</button>
+        <button class="cssbutton" id="saveFileBtn" value="Save file" title="save file to default Downloads folder in original format, or as a text file if type is not recognized">Save file</button>
   </div>
   </div>
   </div>
@@ -420,29 +420,31 @@ img.intLink { border: 0; }
 <!--Key dialog-->
 <div id="keyScr" class="white_content" align="center" style="display: block;">
 <br/>
-      	<div id="keyMsg" style="font-size:x-large;height:90px;"><span style="color:pink;font-weight:bold">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div><br /><br />
-
-		<input type="password" class="cssbox" autocomplete="off" id="pwd" onKeyUp="pwdKeyup(event);" style="width:95%;" name="text" placeholder="Enter your secret Key here." align="center"><br /><br />
-		<input type="checkbox" id="showKey" title="reveal box contents"> &nbsp;Show&nbsp;
-
-	 	<button class="cssbutton" id="acceptKeyBtn" value="OK" style="" title="accept Key" disabled>OK</button>
-        <div id="firstTimeKey" align="left" style="font-size:x-large;width:95%;display:none;">
-<p>Before you do anything else, you must choose a secret Key, which you will memorize and <strong>won't tell anyone</strong>, and then click <strong>OK</strong>.</p>
-<p>Its measured strength will appear above it, as you begin to type. If it is worse than Medium, <em>things will be very slow.</em></p>
+         <div id="firstTimeKey" align="left" style="font-size:x-large;width:95%;display:none;">
+         <h3 style="color:lime;">Welcome to SeeOnce</h3>
+<p>Before you do anything else, you must choose a secret Password, which you will memorize and <strong>won't tell anyone</strong>, and click <strong>OK</strong>.</p>
+<p>Its measured strength will appear above it as you begin to type. If it is worse than Medium, <em>things will be very slow.</em></p>
 <p>Make sure to use $ymbol$, numb3rs, caPiTals, unusual words and mespelingss.</p>
 <p>The <strong>Suggest</strong> button will get you started with five words, which you can modify at will.</p>
-<p>Your Key will not be stored or sent anywhere.</p>
-        <div align="center"><button class="cssbutton" id="suggestKeyBtn" value="Suggest" title="suggest a Key made of five common words">Suggest</button></div>
+<p>Your Password will not be stored or sent anywhere.</p>
+        <div align="center"><button class="cssbutton" id="suggestKeyBtn" value="Suggest" title="suggest a Password made of five common words">Suggest</button></div><br>
         </div>
-        <span id="fiveMin"><p>You will need to re-enter your Key if you don't use it for 5 min.</p></span>
+        
+      	<div id="keyMsg" style="font-size:x-large;height:90px;"><span style="color:pink;font-weight:bold">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div><br /><br />
+
+		<input type="password" class="cssbox" autocomplete="off" id="pwd" onKeyUp="pwdKeyup(event);" style="width:95%;" name="text" placeholder="Enter your Password here" align="center"><br /><br />
+		<input type="checkbox" id="showKey" title="reveal box contents"> &nbsp;Show&nbsp;
+
+	 	<button class="cssbutton" id="acceptKeyBtn" value="OK" style="" title="accept Password" disabled>OK</button>
+        <span id="fiveMin"><p>You will need to re-enter your Password after 5 minutes</p></span>
 </div>
 
 <!--Name dialog-->
 <div id="nameScr" class="white_content" align="center" style="display: none;">
 <br/>
-      	<div id="nameMsg" style="">This message was locked with a new Key. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div><br /><br />
-
-		<select id='nameList2' class="cssbox" size='10' style="width:30%;" title="select the sender"></select><br /><br />
+      	<div id="nameMsg" style="">This message was locked with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div>
+        <div id='nameListSpace2'><br /><br />
+		<select id='nameList2' class="cssbox" size='10' style="width:30%;" title="select the sender"></select><br /><br /></div>
 		<input type="text" class="cssbox" id="nameBox" onKeyUp="nameKeyup(event);" style="width:60%;" name="name" placeholder="Enter the name here." align="center"><br /><br />
 	 	<button class="cssbutton" id="acceptNameBtn" value="OK" style="" title="accept name" disabled>OK</button>
 </div>
@@ -450,10 +452,11 @@ img.intLink { border: 0; }
 <!--Select dialog-->
 <div id="selectScr" class="white_content" align="center" style="display: none;">
 <br/>
-      	<div id="selectMsg" style="">Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button</div><br /><br />
-		<select id='nameList' class="cssbox" size='10' style="width:30%;" title="select the recipient"></select><br /><br />
+      	<div id="selectMsg" style="">Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button</div>
+        <div id='nameListSpace'><br /><br />
+		<select id='nameList' class="cssbox" size='10' style="width:30%;" title="select the recipient"></select><br /><br /></div>
 		<button class="cssbutton" id="cancelSelectBtn" value="Cancel" style="" title="cancel selection">Cancel</button>
-	 	<button class="cssbutton" id="acceptSelectBtn" value="OK" style="" title="accept selection" disabled>OK</button><br><br>        Warning: the contents of invitations are <strong>NOT SECURE</strong><br>If the main box contains sensitive information, you should cancel now and try again after you have changed it.<br><br>
+	 	<button class="cssbutton" id="acceptSelectBtn" value="OK" style="" title="accept selection" disabled>OK</button><br><br>        Warning: the contents of invitations are <strong>NOT SECURE</strong><br>If the main box contains sensitive information, you should cancel now and try again after changing it.<br><br>
 <button class="cssbutton" id="inviteBtn" value="Invite" style="" title="make an invitation for a new user (alt-I)" accesskey="i">Invite a new user</button>
 </div>
 
@@ -486,11 +489,11 @@ img.intLink { border: 0; }
 </div>
 
 <!--Help screen-->
-<div id="helpScr" style="display:none;">
+<div id="helpScr" style="max-width:1200px;margin-left:auto;margin-right:auto;display:none;">
 <h2 style="color:lime;font-size:x-large;">Welcome to SeeOnce</h2>
 <button class="cssbutton" id="help2mainBtnTop" value="< Back" style="float:left;" title="return to main screen (alt-M)" accesskey='m'>&#9668; Back</button>
 <br />
-&nbsp;&nbsp;&nbsp;<span id='helpmsg'>For help on how to do things, click on each title below. Click again to hide.</span><br><br>
+&nbsp;&nbsp;&nbsp;<span id='helpmsg'>For help on how to do things, click on each title.</span><br><br>
 <hr>
 
 <div id="aa1" class="helpitem">
@@ -501,6 +504,7 @@ img.intLink { border: 0; }
 <p>You can also use SeeOnce for real-time secure chat sessions involving text, files, audio, or even video. The connection is direct between participants, with a server getting involved only at the start so you can find each other.</p>
 <p>SeeOnce runs on a browser and is platform-independent. The chat component, however, does not yet run on IE or Safari, or under iOS.</p>
 <p>SeeOnce is <em>still in experimental phase</em>, as it has not yet been duly vetted by experts. Bear this in mind before entrusting sensitive information to it.</p>
+<p>If you want more capability, you may want to try PassLok, from <a href="https://PassLok.com" target="_blank">https://PassLok.com</a>. In addition to read-once encryption and Letters encoding for a single recipient, PassLok implements three more encryption and five more steganography modes, plus signatures and secret splitting. PassLok can also encrypt for several recipients at once.</p>
 </div>
 <hr>
 
@@ -508,8 +512,9 @@ img.intLink { border: 0; }
 <h3>How do I use SeeOnce?</h3>
 </div>
 <div id="a2" class="helptext">
-<p>The first time SeeOnce ran on your machine, you were asked to come up with a secret Key. You must remember this Key and <em>never give it to anyone</em>, not even your friends. SeeOnce gives you a score as you type it and tells you how long it will take to process it. The lower the score, the longer it takes, so it is better to come up with a good Key. SeeOnce doesn't store it or send it anywhere at all.</p>
-<p>After that, <strong>as soon as you paste</strong> into SeeOnce a locked message you have received, it unlocks automatically, and this normally <em>only once</em>. If you load SeeOnce from an email link, you don't even have to copy and paste. The first time you get a message from someone, or if the sender's Key has changed, SeeOnce will ask you to provide a name for this person.</p>
+<p>The first time SeeOnce ran on your machine, you were asked to come up with a secret Password. You must remember this Password and <em>never give it to anyone</em>, not even your friends. SeeOnce gives you a score as you type it and tells you how long it will take to process it. The lower the score, the longer it takes, so it is better to come up with a good Password. SeeOnce doesn't store it or send it anywhere at all.</p>
+<p>After that, <strong>as soon as you paste</strong> into SeeOnce a locked message you have received, it unlocks automatically, and this normally <em>only once</em>. If you load SeeOnce from an email link, you don't even have to copy and paste. The first time you get a message from someone, or if the sender's Password has changed, SeeOnce will ask you to provide a name for this person.</p>
+<p>(PC only) Since normally you will get to see the unlocked message only once, if you click the <strong>Save</strong> button, it will be saved locally as an html file so any formatting is preserved.</p>
 <p>To <strong>reply to a message</strong>, just type your reply into SeeOnce, either plain or with formatting (the formatting tools are shown by clicking the <strong>Rich</strong> button).Then click the <strong>Lock</strong> button. A locked message containing a link is generated. You can then send it through your default email by clicking the <strong>Email</strong> button, if enabled in your browser and the contents are not too long. SeeOnce may ask you to identify the person you are replying to, before the message is locked.</p>
 <p>If you want your locked message to look like normal text rather than encrypted gibberish, click the <strong>Hide</strong> button after locking. You will then be asked for a cover text, which you can store for the session by clicking a checkbox.</p>
 <p>To send a message to a person other than the last message's sender, click <strong>Switch</strong> and select the new recipient. If that person is not yet on the list, you can still send the message to him/her by clicking a special <strong>Invite</strong> button. But be careful, because the contents of invitation messages are NOT SECURE.</p>
@@ -517,29 +522,38 @@ img.intLink { border: 0; }
 <hr>
 
 <div id="aa3" class="helpitem">
-<h3>Can I change my Key?</h3>
+<h3>Something is not working</h3>
 </div>
 <div id="a3" class="helptext">
-<p>You must type in your old Key if you are trying to read a message you just received, otherwise the message will fail to unlock. If you want to change your Key after reading it, however, you only need to reload SeeOnce and start using a new Key.</p>
-<p>You will be forced to do a <strong>Reset</strong> for all current conversations but your message will be secure and you'll be able to continue the conversations normally. Your correspondents will be warned that your Key has changed.</p>
+<p>If a new message fails to unlock even though the Password is correct, this may be because the conversation has gone out of sync after of moving to another machine without copying the stored data (see the help item on how to do this) or reading messages out of sequence. To get back in sync, click the <strong>Reset</strong> button and send a locked message to the other person asking to repeat the last message.</p>
+<p>Some browsers have trouble sending locked messages to the email program, and may corrupt it so that the recipient cannot unlock it. Please make sure the email program got the entire locked message without dropping anything ("+" and "/" characters may be a problem). If something goes wrong, you can always copy the locked message to clipboard, and then paste it into your communications program.</p>
 </div>
 <hr>
 
 <div id="aa4" class="helpitem">
-<h3>Can I change machines?</h3>
+<h3>Can I change my Password?</h3>
 </div>
 <div id="a4" class="helptext">
+<p>You must type in your old Password if you are trying to read a message you just received, otherwise the message will fail to unlock. If you want to change your Password after reading it, however, you only need to reload SeeOnce and start using a new Password.</p>
+<p>You will be forced to do a <strong>Reset</strong> for all current conversations but your message will be secure and you'll be able to continue the conversations normally. Your correspondents will be warned that your Password has changed.</p>
+</div>
+<hr>
+
+<div id="aa5" class="helpitem">
+<h3>Can I change machines?</h3>
+</div>
+<div id="a5" class="helptext">
 <p>SeeOnce depends on ephemeral keys for its operation, and those are stored within the browser. This means that messages will fail to unlock if you move to a new machine or a different browser (except in the Chrome app, see below), but there is a way around this:</p>
-<p>When you click the <strong>Backup</strong> button, a special backup item containing the stored data appears in the box. It is encrypted by your secret Key. You can now copy it and save it somewhere. An email draft can be handy for this. When you paste the backup into SeeOnce, the data will be loaded back so you can continue conversations on a different machine.</p>
+<p>When you click the <strong>Backup</strong> button, a special backup item containing the stored data appears in the box. It is encrypted by your secret Password. You can now copy it and save it somewhere. An email draft can be handy for this. When you paste the backup into SeeOnce, the data will be loaded back so you can continue conversations on a different machine.</p>
 <p>As soon as the backup is made SeeOnce asks if you also want to wipe the storage. If you click the button again, all  SeeOnce data stored in this machine is erased.</p>
 <p>In the Chrome app version of SeeOnce, the ephemeral data is synced across devices as soon as you log into your Chrome account, so you can continue conversations in course using different machines. All the sensitive synced data is encrypted. The wipe operation only affects the local copy of the data.</p>
 </div>
 <hr>
 
-<div id="aa5" class="helpitem">
+<div id="aa6" class="helpitem">
 <h3>How does Chat work?</h3>
 </div>
-<div id="a5" class="helptext">
+<div id="a6" class="helptext">
 <p>If you click the <strong>Chat</strong> button, a dialog asks you what kind of real-time chat you want to set up. There are three choices: text and files, this plus audio, and all this plus video.</p>
 <p>After you click <strong>OK</strong>, SeeOnce makes a chat invite exactly as when locking a message. You then send it to the other participant. At the same time, a chat window opens asking you to supply an alias for the current chat. After you do this, the chat session waits for the other person to join. If the chat window fails to open, check that the browser is not blocking pop-ups from SeeOnce.</p>
 <p>When the recipient gets your chat invite, he/she will unlock it like any other SeeOnce message and then the chat window will open and ask for an alias. When he/she supplies this, you'll be connected directly to one another. You both may also be asked to grant permission to feed audio or video when the connection takes place.</p>
@@ -548,28 +562,28 @@ img.intLink { border: 0; }
 </div>
 <hr>
 
-<div id="aa6" class="helpitem">
+<div id="aa7" class="helpitem">
 <h3>Can I send files?</h3>
 </div>
-<div id="a6" class="helptext">
+<div id="a7" class="helptext">
 <p>Chat has its own secure file-sending process, so we refer here to sending files by email. You have two choices:</p>
 <p>1. Encrypt the files using AES with a utility such as <a href="http://www.7-zip.org/" target="_blank">7-zip</a> (Windows), <a href="http://www.kekaosx.com/" target="_blank">Keka</a> (OSX), or p7zip (Linux), then lock the encryption password inside a SeeOnce reply, and attach the encrypted archive to your email.</p>
 <p>2. You can load a file smaller than a megabyte as text, using the button at the lower left corner of the screen (labeled <strong>Select a file</strong> in Chrome, something else in other browsers), and then lock it as a regular message. After unlocking, the recipient can save the file using the <strong>Save file</strong> button.</p>
 </div>
 <hr>
 
-<div id="aa7" class="helpitem">
+<div id="aa8" class="helpitem">
 <h3>Are there any potential insecurities?</h3>
 </div>
-<div id="a7" class="helptext">
+<div id="a8" class="helptext">
 <p>We have tried to make SeeOnce extremely easy to use without impacting security, but tradeoffs do exist. There are three main issues that you must be aware of:</p>
-<p>1. <strong>Users are not authenticated</strong>. This means that someone could gain access to your correspondent's email account and impersonate him/her without your realizing it. From time to time you should ask your correspondent to send you something that only he/she could produce (for instance, a selfie picture where he/she does something you requested in your previous message). If your correspondent switches Key he/she should tell you about it, because SeeOnce will warn you that the Key has changed. To further protect you against a "man in the middle," follow the instructions at the end of this help item.</p>
+<p>1. <strong>Users are not authenticated</strong>. This means that someone could gain access to your correspondent's email account and impersonate him/her without your realizing it. From time to time you should ask your correspondent to send you something that only he/she could produce (for instance, a selfie picture where he/she does something you requested in your previous message). If your correspondent switches Password he/she should tell you about it, because SeeOnce will warn you that the Password has changed. To further protect you against a "man in the middle," follow the instructions at the end of this help item.</p>
 <p>2. <strong>Not all messages have the same level of security</strong>, which builds up with each message exchanged. Invitations have no security at all, as they can be read by anyone anytime. First replies and replies made right after a reset are secure against third parties reading them, but they can be read indefinitely both by sender and recipient. The replies to those can be read more than once, but only until a new reply is made. Finally, the next reply from either end, and beyond, becomes unreadable by anyone as soon as the recipient sees it.</p>
 <p>3. <strong>Hackers could change the code</strong> at the web server, and therefore destroy all security without users realizing it. The native app versions of SeeOnce are code-signed by the respective app stores so this is not a problem with those, but if you are concerned about the authenticity of the web app, you can verify it by following the instructions below.</p>
-<div id='bb7' class="helpitem">
+<div id='bb8' class="helpitem">
   <p><em>Click here for instructions against a "man in the middle."</em></p>
 </div>
-<div id="b7" class="helptext">
+<div id="b8" class="helptext">
    <p>The easy way: ask your correspondent to read over the phone (or in an audio or video SeeOnce chat session) a substantial portion of the special SeeOnce link made on his/her side when making a reply, or the beginning of any locked item, which should match what you're getting. Fifteen characters or so will be enough. But if you are communicating exclusively by email, you can send a person whom you know and who knows you the following message or something like it, which implements something called the "interlock protocol":</p>
    <p><br />
      <em>Dear So-and-So:</em><br />
@@ -582,10 +596,10 @@ img.intLink { border: 0; }
    </ol>
       <p><em>Many thanks. Sincerely, This-and-That</em></p>
 </div>
-<div id='bb8' class="helpitem">
+<div id='bb9' class="helpitem">
   <p><em>Click here for instructions to verify the SeeOnce code.</em></p>
 </div>
-<div id="b8" class="helptext">
+<div id="b9" class="helptext">
 <p>Warning: following the links in these instructions may give away your location; proceed with caution.</p>
 <p>1. Head to Online-convert.com <a href="http://hash.online-convert.com/sha256-generator" target="_blank">http://hash.online-convert.com/sha256-generator</a> and write https://seeonce.net in the second box from the top, then type Enter or click "Convert File". This will instruct this website to fetch the SeeOnce code from its server and perform a SHA256 operation on it.</p>
 <p>2. A new screen should appear, displaying the SHA256 string in several formats. Now you want to compare this with the published value, which is available at different places. If both strings are the same, the code is tamper-free. Here are a few locations where this string in published:</p>
@@ -599,20 +613,20 @@ img.intLink { border: 0; }
 </div>
 <hr>
 
-<div id="aa8" class="helpitem">
+<div id="aa9" class="helpitem">
 <h3>What's underneath SeeOnce?</h3>
 </div>
-<div id="a8" class="helptext">
+<div id="a9" class="helptext">
 <p>SeeOnce is the little sibling of PassLok privacy (<a href="https://passlok.com" target="_blank">https://passlok.com</a>), from which it takes its PFS and Read-once encryption modes. Under these modes, encryption keys are changed for every message, so that previous messages become impossible to decrypt by anyone. While PassLok gives users control over which mode to use, SeeOnce replies default to Read-once mode and switch to PFS mode when Read-once is unavailable. Invitations are encrypted with the user's own Lock, which makes them not secure, but they only contain instructions for using SeeOnce.</p>
 <p>Likewise, while PassLok includes a complete directory management system for other user's Locks (public keys), SeeOnce makes this automatic by including the sender's Lock in special links and locked messages.</p>
-<p>You can get full details on SeeOnce's cryptography from the <a href="http://www.weebly.com/uploads/2/4/1/8/24187628/passlok_technical_document.pdf" target="_blank">PassLok technical document.</a>.</p>
+<p>You can get full details on SeeOnce's cryptography from the <a href="https://www.seeonce.net/seeonce_technical_document.pdf" target="_blank">SeeOnce technical document.</a>.</p>
 </div>
 <hr>
 
-<div id="aa9" class="helpitem">
+<div id="aa10" class="helpitem">
 <h3>Keyboard shortcuts</h3>
 </div>
-<div id="a9" class="helptext">
+<div id="a10" class="helptext">
 <p>The main functions in SeeOnce can be accessed directly from the keyboard. The button tooltips tell you what the shortcut is for each button that has a shortcut, but below is a list just in case:</p>
     <ul>
     <p>Alt-L: <strong>L</strong>ock</p>
@@ -625,22 +639,22 @@ img.intLink { border: 0; }
 </div>
 <hr>
 
-<div id="aa10" class="helpitem">
+<div id="aa11" class="helpitem">
 <h3>Privacy Policy</h3>
 </div>
-<div id="a10" class="helptext">
+<div id="a11" class="helptext">
 <p>SeeOnce  is a self-contained piece of code that does not rely on servers  to do its job. Therefore:</p>
-<p><strong>1. We cannot give your secret Key to anyone</strong> (not even yourself) because we don't have it. Your Key is never stored or transmitted, and gets deleted from memory  after five minutes of not being used. We don't have ephemeral keys, either.</p>
+<p><strong>1. We cannot give your secret Password to anyone</strong> (not even yourself) because we don't have it. Your Password is never stored or transmitted, and gets deleted from memory after five minutes of not being used. We don't have ephemeral keys, either.</p>
 <p><strong>2. We cannot give your private data to anyone</strong> because SeeOnce does not send anything out of your device. When you download the app from the web server, you get only the code, without any cookies, plugins, or anything of that sort. We get back <em>nothing</em> from you.</p>
 <p><strong>3. We cannot eavesdrop on your chat sessions, or enable anyone to do so.</strong> Establishing a chat session does involve contacting a signaling server (Firebase) and giving it your IP address and a disposable chatroom name so that others can contact you; the signaling server never sees the content of your chat, which is between participants only. The SeeOnce web server doesn't even see the connection data.</p>
-<p><strong>3. We will never weaken the cryptography methods contained within SeeOnce at the request of a third party, private or public.</strong> This also means no backdoors will ever be added. We would rather shut down SeeOnce than be forced to do this, which would betray the very essence of our efforts. If we learn that a counterfeit version of SeeOnce is circulating, whether placed by hackers or government agencies, we will make the fact known to users.</p>
+<p><strong>4. We will never weaken the cryptography methods contained within SeeOnce at the request of a third party, private or public.</strong> This also means no backdoors will ever be added. We would rather shut down SeeOnce than be forced to do this, which would betray the very essence of our efforts. If we learn that a counterfeit version of SeeOnce is circulating, whether placed by hackers or government agencies, we will make the fact known to users.</p>
 <p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
 <p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
 </div>
 <hr>
 
 <address>
-SeeOnce 1.0 &#169; F. Ruiz 2015
+SeeOnce 1.0.1 &#169; F. Ruiz 2015
 </address>
 <ul>
   <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>

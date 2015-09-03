@@ -1,6 +1,6 @@
 ﻿//sends to default email
 function sendMail() {
-    var link = ("mailto:" + "?subject=" + "&body=" + encodeURIComponent(mainBox.innerHTML)).replace(/%3Cbr%3E/g,'%0D%0A');	
+    var link = ("mailto:" + "?subject= " + "&body=" + encodeURIComponent(mainBox.innerHTML)).replace(/%3Cbr%3E/g,'%0D%0A');	
 	if(isMobile){ 	 											//new window for PC, same window for mobile
 		window.open(link,"_parent")
 	} else {
@@ -14,8 +14,7 @@ function startChat(){
 	checkWebRTC();						//proceed only if supported
 	if(!theirLock){						//make sure a Lock is loaded
 		fromChat = true;
-		fillList(nameList);
-		selectScr.style.display = 'block'
+		selectUser()
 	}else{
 		chatScr.style.display = 'block'
 	}
