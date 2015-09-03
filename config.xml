@@ -4,7 +4,7 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "com.fruiz500.seeonce"
         versionCode = "1"
-        version     = "1.0.0" >
+        version     = "1.0.1" >
 		
     <name>SeeOnce</name>
 
