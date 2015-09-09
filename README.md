@@ -31,9 +31,9 @@ The SeeOnce original code is in directories js-head and js-body (note: names are
 * window reformatting, special functions: bodyscript.js
 * initialization, button connections: initbuttons.js
 
-Full documentation will soon be found at: <http://see-once.weebly.com/> including:
-* PassLok technical design document: http://www.weebly.com/uploads/2/4/1/8/24187628/passlok_technical_document.pdf
-* and a number of articles and video tutorials.
+Full documentation to be found at: <http://see-once.weebly.com/> including:
+* SeeOnce technical design document: https://seeonce.net/seeonce_technical_document.pdf
+* and a number of articles and video tutorials, coming soon.
 
 License
 -------
