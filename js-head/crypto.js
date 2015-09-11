@@ -110,11 +110,11 @@ function Encrypt(isChat){
 	mainBox.innerHTML = type + myLock + noncestr + newLockCipher + cipherstr;
 		
 	if(type == '%' || firstMessage){
-		mainMsg.innerHTML = "This message for " + name + " will never become unlockable<br>Copy and send or click <strong>Email</strong>"	
+		mainMsg.innerHTML = "This message for " + name + " will never become permanently locked<br>Copy and send or click <strong>Email</strong>"	
 	}else if(type == '$'){
-		mainMsg.innerHTML = "This message for " + name + " will become unlockable after you get a reply<br>Copy and send or click <strong>Email</strong>"
+		mainMsg.innerHTML = "This message for " + name + " will become permanently locked after you get a reply<br>Copy and send or click <strong>Email</strong>"
 	}else{
-		mainMsg.innerHTML = "This message for " + name + " will become unlockable as soon as it is read<br>Copy and send or click <strong>Email</strong>"
+		mainMsg.innerHTML = "This message for " + name + " will become permanently locked as soon as it is read<br>Copy and send or click <strong>Email</strong>"
 	}
 	
 	if(isChat){

@@ -60,6 +60,8 @@ function introGreeting(){
 		keyScr.style.top = 0;
 		keyScr.style.left = 0;
 		firstTimeKey.style.fontSize = 'large'	//smaller font
+	}else if(isMobile){
+		firstTimeKey.style.fontSize = 'large'
 	}
 }
 function cancelIntroGreeting(){
