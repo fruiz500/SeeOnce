@@ -1,5 +1,5 @@
 ﻿//this is the part of the javascript code that must be within the body
-	
+
 //detect browser and device
 	var isMobile = (typeof window.orientation != 'undefined'),
 		isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1,
@@ -34,9 +34,9 @@ if(isChrome){
 function showGreeting(){
 	var protocol = window.location.protocol,
 		msgStart = "<span style='color:lime;font-size:xx-large;'><strong>Welcome to SeeOnce</strong></span><br />",
-		msgEnd = "<br>Enter your Password and click OK";	
+		msgEnd = "<br>Enter your Password and click OK";
 	if(protocol == 'file:'){
-		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd	
+		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd
 	}else if(protocol == 'https:'){
 		keyMsg.innerHTML = msgStart + 'downloaded from a secure server' + msgEnd
 	}else if(protocol == 'chrome-extension:'){
@@ -45,7 +45,7 @@ function showGreeting(){
 		mainScr.style.backgroundColor = '#ffd0ff';
 		keyMsg.innerHTML = msgStart + '<span style="color:orange">WARNING: running from an insecure source!</span>' + msgEnd
 	}
-		
+
 	//display special greeting the first time the program runs. The Chrome app does this differently
 	if(!ChromeSyncOn){if(!localStorage){introGreeting();}else if(!localStorage['locDir']){introGreeting();}}
 }
@@ -105,7 +105,7 @@ function saveURLAsFile(){
 		var content = URLToWriteSplit[0].trim()
 	};
 	var downloadLink = document.createElement("a");
-	if(content.slice(0,4).toLowerCase()=='data'){							//regular save of encoded file		
+	if(content.slice(0,4).toLowerCase()=='data'){							//regular save of encoded file
 		downloadLink.download = fileNameToSaveAs;
 		downloadLink.innerHTML = "Download File"
 	} else if(URLToWrite){																//to save contents as rich text file

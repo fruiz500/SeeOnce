@@ -22,9 +22,9 @@ function keyStrength(pwd,display) {
 	}else{
 		var msg = '<span style="color:cyan">Overkill  !!</span>';
 	}
-	
+
 	var iter = Math.max(1,Math.min(20,Math.ceil(24 - entropy/5)));			//set the scrypt iteration exponent based on entropy: 1 for entropy >= 120, 20(max) for entropy <= 20
-	
+
 	var seconds = time10/10000*Math.pow(2,iter-8);			//to tell the user how long it will take, in seconds
 
 	keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process';
@@ -104,16 +104,18 @@ var	myKey,
 function readKey(){
 	clearTimeout(keytimer);
 	var period = 300000;
-	
+
 	//start timer to reset Password box
 	keytimer = setTimeout(function() {
 		pwd.value = '';
+		oldPwd.value = '';
 		myKey = '';
 	}, period);
-	
+
 	//erase key at end of period, by a different way
 	if ((new Date().getTime() - keytime > period)) {
 		pwd.value = '';
+		oldPwd.value = '';
 		myKey = '';
 	}
     keytime = new Date().getTime();
@@ -146,7 +148,7 @@ function acceptKey(){
 		mainMsg.innerHTML = '<span class="blink" style="color:orange">LOADING...</span> for best speed, use at least a Medium Password'
 	}
 	key2any();
-	
+
 	setTimeout(function(){									//execute after a delay so the key entry dialog can go away
 		myKey = wiseHash(key,'');
 		if(!myLockbin){
@@ -184,25 +186,25 @@ function initSession(){
 	}else{
 		locDir = JSON.parse(localStorage['locDir']);		//retrieve whatever is stored
 	}
-	
+
 	if(theirLock == ''){
 		resetBtn.disabled = true
-		
+
 	}else if(theirLock.length != 43){				//public key is malformed, bail out and display message
 		keyMsg.innerHTML = "<span style='color:orange;'>The link is corrupted. Please check it and try again</span>";
 		throw('malformed link')
-		
+
 	}else if(!locDir[theirLock]){					//new public key, store it
 		var newEntry = JSON.parse('{"' + theirLock + '":[]}');
 		locDir = mergeObjects(locDir,newEntry);
 		storeData(theirLock)
-				
+
 	}else{											//key already known, prepare to reply, reset if ordered to do so
 		if(locDir[theirLock][0] || locDir[theirLock][1]){
 			resetBtn.disabled = false
 		}
 		theirName = locDir[theirLock][3]
-	}	
+	}
 }
 
 //stretches a password string with a salt string to make a 256-bit Uint8Array Password
@@ -211,7 +213,7 @@ function wiseHash(pwd,salt){
 		secArray = new Uint8Array(32),
 		keyBytes;
 	if(salt.length == 43) iter = 1;								//random salt: no extra stretching needed
-	scrypt(pwd,salt,iter,8,32,1000,function(x){keyBytes=x;});
+	scrypt(pwd,salt,iter,8,32,0,function(x){keyBytes=x;});
 	for(var i=0;i<32;i++){
 			secArray[i] = keyBytes[i]
 	}
@@ -222,7 +224,7 @@ function wiseHash(pwd,salt){
 function hashTime10(){
 	var before = Date.now();
 	for (var i=0; i<10; i++){
-		scrypt('hello','world',10,8,32,1000,function(){});
+		scrypt('hello','world',10,8,32,0,function(){});
 	}
 	return Date.now() - before
 }
@@ -253,26 +255,66 @@ function PLencrypt(plainstr,nonce24,sharedKey){
 	return nacl.util.encodeBase64(cipher).replace(/=+$/,'')
 }
 
+needRecrypt = false;
 //decrypt string with a shared key
-function PLdecrypt(cipherstr,nonce24,sharedKey){
-	var cipher = nacl.util.decodeBase64(cipherstr),
-		plain = nacl.secretbox.open(cipher,nonce24,sharedKey);
-		if(!plain) failedDecrypt();
+function PLdecrypt(cipherstr,nonce24,sharedKey,detectPwdChange){
+	try{															//this may fail if the string is corrupted, hence the try
+		var cipher = nacl.util.decodeBase64(cipherstr);
+	}catch(err){
+		mainMsg.innerHTML = "This locked message seems to be corrupted or incomplete";
+		throw('decodeBase64 failed')
+	}
+	var	plain = nacl.secretbox.open(cipher,nonce24,sharedKey);
+		if(!plain){													//failed, try old password
+			if(oldPwd.value.trim()){
+				plain = nacl.secretbox.open(cipher,nonce24,wiseHash(oldPwd.value.trim(),''));
+				if(!plain){
+					failedDecrypt()
+				}else{
+					needRecrypt = true							//record the fact that a new Password is being used
+				}
+			}else{
+				failedDecrypt()
+			}
+		}
 	return nacl.util.encodeUTF8(plain)
 }
 
 //takes appropriate UI action if decryption fails
 function failedDecrypt(){
-	if(callKey == 'encrypt'){
-		mainMsg.innerHTML = 'The stored data failed to unlock. Please check your Password<br>Or reset the exchange';
+	if((callKey == 'encrypt' || callKey == 'decrypt') && locDirDecrypt){
+		oldKeyScr.style.display = 'block';
+		shadow.style.display = 'block';
+		locDirDecrypt = false
+	}else if(!locDir[theirLock]){
+		restoreTempLock();
+		mainMsg.innerHTML = 'Unlock has Failed. Selected sender may be wrong';
+		callKey = ''		
 	}else if(locDir[theirLock][2] == 'lock'){
+		restoreTempLock();
 		mainMsg.innerHTML = '<span style="color:orange;">Messages can be unlocked <em>only once</em></span>';
+		callKey = ''
 	}else if(mainBox.innerHTML.charAt(0) == '~'){
 		mainMsg.innerHTML = 'The backup has failed to unlock. Please check your Password';
+		callKey = ''
 	}else{
+		restoreTempLock();
 		mainMsg.innerHTML = 'Unlock has Failed. Try resetting the exchange';
-		mainBox.innerHTML = ''
+		callKey = ''
 	}
-	callKey = '';
 	throw('decryption failed')
+}
+
+//restores the original data if unlocking from a new Lock fails
+function restoreTempLock(){
+	if(tempLock){
+		locDir[tempLock] = [];
+		locDir[tempLock][0] = tempEphKey;
+		locDir[tempLock][1] = tempEphLock;
+		locDir[tempLock][2] = tempFlag;
+		locDir[tempLock][3] = theirName;
+		delete locDir[theirLock];
+		tempLock = tempEphKey = tempEphLock = tempFlag = '';
+		storeData()
+	}
 }

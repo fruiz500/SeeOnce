@@ -1,9 +1,18 @@
 ﻿//this is for showing and hiding text in key box and other password input boxes
-function showsec(){
+function showSec(){
 	if(showKey.checked){
 		pwd.type="TEXT";
 	}else{
 		pwd.type="PASSWORD";
+	}
+};
+
+//same, for old Key box
+function showOldSec(){
+	if(showOldKey.checked){
+		oldPwd.type="TEXT";
+	}else{
+		oldPwd.type="PASSWORD";
 	}
 };
 
@@ -16,13 +25,13 @@ function clearMain(){
 
 //for selecting the Main box contents
 function selectMain(){
-    var range, selection;   
+    var range, selection;
     if (document.body.createTextRange) {
         range = document.body.createTextRange();
         range.moveToElementText(mainBox);
         range.select();
     } else if (window.getSelection) {
-        selection = window.getSelection();        
+        selection = window.getSelection();
         range = document.createRange();
         range.selectNodeContents(mainBox);
         selection.removeAllRanges();
@@ -52,11 +61,21 @@ function changeButtons(){
 		hideBtn.innerHTML = 'Hide';
 		replyBtn.innerHTML = 'Email'
 	}else if(text.match('\u2004') || text.match('\u2005') || text.match('\u2006')){		//hidden output
-		hideBtn.innerHTML = 'Switch';
+		hideBtn.innerHTML = 'To...';
 		replyBtn.innerHTML = 'Email'
 	}else{
-		hideBtn.innerHTML = 'Switch';
-		replyBtn.innerHTML = 'Lock'	
+		hideBtn.innerHTML = 'To...';
+		replyBtn.innerHTML = 'Lock'
+	}
+}
+
+//accepts old Password and restarts interrupted process
+function acceptOldKey(){
+	closeBox();
+	if(callKey == 'encrypt'){
+		lockItem()
+	}else if(callKey == 'decrypt'){
+		Decrypt()
 	}
 }
 
@@ -64,10 +83,16 @@ function changeButtons(){
 function closeBox() {
 	shadow.style.display = "none";
 	keyScr.style.display = "none";
+	oldKeyScr.style.display = "none";
 	coverScr.style.display = "none";
 	chatScr.style.display = "none";
 	selectScr.style.display = "none";
 	nameScr.style.display = "none";
+}
+
+function cancelOldKey(){
+	closeBox();
+	mainMsg.innerHTML = 'Old Password canceled';
 }
 
 function cancelChat(){
@@ -120,14 +145,21 @@ function openNewLock(){
 //displays Password strength and resets timer
 function pwdKeyup(evt){
 	clearTimeout(keytimer);
-	keytimer = setTimeout(function() {pwd.value = ''}, 300000);
+	keytimer = setTimeout(function() {pwd.value = ''; oldPwd.value = '';}, 300000);
 	keytime = new Date().getTime();
 	if(pwd.value.trim() == ''){acceptKeyBtn.disabled = true;}else{acceptKeyBtn.disabled = false;}
 	evt = evt || window.event
-	if (evt.keyCode == 13){acceptKey()} 
+	if (evt.keyCode == 13){acceptKey()}
 	else if(pwd.value.trim() == ''){return}
 	else{return keyStrength(pwd.value,true);
 	}
+}
+
+//enter old password from keyboard
+function oldPwdKeyup(evt){
+	evt = evt || window.event
+	if (evt.keyCode == 13){acceptOldKey()}
+	else if(oldPwd.value.trim() == ''){return}
 }
 
 //stores new name from box or disables OK button
@@ -150,7 +182,7 @@ function any2key(){
 //close screens and reset Password timer when leaving the Password box. Restarts whatever was being done when the Password was found missing.
 function key2any(){
 	clearTimeout(keytimer);
-	keytimer = setTimeout(function() {pwd.value = ''}, 300000)	//reset timer for 5 minutes, then delete Password
+	keytimer = setTimeout(function() {pwd.value = ''; oldPwd.value = ''}, 300000)	//reset timer for 5 minutes, then delete Password
 	keytime = new Date().getTime();
 	keyScr.style.display = 'none';
 	shadow.style.display = 'none';
@@ -188,7 +220,7 @@ function main2help(){
 		helpScr.style.display = 'block'
 	}else{
 		mainScr.style.display = 'block';
-		helpScr.style.display = 'none'		
+		helpScr.style.display = 'none'
 	}
 }
 
@@ -210,7 +242,7 @@ function XSSfilter(string){
 
 //for rich text editing
 function formatDoc(sCmd, sValue) {
-	  document.execCommand(sCmd, false, sValue); mainBox.focus(); 
+	  document.execCommand(sCmd, false, sValue); mainBox.focus();
 }
 
 var niceEditor = false;
@@ -253,7 +285,7 @@ function openHelp(theID){
 		location.href = '#a' + theID
 	}
 }
- 
+
 //narrower buttons for phones
 function narrowButtons(){
 	var buttons = document.getElementsByClassName('cssbutton');

@@ -1,7 +1,7 @@
 ﻿//detects that all the characters in the text are legal output
 function legalItem(text){
 	if(text.trim() == '') return false;
-	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@$%";	//base64 plus other characters used in SeeOnce strings	
+	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@$%";	//base64 plus other characters used in SeeOnce strings
 	for (var i = 0; i < text.length; i++){
 		var index = keyAlphabet.indexOf(text[i]);
 		if(index == -1){
@@ -21,9 +21,9 @@ function textStego(){
 		return
 	}else{
 		coverScr.style.display = 'none';
-		shadow.style.display = 'none';		
+		shadow.style.display = 'none';
 	}
-	
+
 	var cleanText = extractCipher(mainBox.innerHTML);
 
 	if(legalItem(cleanText)){							//legal item found: encode it
@@ -47,7 +47,7 @@ function toBin(input){
 		while(bin.length < 7) bin = '0' + bin;
         output += bin;
     }
-	return output	
+	return output
 }
 
 //Letters encoding is based on code at: http://www.irongeek.com/i.php?page=security/unicode-steganography-homoglyph-encoder, by Adrian Crenshaw, 2013
@@ -100,7 +100,7 @@ var charMappings = {//Aa
 					"Z":"0", "Z0":"Z", "\u0396":"1", "Z1":"\u0396",
 					//Spaces
 					" ":"000",
-					" 000":" ",	
+					" 000":" ",
 					"\u2004":"001",
 					" 001":"\u2004",
 					"\u2005":"010",
@@ -160,7 +160,7 @@ function toLetters(text){
 		i++;
 	}
 	mainBox.innerHTML = finalString;
-	hideBtn.innerHTML = 'Switch';
+	hideBtn.innerHTML = 'To...';
 	return turns
 }
 
@@ -184,11 +184,11 @@ function fromLetters(text){
 		}
 	}
 	mainBox.innerHTML = finalString;
-	hideBtn.innerHTML = 'Switch'
+	hideBtn.innerHTML = 'To...'
 }
 
 //adds spaces that can be encoded if Chinese, Korean, or Japanese
 function addSpaces(string){
-	if (string.match(/[\u3400-\u9FBF]/) != null) string = string.split('').join(' ').replace(/\s+/g, ' ');														
+	if (string.match(/[\u3400-\u9FBF]/) != null) string = string.split('').join(' ').replace(/\s+/g, ' ');
 	return string
 }
