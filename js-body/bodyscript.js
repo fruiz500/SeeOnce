@@ -1,5 +1,5 @@
 ﻿//this is the part of the javascript code that must be within the body
-	
+
 //detect browser and device
 	var isMobile = (typeof window.orientation != 'undefined'),
 		isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1,
@@ -34,9 +34,9 @@ if(isChrome){
 function showGreeting(){
 	var protocol = window.location.protocol,
 		msgStart = "<span style='color:lime;font-size:xx-large;'><strong>Welcome to SeeOnce</strong></span><br />",
-		msgEnd = "<br>Enter your Password and click OK";	
+		msgEnd = "<br>Enter your Password and click OK";
 	if(protocol == 'file:'){
-		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd	
+		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd
 	}else if(protocol == 'https:'){
 		keyMsg.innerHTML = msgStart + 'downloaded from a secure server' + msgEnd
 	}else if(protocol == 'chrome-extension:'){
@@ -45,7 +45,7 @@ function showGreeting(){
 		mainScr.style.backgroundColor = '#ffd0ff';
 		keyMsg.innerHTML = msgStart + '<span style="color:orange">WARNING: running from an insecure source!</span>' + msgEnd
 	}
-		
+
 	//display special greeting the first time the program runs. The Chrome app does this differently
 	if(!ChromeSyncOn){if(!localStorage){introGreeting();}else if(!localStorage['locDir']){introGreeting();}}
 }
@@ -60,6 +60,8 @@ function introGreeting(){
 		keyScr.style.top = 0;
 		keyScr.style.left = 0;
 		firstTimeKey.style.fontSize = 'large'	//smaller font
+	}else if(isMobile){
+		firstTimeKey.style.fontSize = 'large'
 	}
 }
 function cancelIntroGreeting(){
@@ -92,52 +94,6 @@ function textheight(){
 	}
 }
 
-//functions for reading a file into the box, and for saving it later
-function saveURLAsFile(){
-	var URLToWrite = mainBox.innerHTML.trim(),
-		URLToWriteSplit = URLToWrite.split('<br>'),
-		fileNameToSaveAs = URLToWriteSplit[0].split(':')[1];
-	if(URLToWriteSplit.length > 1){
-		var content = URLToWriteSplit[1].trim()
-	} else {
-		var content = URLToWriteSplit[0].trim()
-	};
-	var downloadLink = document.createElement("a");
-	if(content.slice(0,4).toLowerCase()=='data'){							//regular save of encoded file		
-		downloadLink.download = fileNameToSaveAs;
-		downloadLink.innerHTML = "Download File"
-	} else if(URLToWrite){																//to save contents as rich text file
-		var textFileAsBlob = new Blob([URLToWrite], {type:'text/plain'});
-		downloadLink.download = 'SeeOnce_saved.html';
-		downloadLink.innerHTML = "Download File";
-		content = window.URL.createObjectURL(textFileAsBlob);
-	}
-	if (window.URL != null)
-	{
-		// Chrome allows the link to be clicked
-		// without actually adding it to the DOM.
-		downloadLink.href = content;
-	}
-	else
-	{
-		// Firefox requires the link to be added to the DOM
-		// before it can be clicked.
-		downloadLink.href = content;
-		downloadLink.onclick = destroyClickedElement;
-		downloadLink.style.display = "none";
-		document.body.appendChild(downloadLink);
-	}
-	if(content){
-		downloadLink.click();
-		mainMsg.innerHTML = 'File saved with filename ' + downloadLink.download
-	}
-}
-
-function destroyClickedElement(event)
-{
-	document.body.removeChild(event.target);
-}
-
 //this one is called by window.onload below
 function loadFileAsURL()
 {
@@ -148,18 +104,47 @@ function loadFileAsURL()
 	{
 		var fileName = fileToLoad.name;
 		var URLFromFileLoaded = fileLoadedEvent.target.result;
+		if(URLFromFileLoaded.length > 2000000){
+			var reply = confirm("This file is larger than 1.5MB and Chrome won't save it. Do you want to continue loading it?");
+			if(!reply){
+				mainMsg.innerHTML = 'File load canceled';
+				throw('file load canceled')
+			}
+		}
 		if(fileToLoad.type.slice(0,4) == "text"){
-			mainBox.innerHTML = URLFromFileLoaded.replace(/  /g,' &nbsp;');
+			if(URLFromFileLoaded.slice(0,2) == '==' && URLFromFileLoaded.slice(-2) == '=='){
+				mainBox.innerHTML += '<br><a download="' + fileName + '" href="data:,' + URLFromFileLoaded + '">' + fileName + '&nbsp;&nbsp;<button onClick="followLink(this);">Save</button></a>'
+			}else{
+				mainBox.innerHTML += "<br><br>" + URLFromFileLoaded.replace(/  /g,' &nbsp;')
+			}
 		}else{
-			mainBox.innerHTML = "filename:" + fileName + "<br>" + URLFromFileLoaded;
+			mainBox.innerHTML += '<br><a download="' + fileName + '" href="' + URLFromFileLoaded + '">' + fileName + '&nbsp;&nbsp;<button onClick="followLink(this);">Save</button></a>'
 		}
 	};
 	if(fileToLoad.type.slice(0,4) == "text"){
 		fileReader.readAsText(fileToLoad, "UTF-8");
-		mainMsg.innerHTML = 'This is the content of file <strong>' + fileToLoad.name + '</strong>'
+		mainMsg.innerHTML = 'This is the content of file <strong>' + fileToLoad.name + '</strong>';
 	}else{
 		fileReader.readAsDataURL(fileToLoad, "UTF-8");
-		mainMsg.innerHTML = 'The file has been loaded in encoded form. It is <strong>not encrypted</strong>'
+		mainMsg.innerHTML = 'The file has been loaded in encoded form. It is <strong>not encrypted.</strong>';
 	}
-	setTimeout(function(){changeButtons();},1000)
+}
+
+//used to download a packaged file
+function followLink(thisLink){
+	var downloadLink = document.createElement("a");
+	downloadLink.download = thisLink.parentElement.download;
+	downloadLink.href = thisLink.parentElement.href;
+	if (isFirefox){
+		// Firefox requires the link to be added to the DOM before it can be clicked
+		downloadLink.onclick = destroyClickedElement;
+		downloadLink.style.display = "none";
+		document.body.appendChild(downloadLink);
+	}
+	downloadLink.click();
+}
+
+function destroyClickedElement(event)
+{
+	document.body.removeChild(event.target);
 }

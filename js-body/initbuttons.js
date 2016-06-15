@@ -3,9 +3,9 @@ window.onload = function() {
 
 	if(isMobile){
 		niceEditBtn.style.display = 'none';		//no rich text editing on mobile
-		fileBtns.style.display = 'none';
+		fileBtn.style.display = 'none';
 		selectBtn.style.display = 'none';
-	}		
+	}
 	if(isiPhone || isAndroidPhone){				//screen is narrow, so use smaller type and buttons
 		keyMsg.style.fontSize = 'medium';
 		mainMsg.style.fontSize = 'medium';
@@ -14,13 +14,19 @@ window.onload = function() {
 		narrowButtons()
 	}
 	if(isiOS || isSafari || isIE) makeChatBtn.style.display = 'none';		//webRTC not supported in these
-  
+
   //event listeners for buttons etc.
 	window.addEventListener('resize',textheight);
 
-   	showKey.addEventListener('click', showsec);
+   	showKey.addEventListener('click', showSec);
+
+	showOldKey.addEventListener('click', showOldSec);
 
 	acceptKeyBtn.addEventListener('click', acceptKey);
+
+	acceptOldKeyBtn.addEventListener('click', acceptOldKey);
+
+	cancelOldKeyBtn.addEventListener('click', cancelOldKey);
 
 	mainBox.addEventListener('paste', pasteItem);
 	function pasteItem() {setTimeout(function(){unlockItem();}, 0);}
@@ -57,8 +63,6 @@ window.onload = function() {
 
    	cancelChatBtn.addEventListener('click', cancelChat);
 
-   	saveFileBtn.addEventListener('click', saveURLAsFile);
-
 	suggestKeyBtn.addEventListener('click', suggestKey);
 
 	coverBox.addEventListener('paste', enableCover);
@@ -77,12 +81,17 @@ window.onload = function() {
 
 	acceptNameBtn.addEventListener('click', storeNewLock);
 
+	cancelResetBtn.addEventListener('click', cancelReset);
+
+	acceptResetBtn.addEventListener('click', acceptReset);
+
 //Firefox requires the keyup code to be inline if it refers to the event
 //but this must be removed for the Chrome app and replaced with those commented below
 
 //	pwd.addEventListener('keyup', function() {pwdKeyup(event)}, false);
+//	oldPwd.addEventListener('keyup', function() {oldPwdKeyup(event)}, false);
 //	nameBox.addEventListener('keyup', function() {nameKeyup(event)}, false);
-	
+
 //for the rich text editor boxes and buttons
 	formatBlock.addEventListener("change", function() {formatDoc('formatBlock',this[this.selectedIndex].value);this.selectedIndex=0;});
 	fontName.addEventListener("change", function() {formatDoc('fontName',this[this.selectedIndex].value);this.selectedIndex=0;});
@@ -134,7 +143,8 @@ var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter 
 
 mainBox.innerHTML = window.location.hash.slice(1);			//correspondent's message from address bar
 
-var theirLock = mainBox.innerHTML.slice(1,44),
+var theirezLock = mainBox.innerHTML.slice(0,50),
+	theirLock = changeBase(theirezLock, base36, base64, true),
 	theirName = '';
 
 //this one is for mobile only. Remove for the Chrome app

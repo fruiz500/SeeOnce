@@ -1,6 +1,6 @@
 ﻿//sends to default email
 function sendMail() {
-    var link = ("mailto:" + "?subject= " + "&body=" + encodeURIComponent(mainBox.innerHTML)).replace(/%3Cbr%3E/g,'%0D%0A');	
+    var link = ("mailto:" + "?subject= " + "&body=" + encodeURIComponent(mainBox.innerHTML)).replace(/%3Cbr%3E/g,'%0D%0A');
 	if(isMobile){ 	 											//new window for PC, same window for mobile
 		window.open(link,"_parent")
 	} else {
@@ -35,7 +35,7 @@ function makeChat(){
 	var password = nacl.util.encodeBase64(nacl.randomBytes(32)).replace(/=+$/,'');
 	var chatRoom = makeChatRoom();
 	mainBox.innerHTML = type + chatRoom + password;
-	mainMsg.innerHTML = '<span class="blink" style="color:cyan">LOCKING</span>';
+	mainMsg.innerHTML = '<span class="blink" style="color:cyan">ENCRYPTING</span>';
 	setTimeout(function(){
 		Encrypt(true);										//special chat output
 		changeButtons();
@@ -67,15 +67,15 @@ function randomBlackIndex(){
 	return index
 }
 
-//detects an unlocked chat invitation in the box and opens up a chat window
+//detects an decrypted chat invitation in the box and opens up a chat window
 function detectChat(){
 	var token = mainBox.innerHTML;
-	if (token.length == 64){											//chat invite detected, so open chat
+	if (token.length == 64 && !typetoken.slice(-43).match(' ')){											//chat invite detected, so open chat
 		mainBox.innerHTML = '';
 		checkWebRTC();
 		window.open('https://www.seeonce.net/chat/index.html#' + token,'_blank');
 		mainMsg.innerHTML = 'Chat session open on a separate tab'
-	}			
+	}
 	return
 }
 
@@ -88,5 +88,5 @@ function checkWebRTC(){
 	if(isAndroid){
 		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running SeeOnce as a native app.');
 		if(!reply) throw('chat canceled by user');
-	}	
+	}
 }

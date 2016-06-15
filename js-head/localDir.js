@@ -1,21 +1,36 @@
-﻿//stores new Lock
+﻿var tempLock, tempEphKey, tempEphLock, tempFlag;			//to store deleted data in case decryption fails later on
+
+var isInvite = false; 											//to distinguish an invite from a changed Password
+//stores new Lock, copies old data if existing
 function storeNewLock(){
 	var name  = nameBox.value.trim();
-	mainMsg.innerHTML = 'Sender saved with name: ' + name;
-	theirName = name;
-		
-	//first delete the data for the previous Lock with that same name, if any
+	//first get the data for the previous Lock with that same name, if any, and delete that entry
 	for(var Lock in locDir){
 		if(locDir[Lock][3] == name){
+			tempLock = Lock;
+			tempEphKey = locDir[Lock][0];
+			tempEphLock = locDir[Lock][1];
+			tempFlag = locDir[Lock][2];
 			delete locDir[Lock];
-			mainMsg.innerHTML = 'Data for ' + name + ' updated'
 		}
 	}
-	
-	//now store new data
-	locDir[theirLock][3] = name;	
+
+	//now store new data; be careful not to delete existing data
+	if(!locDir[theirLock]) locDir[theirLock] = [];
+	if(tempEphKey) locDir[theirLock][0] = tempEphKey;
+	if(tempEphLock) locDir[theirLock][1] = tempEphLock;
+	if(tempFlag) locDir[theirLock][2] = tempFlag;
+	locDir[theirLock][3] = name;
 	storeData();
 	closeBox();
+	theirName = name;
+	mainMsg.innerHTML = 'Sender saved with name: ' + name;
+	if(isInvite){
+		isInvite = false;
+	}else{
+		isInvite = false;
+		if(mainBox.innerHTML.match('#(.*)=')) unlockItem()		//decrypt again if still undecrypted
+	}
 }
 
 //to store data permanently
@@ -24,7 +39,7 @@ function storeData(Lock){
 		localStorage['locDir'] = JSON.stringify(locDir);
 		moveBtn.disabled = false
 	}
-		
+
 	if(ChromeSyncOn){												//if Chrome sync is available, add to sync storage
 		if(Lock){
 			syncChromeLock(Lock,JSON.stringify(locDir[Lock]))		//sync only one entry
@@ -37,7 +52,7 @@ function storeData(Lock){
 }
 
 var resetRequested = false;
-//this is to just delete the PFS data for a particular Lock
+//this is to just delete the Read-once data for a particular Lock
 function resetPFS(){
 	if(!resetRequested && callKey != 'decrypt'){												//sets flag so action happens on next click
 		resetRequested = true;
@@ -47,12 +62,12 @@ function resetPFS(){
 			resetRequested = false;
 			resetBtn.style.background = '';
 		}, 10000)								//forget request after 10 seconds
-		
+
 	}else{
 		var name = theirLock;
 		if ((locDir[name][0] == null) && (locDir[name][1] == null)){
 			mainMsg.innerHTML = 'Nothing to reset';
-			throw('no PFS data')
+			throw('no Read-once data')
 		}
 		locDir[name][0] = locDir[name][1] = null;
 		locDir[name][2] = 'reset';
@@ -75,7 +90,7 @@ function moveDB(){
 		moveBtn.innerHTML = 'Backup';
 		moveBtn.disabled = true;
 		wipeEnabled = false
-		
+
 	}else{													//normal backup
 		callKey = 'movedb';
 		readKey();
@@ -84,15 +99,15 @@ function moveDB(){
 		for (var Lock in locDir){
 			if (!locDir[Lock][0] && !locDir[Lock][1]){
 				delete locDir[Lock];
-			
+
 				if(ChromeSyncOn) remChromeLock(Lock)		//remove from sync as well
 			}
 		}
 		if(!locDir.length && ChromeSyncOn) chrome.storage.sync.remove('ChromeSyncList');		//remove index if empty
-	
+
 		//now encrypt it with the user Password
-		mainBox.innerHTML = "The gibberish below is a locked backup containing data needed to continue conversations in course. Click on it to unlock it.<br><br>https://SeeOnce.net#" + keyEncrypt(JSON.stringify(locDir)) + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.";
-		mainMsg.innerHTML = 'Backup in the box. Click <strong>Email</strong> to keep a copy as a draft.<br>If you click the same button again, it will now be wiped from this device';
+		mainBox.innerHTML = "The gibberish below is an encrypted backup containing data needed to continue conversations in course. Click on it to decrypt it.<br><br>https://SeeOnce.net#" + keyEncrypt(JSON.stringify(locDir)) + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.";
+		mainMsg.innerHTML = 'Backup in the box.<br>If you click the same button again, it will now be wiped from this device';
 		moveBtn.style.background = '#802020';
 		moveBtn.innerHTML = 'Wipe';
 		wipeEnabled = true;
@@ -127,7 +142,7 @@ function fillList(list){
 		if(nameArray[i] != undefined){
 			list.innerHTML += '<option value="' + nameArray[i] + '">' + nameArray[i] + '</option>'
 		}
-	}	
+	}
 }
 
 //loads the Lock selected on the name list
