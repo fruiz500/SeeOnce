@@ -95,10 +95,13 @@ function reduceVariants(string){
 	return string.toLowerCase().replace(/[óòöôõo]/g,'0').replace(/[!íìïîi]/g,'1').replace(/[z]/g,'2').replace(/[éèëêe]/g,'3').replace(/[@áàäâãa]/g,'4').replace(/[$s]/g,'5').replace(/[t]/g,'7').replace(/[b]/g,'8').replace(/[g]/g,'9').replace(/[úùüû]/g,'u');
 }
 
-//myKey is a 32-byte uint8 array private key deriving from the user's Password, for DH and local encryption. myLockbin is the derived public Key. theirLock is the correspondent's public key. Suffix "bin" means it is binary.
+//myKey is a 32-byte uint8 array private key deriving from the user's Password, no salt, for local saving. Sgn (Edwards curve) is 64-byte; DH (Motgomery curve, deriving from Sgn) is 32-byte. myLockbin is the public Key derived from myKeySgn. myezLock is the base36 version. Suffix "bin" means it is binary.
 var	myKey,
+	KeySgn,
+	KeyDH,
 	myLockbin,
-	myLock;
+	myLock,
+	myezLock;
 
 //If the timer has run out, the Password is deleted from box, and the stretched binary secret key is deleted from memory
 function readKey(){
@@ -110,6 +113,8 @@ function readKey(){
 		pwd.value = '';
 		oldPwd.value = '';
 		myKey = '';
+		KeySgn = '';
+		KeyDH = ''
 	}, period);
 
 	//erase key at end of period, by a different way
@@ -117,6 +122,8 @@ function readKey(){
 		pwd.value = '';
 		oldPwd.value = '';
 		myKey = '';
+		KeySgn = '';
+		KeyDH = ''
 	}
     keytime = new Date().getTime();
 
@@ -150,11 +157,14 @@ function acceptKey(){
 	key2any();
 
 	setTimeout(function(){									//execute after a delay so the key entry dialog can go away
-		myKey = wiseHash(key,'');
+		myKey = wiseHash(key,'');									//no salt used in SeeOnce
+		KeySgn = nacl.sign.keyPair.fromSeed(myKey).secretKey;		//make the Edwards curve secret key first
+		KeyDH = ed2curve.convertSecretKey(KeySgn);
 		if(!myLockbin){
-			myLockbin = nacl.box.keyPair.fromSecretKey(myKey).publicKey;
+			myLockbin = nacl.sign.keyPair.fromSecretKey(KeySgn).publicKey;		//from the signing key
 			myLock = nacl.util.encodeBase64(myLockbin).replace(/=+$/,'');
-			mainMsg.innerHTML = "Now paste into the box the message you got, including all the gibberish.<br>Or write a new message and click <b>Lock"
+			myezLock = changeBase(myLock, base64, base36, true);
+			mainMsg.innerHTML = "Now paste into the box the message you got, including all the gibberish.<br>Or write a new message and click <b>Encrypt"
 		}
 		if(firstInit) {
 			initSession();
@@ -241,6 +251,13 @@ function makeShared(pubstr,sec){
 	return nacl.box.before(pub,sec)
 }
 
+
+//makes the DH public key (Montgomery) from a published Lock, which is a Signing public key (Edwards)
+function convertPubStr(Lock){
+	var pub = nacl.util.decodeBase64(Lock);
+	return nacl.util.encodeBase64(ed2curve.convertPublicKey(pub)).replace(/=+$/,'')
+}
+
 //stretches nonce to 24 bytes
 function makeNonce24(nonce){
 	var	result = new Uint8Array(24);
@@ -249,15 +266,19 @@ function makeNonce24(nonce){
 }
 
 //encrypt string with a shared key
-function PLencrypt(plainstr,nonce24,sharedKey){
-	var plain = nacl.util.decodeUTF8(plainstr),
-		cipher = nacl.secretbox(plain,nonce24,sharedKey);
+function PLencrypt(plainstr,nonce24,sharedKey,isCompressed){
+	if(isCompressed){
+		var plain = LZString.compressToUint8Array(plainstr)
+	}else{
+		var plain = nacl.util.decodeUTF8(plainstr)
+	}
+	var	cipher = nacl.secretbox(plain,nonce24,sharedKey);
 	return nacl.util.encodeBase64(cipher).replace(/=+$/,'')
 }
 
-needRecrypt = false;
+var needRecrypt = false;
 //decrypt string with a shared key
-function PLdecrypt(cipherstr,nonce24,sharedKey,detectPwdChange){
+function PLdecrypt(cipherstr,nonce24,sharedKey,isCompressed){
 	try{															//this may fail if the string is corrupted, hence the try
 		var cipher = nacl.util.decodeBase64(cipherstr);
 	}catch(err){
@@ -265,19 +286,23 @@ function PLdecrypt(cipherstr,nonce24,sharedKey,detectPwdChange){
 		throw('decodeBase64 failed')
 	}
 	var	plain = nacl.secretbox.open(cipher,nonce24,sharedKey);
-		if(!plain){													//failed, try old password
-			if(oldPwd.value.trim()){
-				plain = nacl.secretbox.open(cipher,nonce24,wiseHash(oldPwd.value.trim(),''));
-				if(!plain){
-					failedDecrypt()
-				}else{
-					needRecrypt = true							//record the fact that a new Password is being used
-				}
-			}else{
+	if(!plain){													//failed, try old password
+		if(oldPwd.value.trim()){
+			plain = nacl.secretbox.open(cipher,nonce24,wiseHash(oldPwd.value.trim(),''));
+			if(!plain){
 				failedDecrypt()
+			}else{
+				needRecrypt = true							//record the fact that a new Password is being used
 			}
+		}else{
+			failedDecrypt()
 		}
-	return nacl.util.encodeUTF8(plain)
+	}
+	if(isCompressed){
+		return LZString.decompressFromUint8Array(plain)
+	}else{
+		return nacl.util.encodeUTF8(plain)
+	}
 }
 
 //takes appropriate UI action if decryption fails
@@ -288,24 +313,24 @@ function failedDecrypt(){
 		locDirDecrypt = false
 	}else if(!locDir[theirLock]){
 		restoreTempLock();
-		mainMsg.innerHTML = 'Unlock has Failed. Selected sender may be wrong';
+		mainMsg.innerHTML = 'Decryption has Failed. Selected sender may be wrong';
 		callKey = ''		
 	}else if(locDir[theirLock][2] == 'lock'){
 		restoreTempLock();
-		mainMsg.innerHTML = '<span style="color:orange;">Messages can be unlocked <em>only once</em></span>';
+		mainMsg.innerHTML = '<span style="color:orange;">Messages can be decrypted <em>only once</em></span>';
 		callKey = ''
 	}else if(mainBox.innerHTML.charAt(0) == '~'){
-		mainMsg.innerHTML = 'The backup has failed to unlock. Please check your Password';
+		mainMsg.innerHTML = 'The backup has failed to decrypt. Please check your Password';
 		callKey = ''
 	}else{
 		restoreTempLock();
-		mainMsg.innerHTML = 'Unlock has Failed. Try resetting the exchange';
+		mainMsg.innerHTML = 'Decryption has Failed. Try resetting the exchange';
 		callKey = ''
 	}
 	throw('decryption failed')
 }
 
-//restores the original data if unlocking from a new Lock fails
+//restores the original data if decrypting from a new Lock fails
 function restoreTempLock(){
 	if(tempLock){
 		locDir[tempLock] = [];
@@ -317,4 +342,43 @@ function restoreTempLock(){
 		tempLock = tempEphKey = tempEphLock = tempFlag = '';
 		storeData()
 	}
+}
+
+var base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+	base36 = "0123456789abcdefghijkLmnopqrstuvwxyz";	//L is capital
+//changes the base of a number. inAlpha and outAlpha are strings containing the base code for the original and target bases, as in '0123456789' for decimal
+//adapted from http://snippetrepo.com/snippets/bignum-base-conversion, by kybernetikos
+function changeBase(number, inAlpha, outAlpha, isLock) {
+	var targetBase = outAlpha.length,
+		originalBase = inAlpha.length;
+    var result = "";
+    while (number.length > 0) {
+        var remainingToConvert = "", resultDigit = 0;
+        for (var position = 0; position < number.length; ++position) {
+            var idx = inAlpha.indexOf(number[position]);
+            if (idx < 0) {
+                throw new Error('Symbol ' + number[position] + ' from the'
+                    + ' original number ' + number + ' was not found in the'
+                    + ' alphabet ' + inAlpha);
+            }
+            var currentValue = idx + resultDigit * originalBase;
+            var remainDigit = Math.floor(currentValue / targetBase);
+            resultDigit = currentValue % targetBase;
+            if (remainingToConvert.length || remainDigit) {
+                remainingToConvert += inAlpha[remainDigit];
+            }
+        }
+        number = remainingToConvert;
+        result = outAlpha[resultDigit] + result;
+    }
+
+	//add leading zeroes in Locks
+	if(isLock){
+		if(targetBase == 64){
+			while(result.length < 43) result = 'A'+ result;
+		} else if (targetBase == 36){
+			while(result.length < 50) result = '0'+ result;
+		}
+	}
+    return result;
 }

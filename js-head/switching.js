@@ -37,6 +37,7 @@ function selectMain(){
         selection.removeAllRanges();
         selection.addRange(range);
     }
+	document.execCommand('copy')
 }
 
 //for opening the select User screen
@@ -56,8 +57,8 @@ function selectUser(){
 //to change or disable buttons depending on main box contents
 function changeButtons(){
 	var text = mainBox.innerHTML.trim(),
-		type = extractCipher(text).slice(0,1);
-	if(type == '!' || type == '$' || type == '@' || type == '%' || type == '~'){			//regular output
+		type = extractCipher(text).charAt(50);
+	if(type == '$' || type == '*' || type == ':' || type == '@' || extractCipher(text).charAt(0) == '~'){			//regular output
 		hideBtn.innerHTML = 'Hide';
 		replyBtn.innerHTML = 'Email'
 	}else if(text.match('\u2004') || text.match('\u2005') || text.match('\u2006')){		//hidden output
@@ -65,7 +66,7 @@ function changeButtons(){
 		replyBtn.innerHTML = 'Email'
 	}else{
 		hideBtn.innerHTML = 'To...';
-		replyBtn.innerHTML = 'Lock'
+		replyBtn.innerHTML = 'Encrypt'
 	}
 }
 
@@ -88,6 +89,7 @@ function closeBox() {
 	chatScr.style.display = "none";
 	selectScr.style.display = "none";
 	nameScr.style.display = "none";
+	resetScr.style.display = "none"
 }
 
 function cancelOldKey(){
@@ -118,6 +120,18 @@ function cancelSelect(){
 	closeBox()
 }
 
+var resetOK = false;
+function acceptReset(){
+	closeBox();
+	resetOK = true;
+	Decrypt()
+}
+
+function cancelReset(){
+	closeBox();
+	mainMsg.innerHTML = 'Decryption canceled by user'
+}
+
 var fromSwitch = false;				//to keep track if the user change dialog was loaded by this action
 function hideBtnAction(){
 	if(hideBtn.innerHTML == 'Hide'){textStego();}			//nornmal hiding action
@@ -138,7 +152,7 @@ function openNewLock(){
 		nameMsg.innerHTML = 'Please type the name of the person who sent you this invitation into the box below, then click <strong>OK</strong>'
 	}else{
 		nameListSpace2.style.display = 'block';
-		nameMsg.innerHTML = 'This message was locked with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong>'
+		nameMsg.innerHTML = 'This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong>'
 	}
 }
 

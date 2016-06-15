@@ -3,7 +3,7 @@ window.onload = function() {
 
 	if(isMobile){
 		niceEditBtn.style.display = 'none';		//no rich text editing on mobile
-		fileBtns.style.display = 'none';
+		fileBtn.style.display = 'none';
 		selectBtn.style.display = 'none';
 	}
 	if(isiPhone || isAndroidPhone){				//screen is narrow, so use smaller type and buttons
@@ -63,8 +63,6 @@ window.onload = function() {
 
    	cancelChatBtn.addEventListener('click', cancelChat);
 
-   	saveFileBtn.addEventListener('click', saveURLAsFile);
-
 	suggestKeyBtn.addEventListener('click', suggestKey);
 
 	coverBox.addEventListener('paste', enableCover);
@@ -82,6 +80,10 @@ window.onload = function() {
 	acceptSelectBtn.addEventListener('click', acceptSelect);
 
 	acceptNameBtn.addEventListener('click', storeNewLock);
+
+	cancelResetBtn.addEventListener('click', cancelReset);
+
+	acceptResetBtn.addEventListener('click', acceptReset);
 
 //Firefox requires the keyup code to be inline if it refers to the event
 //but this must be removed for the Chrome app and replaced with those commented below
@@ -141,7 +143,8 @@ var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter 
 
 mainBox.innerHTML = window.location.hash.slice(1);			//correspondent's message from address bar
 
-var theirLock = mainBox.innerHTML.slice(1,44),
+var theirezLock = mainBox.innerHTML.slice(0,50),
+	theirLock = changeBase(theirezLock, base36, base64, true),
 	theirName = '';
 
 //this one is for mobile only. Remove for the Chrome app

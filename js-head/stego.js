@@ -1,7 +1,7 @@
 ﻿//detects that all the characters in the text are legal output
 function legalItem(text){
 	if(text.trim() == '') return false;
-	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@$%";	//base64 plus other characters used in SeeOnce strings
+	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~@$*:";		//base64 plus other characters used in SeeOnce strings
 	for (var i = 0; i < text.length; i++){
 		var index = keyAlphabet.indexOf(text[i]);
 		if(index == -1){

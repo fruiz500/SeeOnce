@@ -35,7 +35,7 @@ function makeChat(){
 	var password = nacl.util.encodeBase64(nacl.randomBytes(32)).replace(/=+$/,'');
 	var chatRoom = makeChatRoom();
 	mainBox.innerHTML = type + chatRoom + password;
-	mainMsg.innerHTML = '<span class="blink" style="color:cyan">LOCKING</span>';
+	mainMsg.innerHTML = '<span class="blink" style="color:cyan">ENCRYPTING</span>';
 	setTimeout(function(){
 		Encrypt(true);										//special chat output
 		changeButtons();
@@ -67,7 +67,7 @@ function randomBlackIndex(){
 	return index
 }
 
-//detects an unlocked chat invitation in the box and opens up a chat window
+//detects an decrypted chat invitation in the box and opens up a chat window
 function detectChat(){
 	var token = mainBox.innerHTML;
 	if (token.length == 64 && !typetoken.slice(-43).match(' ')){											//chat invite detected, so open chat

@@ -24,9 +24,9 @@ function storeNewLock(){
 	storeData();
 	closeBox();
 	theirName = name;
+	mainMsg.innerHTML = 'Sender saved with name: ' + name;
 	if(isInvite){
 		isInvite = false;
-		mainMsg.innerHTML = 'Sender saved with name: ' + name
 	}else{
 		isInvite = false;
 		if(mainBox.innerHTML.match('#(.*)=')) unlockItem()		//decrypt again if still undecrypted
@@ -106,7 +106,7 @@ function moveDB(){
 		if(!locDir.length && ChromeSyncOn) chrome.storage.sync.remove('ChromeSyncList');		//remove index if empty
 
 		//now encrypt it with the user Password
-		mainBox.innerHTML = "The gibberish below is a locked backup containing data needed to continue conversations in course. Click on it to unlock it.<br><br>https://SeeOnce.net#" + keyEncrypt(JSON.stringify(locDir)) + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.";
+		mainBox.innerHTML = "The gibberish below is an encrypted backup containing data needed to continue conversations in course. Click on it to decrypt it.<br><br>https://SeeOnce.net#" + keyEncrypt(JSON.stringify(locDir)) + "=<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.";
 		mainMsg.innerHTML = 'Backup in the box.<br>If you click the same button again, it will now be wiped from this device';
 		moveBtn.style.background = '#802020';
 		moveBtn.innerHTML = 'Wipe';
