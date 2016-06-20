@@ -162,8 +162,9 @@ function pwdKeyup(evt){
 	keytimer = setTimeout(function() {pwd.value = ''; oldPwd.value = '';}, 300000);
 	keytime = new Date().getTime();
 	if(pwd.value.trim() == ''){acceptKeyBtn.disabled = true;}else{acceptKeyBtn.disabled = false;}
-	evt = evt || window.event
-	if (evt.keyCode == 13){acceptKey()}
+	evt = evt || window.event;
+	var key = evt.keyCode || evt.which || evt.keyChar;
+	if (key == 13){acceptKey()}
 	else if(pwd.value.trim() == ''){return}
 	else{return keyStrength(pwd.value,true);
 	}
@@ -171,15 +172,17 @@ function pwdKeyup(evt){
 
 //enter old password from keyboard
 function oldPwdKeyup(evt){
-	evt = evt || window.event
-	if (evt.keyCode == 13){acceptOldKey()}
+	evt = evt || window.event;
+	var key = evt.keyCode || evt.which || evt.keyChar;
+	if (key == 13){acceptOldKey()}
 	else if(oldPwd.value.trim() == ''){return}
 }
 
 //stores new name from box or disables OK button
 function nameKeyup(evt){
-	evt = evt || window.event
-	if (evt.keyCode == 13){storeNewLock()};
+	evt = evt || window.event;
+	var key = evt.keyCode || evt.which || evt.keyChar;
+	if (key == 13){storeNewLock()};
 	if(nameBox.value.trim() == ''){acceptNameBtn.disabled = true;}else{acceptNameBtn.disabled = false;}
 }
 
