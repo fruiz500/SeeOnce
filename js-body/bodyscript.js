@@ -53,7 +53,7 @@ function showGreeting(){
 //special instructions the first time it runs
 function introGreeting(){
 	firstTimeKey.style.display = 'block';
-	keyMsg.innerHTML = 'The strength will appear here<br>Enter the Password and click <strong>OK</strong>';
+	keyMsg.innerText = 'The strength will appear here\nEnter the Password and click OK';
 	if(isiPhone || isAndroidPhone){
 		keyScr.style.width = '100%';			//more space needed for phones
 		keyScr.style.height = '100%';
@@ -95,30 +95,27 @@ function textheight(){
 }
 
 //this one is called by window.onload below
-function loadFileAsURL()
-{
-	var fileToLoad = fileBtn.files[0];
-
-	var fileReader = new FileReader();
-	fileReader.onload = function(fileLoadedEvent)
-	{
+function loadFileAsURL(){
+	var fileToLoad = mainFile.files[0],
+		fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent){
 		var fileName = fileToLoad.name;
 		var URLFromFileLoaded = fileLoadedEvent.target.result;
 		if(URLFromFileLoaded.length > 2000000){
 			var reply = confirm("This file is larger than 1.5MB and Chrome won't save it. Do you want to continue loading it?");
 			if(!reply){
-				mainMsg.innerHTML = 'File load canceled';
+				mainMsg.innerText = 'File load canceled';
 				throw('file load canceled')
 			}
 		}
 		if(fileToLoad.type.slice(0,4) == "text"){
 			if(URLFromFileLoaded.slice(0,2) == '==' && URLFromFileLoaded.slice(-2) == '=='){
-				mainBox.innerHTML += '<br><a download="' + fileName + '" href="data:,' + URLFromFileLoaded + '">' + fileName + '&nbsp;&nbsp;<button onClick="followLink(this);">Save</button></a>'
+				mainBox.innerHTML += '<br><a download="' + fileName + '" href="data:,' + URLFromFileLoaded + '">' + fileName + '</a>'
 			}else{
 				mainBox.innerHTML += "<br><br>" + URLFromFileLoaded.replace(/  /g,' &nbsp;')
 			}
 		}else{
-			mainBox.innerHTML += '<br><a download="' + fileName + '" href="' + URLFromFileLoaded + '">' + fileName + '&nbsp;&nbsp;<button onClick="followLink(this);">Save</button></a>'
+			mainBox.innerHTML += '<br><a download="' + fileName + '" href="' + URLFromFileLoaded + '">' + fileName + '</a>'
 		}
 	};
 	if(fileToLoad.type.slice(0,4) == "text"){
@@ -130,21 +127,18 @@ function loadFileAsURL()
 	}
 }
 
-//used to download a packaged file
-function followLink(thisLink){
-	var downloadLink = document.createElement("a");
-	downloadLink.download = thisLink.parentElement.download;
-	downloadLink.href = thisLink.parentElement.href;
-	if (isFirefox){
-		// Firefox requires the link to be added to the DOM before it can be clicked
-		downloadLink.onclick = destroyClickedElement;
-		downloadLink.style.display = "none";
-		document.body.appendChild(downloadLink);
-	}
-	downloadLink.click();
-}
+//to load an image into the main box
+function loadImage(){
+	var fileToLoad = imgFile.files[0],
+		fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent){
+		var URLFromFileLoaded = fileLoadedEvent.target.result;
+		if(URLFromFileLoaded.slice(0,10) != 'data:image'){
+			mainMsg.innerText = 'This file is not a recognized image type';
+			return
+		}
+		mainBox.innerHTML += safeHTML('<img style="width:50%;" src="' + URLFromFileLoaded.replace(/=+$/,'') + '">')
+	};
 
-function destroyClickedElement(event)
-{
-	document.body.removeChild(event.target);
+	fileReader.readAsDataURL(fileToLoad, "UTF-8");
 }
