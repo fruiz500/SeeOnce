@@ -3,7 +3,6 @@ window.onload = function() {
 
 	if(isMobile){
 		niceEditBtn.style.display = 'none';		//no rich text editing on mobile
-		fileBtn.style.display = 'none';
 		selectBtn.style.display = 'none';
 	}
 	if(isiPhone || isAndroidPhone){				//screen is narrow, so use smaller type and buttons
@@ -33,7 +32,11 @@ window.onload = function() {
 
 	mainBox.addEventListener('keyup', changeButtons);
 
-    fileBtn.addEventListener('change', loadFileAsURL);
+	mainFile.addEventListener('change', loadFileAsURL);
+	mainFile.addEventListener('click', function(){this.value = '';});
+	
+	imgFile.addEventListener('change', loadImage);
+	imgFile.addEventListener('click', function(){this.value = '';});
 
 	selectBtn.addEventListener('click', selectMain);
 
@@ -85,12 +88,11 @@ window.onload = function() {
 
 	acceptResetBtn.addEventListener('click', acceptReset);
 
-//Firefox requires the keyup code to be inline if it refers to the event
-//but this must be removed for the Chrome app and replaced with those commented below
+	pwd.addEventListener('keyup', function(event) {pwdKeyup(event)}, false);
 
-//	pwd.addEventListener('keyup', function() {pwdKeyup(event)}, false);
-//	oldPwd.addEventListener('keyup', function() {oldPwdKeyup(event)}, false);
-//	nameBox.addEventListener('keyup', function() {nameKeyup(event)}, false);
+	oldPwd.addEventListener('keyup', function(event) {oldPwdKeyup(event)}, false);
+
+	nameBox.addEventListener('keyup', function(event) {nameKeyup(event)}, false);
 
 //for the rich text editor boxes and buttons
 	formatBlock.addEventListener("change", function() {formatDoc('formatBlock',this[this.selectedIndex].value);this.selectedIndex=0;});
@@ -141,9 +143,10 @@ window.onload = function() {
 
 var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
 
-mainBox.innerHTML = window.location.hash.slice(1);			//correspondent's message from address bar
+//mainBox.innerText = decodeURI(window.location.hash).slice(1);			//correspondent's message from address bar
+mainBox.innerText = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1]
 
-var theirezLock = mainBox.innerHTML.slice(0,50),
+var theirezLock = mainBox.innerText.slice(0,50),
 	theirLock = changeBase(theirezLock, base36, base64, true),
 	theirName = '';
 

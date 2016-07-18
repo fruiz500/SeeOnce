@@ -18,8 +18,8 @@ function showOldSec(){
 
 //for clearing the main box
 function clearMain(){
-	mainBox.innerHTML = '';
-	if(theirName){mainMsg.innerHTML = 'Replying to ' + theirName}else{mainMsg.innerHTML = ''}
+	mainBox.innerText = '';
+	if(theirName){mainMsg.innerText = 'Replying to ' + theirName}else{mainMsg.innerText = ''}
 	changeButtons()
 }
 
@@ -47,26 +47,26 @@ function selectUser(){
 	shadow.style.display = 'block';
 	if(nameList.length == 0){			//don't display box if there is nothing there
 		nameListSpace.style.display = 'none';
-		selectMsg.innerHTML = 'No stored users. Invite a new user with the lower button'
+		selectMsg.innerText = 'No stored users. Invite a new user with the lower button'
 	}else{
 		nameListSpace.style.display = 'block';
-		selectMsg.innerHTML = 'Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button'
+		selectMsg.innerText = 'Please select the recipient on the list below and click OK, or invite a new user with the lower button'
 	}
 }
 
 //to change or disable buttons depending on main box contents
 function changeButtons(){
-	var text = mainBox.innerHTML.trim(),
+	var text = mainBox.innerText.trim(),
 		type = extractCipher(text).charAt(50);
 	if(type == '$' || type == '*' || type == ':' || type == '@' || extractCipher(text).charAt(0) == '~'){			//regular output
-		hideBtn.innerHTML = 'Hide';
-		replyBtn.innerHTML = 'Email'
+		hideBtn.innerText = 'Hide';
+		replyBtn.innerText = 'Email'
 	}else if(text.match('\u2004') || text.match('\u2005') || text.match('\u2006')){		//hidden output
-		hideBtn.innerHTML = 'To...';
-		replyBtn.innerHTML = 'Email'
+		hideBtn.innerText = 'To...';
+		replyBtn.innerText = 'Email'
 	}else{
-		hideBtn.innerHTML = 'To...';
-		replyBtn.innerHTML = 'Encrypt'
+		hideBtn.innerText = 'To...';
+		replyBtn.innerText = 'Encrypt'
 	}
 }
 
@@ -94,18 +94,18 @@ function closeBox() {
 
 function cancelOldKey(){
 	closeBox();
-	mainMsg.innerHTML = 'Old Password canceled';
+	mainMsg.innerText = 'Old Password canceled';
 }
 
 function cancelChat(){
 	lockForChat = false;
 	closeBox();
-	mainMsg.innerHTML = 'Chat canceled';
+	mainMsg.innerText = 'Chat canceled';
 }
 
 function cancelCover(){
 	closeBox();
-	mainMsg.innerHTML = 'Text hide canceled';
+	mainMsg.innerText = 'Text hide canceled';
 }
 
 function acceptSelect(){
@@ -129,12 +129,12 @@ function acceptReset(){
 
 function cancelReset(){
 	closeBox();
-	mainMsg.innerHTML = 'Decryption canceled by user'
+	mainMsg.innerText = 'Decryption canceled by user'
 }
 
 var fromSwitch = false;				//to keep track if the user change dialog was loaded by this action
 function hideBtnAction(){
-	if(hideBtn.innerHTML == 'Hide'){textStego();}			//nornmal hiding action
+	if(hideBtn.innerText == 'Hide'){textStego();}			//nornmal hiding action
 	else {
 		fromSwitch = true;									//display dialog to change recipient
 		selectUser()
@@ -149,10 +149,10 @@ function openNewLock(){
 	nameBox.value = '';
 	if(nameList2.length == 0){
 		nameListSpace2.style.display = 'none';
-		nameMsg.innerHTML = 'Please type the name of the person who sent you this invitation into the box below, then click <strong>OK</strong>'
+		nameMsg.innerText = 'Please type the name of the person who sent you this invitation into the box below, then click OK'
 	}else{
 		nameListSpace2.style.display = 'block';
-		nameMsg.innerHTML = 'This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong>'
+		nameMsg.innerText = 'This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click OK'
 	}
 }
 
@@ -162,8 +162,9 @@ function pwdKeyup(evt){
 	keytimer = setTimeout(function() {pwd.value = ''; oldPwd.value = '';}, 300000);
 	keytime = new Date().getTime();
 	if(pwd.value.trim() == ''){acceptKeyBtn.disabled = true;}else{acceptKeyBtn.disabled = false;}
-	evt = evt || window.event
-	if (evt.keyCode == 13){acceptKey()}
+	evt = evt || window.event;
+	var key = evt.keyCode || evt.which || evt.keyChar;
+	if (key == 13){acceptKey()}
 	else if(pwd.value.trim() == ''){return}
 	else{return keyStrength(pwd.value,true);
 	}
@@ -171,15 +172,17 @@ function pwdKeyup(evt){
 
 //enter old password from keyboard
 function oldPwdKeyup(evt){
-	evt = evt || window.event
-	if (evt.keyCode == 13){acceptOldKey()}
+	evt = evt || window.event;
+	var key = evt.keyCode || evt.which || evt.keyChar;
+	if (key == 13){acceptOldKey()}
 	else if(oldPwd.value.trim() == ''){return}
 }
 
 //stores new name from box or disables OK button
 function nameKeyup(evt){
-	evt = evt || window.event
-	if (evt.keyCode == 13){storeNewLock()};
+	evt = evt || window.event;
+	var key = evt.keyCode || evt.which || evt.keyChar;
+	if (key == 13){storeNewLock()};
 	if(nameBox.value.trim() == ''){acceptNameBtn.disabled = true;}else{acceptNameBtn.disabled = false;}
 }
 
@@ -189,7 +192,7 @@ function any2key(){
 	cancelIntroGreeting();
 	shadow.style.display = 'block';
 	keyScr.style.display = 'block';
-	keyMsg.innerHTML = 'Please enter your Password';
+	keyMsg.innerText = 'Please enter your Password';
 	if(!isMobile) pwd.focus()
 }
 
@@ -223,7 +226,7 @@ function enableCover(){
 		if(text.length > 1400){
 			acceptCoverBtn.disabled = false
 		}else{
-			coverMsg.innerHTML = 'The cover text must be at least 1400 characters long'
+			coverMsg.innerText = 'The cover text must be at least 1400 characters long'
 		}
 	},20)
 }
@@ -249,11 +252,6 @@ function focusBox(){
 	}
 }
 
-//simple XSS filter for use in innerHTML-editing statements. Removes stuff between angle brackets
-function XSSfilter(string){
-	return string.replace(/<(.*?)>/gi, "")
-}
-
 //for rich text editing
 function formatDoc(sCmd, sValue) {
 	  document.execCommand(sCmd, false, sValue); mainBox.focus();
@@ -266,13 +264,13 @@ function toggleRichText() {
 		toolBar1.style.display = 'none';
 		mainBox.style.borderTopLeftRadius = '15px';
 		mainBox.style.borderTopRightRadius = '15px';
-		niceEditBtn.innerHTML = 'Rich';
+		niceEditBtn.innerText = 'Rich';
 		niceEditor = false
 	} else {
 		toolBar1.style.display = 'block';
 		mainBox.style.borderTopLeftRadius = '0';
 		mainBox.style.borderTopRightRadius = '0';
-		niceEditBtn.innerHTML = 'Plain';
+		niceEditBtn.innerText = 'Plain';
 		niceEditor = true
 	}
 	textheight();

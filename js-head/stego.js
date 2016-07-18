@@ -24,7 +24,7 @@ function textStego(){
 		shadow.style.display = 'none';
 	}
 
-	var cleanText = extractCipher(mainBox.innerHTML);
+	var cleanText = extractCipher(mainBox.innerText);
 
 	if(legalItem(cleanText)){							//legal item found: encode it
 		mainMsg.innerHTML = '<span class="blink" style="color:cyan">PROCESSING</span>';		//Get blinking message started
@@ -32,10 +32,10 @@ function textStego(){
 			var turns = toLetters(cleanText);
 			if(!rememberCoverCheck.checked) coverBox.value = '';
 			if(turns){var turnText = 'It was repeated ' + turns + ' times. '}else{var turnText = ''}
-			mainMsg.innerHTML = 'Message encoded into letters of this text. ' + turnText + 'Please complete it if necessary'
+			mainMsg.innerText = 'Message encoded into letters of this text. ' + turnText + 'Please complete it if necessary'
 		},20);						//end of timeout
 	}else{												//no legal item found
-		mainMsg.innerHTML = 'Only SeeOnce output can be hidden'
+		mainMsg.innerText = 'Only SeeOnce output can be hidden'
 	}
 }
 
@@ -131,14 +131,14 @@ function encodableBits(cover){
 //encodes text as special letters and spaces in the cover text, which replace the original ones
 function toLetters(text){
 	var textBin = toBin(text),
-		coverText = addSpaces(coverBox.value.trim()).replace(/\n\n/g,'<br><br>').replace(/\n/g,' '),
+		coverText = addSpaces(coverBox.value.trim()).replace(/\n/g,' '),
 		cover = coverText,
 		capacity = encodableBits(cover);
 	if (capacity < textBin.length){						//repeat the cover text if it is too short
 		var turns = Math.ceil(textBin.length / capacity);
 		var index = 0;
 		while (index < turns){
-			cover = cover + '<br><br>' + coverText;
+			cover = cover + ' ' + coverText;
 			index++;
 		};
 		capacity = encodableBits(cover)
@@ -159,8 +159,8 @@ function toLetters(text){
 		}
 		i++;
 	}
-	mainBox.innerHTML = finalString;
-	hideBtn.innerHTML = 'To...';
+	mainBox.innerText = finalString;
+	hideBtn.innerText = 'Hide';
 	return turns
 }
 
@@ -183,8 +183,8 @@ function fromLetters(text){
 			finalString = finalString + mybyte;
 		}
 	}
-	mainBox.innerHTML = finalString;
-	hideBtn.innerHTML = 'To...'
+	mainBox.innerText = finalString;
+	hideBtn.innerText = 'To...'
 }
 
 //adds spaces that can be encoded if Chinese, Korean, or Japanese

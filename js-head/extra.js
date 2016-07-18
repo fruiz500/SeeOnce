@@ -1,6 +1,6 @@
 ﻿//sends to default email
 function sendMail() {
-    var link = ("mailto:" + "?subject= " + "&body=" + encodeURIComponent(mainBox.innerHTML)).replace(/%3Cbr%3E/g,'%0D%0A');
+    var link = ("mailto:" + "?subject= " + "&body=" + encodeURIComponent(removeHTMLtags(mainBox.innerHTML.trim()))).replace(/%3Cbr%3E/g,'%0D%0A');
 	if(isMobile){ 	 											//new window for PC, same window for mobile
 		window.open(link,"_parent")
 	} else {
@@ -34,12 +34,12 @@ function makeChat(){
 	}
 	var password = nacl.util.encodeBase64(nacl.randomBytes(32)).replace(/=+$/,'');
 	var chatRoom = makeChatRoom();
-	mainBox.innerHTML = type + chatRoom + password;
+	mainBox.innerText = type + chatRoom + password;
 	mainMsg.innerHTML = '<span class="blink" style="color:cyan">ENCRYPTING</span>';
 	setTimeout(function(){
 		Encrypt(true);										//special chat output
 		changeButtons();
-		window.open('https://www.seeonce.net/chat/index.html#' + type + chatRoom + password,'_blank')
+		window.open('https://www.passlok.com/chat/index.html#' + type + chatRoom + password,'_blank')
 	},20);
 }
 
@@ -69,12 +69,12 @@ function randomBlackIndex(){
 
 //detects an decrypted chat invitation in the box and opens up a chat window
 function detectChat(){
-	var token = mainBox.innerHTML;
+	var token = mainBox.innerText;
 	if (token.length == 64 && !typetoken.slice(-43).match(' ')){											//chat invite detected, so open chat
-		mainBox.innerHTML = '';
+		mainBox.innerText = '';
 		checkWebRTC();
-		window.open('https://www.seeonce.net/chat/index.html#' + token,'_blank');
-		mainMsg.innerHTML = 'Chat session open on a separate tab'
+		window.open('https://www.passlok.com/chat/index.html#' + token,'_blank');
+		mainMsg.innerText = 'Chat session open on a separate tab'
 	}
 	return
 }
@@ -82,7 +82,7 @@ function detectChat(){
 //detects OS and prevents Chat if not supported
 function checkWebRTC(){
 	if(isSafari || isIE || isiOS){
-		mainMsg.innerHTML = 'Sorry, but chat is not yet supported by your browser or OS';
+		mainMsg.innerText = 'Sorry, but chat is not yet supported by your browser or OS';
 		throw('browser does not support webRTC')
 	}
 	if(isAndroid){

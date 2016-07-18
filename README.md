@@ -38,7 +38,7 @@ Full documentation to be found at: <http://see-once.weebly.com/> including:
 License
 -------
 
-  Copyright (C) 2015 Francisco Ruiz
+  Copyright (C) 2016 Francisco Ruiz
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
