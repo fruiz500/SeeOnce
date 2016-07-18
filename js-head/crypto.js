@@ -1,6 +1,6 @@
 ﻿//functions that start a blinking message when the Encrypt button is pressed or an encrypted item is pasted
 function lockItem(){
-	var text = removeHTMLtags(mainBox.innerHTML);
+	var text = mainBox.innerHTML;
 	if(text.match('\u2004') || text.match('\u2005') || text.match('\u2006')){
 		sendMail();
 		return
