@@ -24,12 +24,12 @@ function storeNewLock(){
 	storeData();
 	closeBox();
 	theirName = name;
-	mainMsg.innerText = 'Sender saved with name: ' + name;
+	mainMsg.textContent = 'Sender saved with name: ' + name;
 	if(isInvite){
 		isInvite = false;
 	}else{
 		isInvite = false;
-		if(mainBox.innerText.match('#(.*)=')) unlockItem()		//decrypt again if still undecrypted
+		if(mainBox.textContent.match('#(.*)=')) unlockItem()		//decrypt again if still undecrypted
 	}
 }
 
@@ -56,7 +56,7 @@ var resetRequested = false;
 function resetPFS(){
 	if(!resetRequested && callKey != 'decrypt'){												//sets flag so action happens on next click
 		resetRequested = true;
-		mainMsg.innerText = "If you click Reset again, the current conversation will be reset. This cannot be undone";
+		mainMsg.textContent = "If you click Reset again, the current conversation will be reset. This cannot be undone";
 		resetBtn.style.background = '#802020';
 		setTimeout(function() {
 			resetRequested = false;
@@ -66,13 +66,13 @@ function resetPFS(){
 	}else{
 		var name = theirLock;
 		if ((locDir[name][0] == null) && (locDir[name][1] == null)){
-			mainMsg.innerText = 'Nothing to reset';
+			mainMsg.textContent = 'Nothing to reset';
 			throw('no Read-once data')
 		}
 		locDir[name][0] = locDir[name][1] = null;
 		locDir[name][2] = 'reset';
 		storeData(name);
-		mainMsg.innerText = "Conversation reset. The next reply won't have perfect forward secrecy";
+		mainMsg.textContent = "Conversation reset. The next reply won't have perfect forward secrecy";
 		resetBtn.style.background = '';
 		resetBtn.disabled = true;
 		resetRequested = false
@@ -82,12 +82,12 @@ function resetPFS(){
 var wipeEnabled = false;
 //makes encrypted backup of the whole DB, then if confirmed wipes data clean
 function moveDB(){
-	if(mainBox.innerText.match(/passlok.com\/seeonce#~/) && wipeEnabled){			//delete data the second time
+	if(mainBox.textContent.match(/passlok.com\/seeonce#==k/) && wipeEnabled){			//delete data the second time
 		locDir = {};
 		delete localStorage['locDir'];
-		mainMsg.innerText = 'Local data wiped';
+		mainMsg.textContent = 'Local data wiped';
 		moveBtn.style.background = '';
-		moveBtn.innerText = 'Backup';
+		moveBtn.textContent = 'Backup';
 		moveBtn.disabled = true;
 		wipeEnabled = false
 
@@ -106,14 +106,14 @@ function moveDB(){
 		if(!locDir.length && ChromeSyncOn) chrome.storage.sync.remove('ChromeSyncList');		//remove index if empty
 
 		//now encrypt it with the user Password
-		mainBox.innerText = "The gibberish below is an encrypted backup containing data needed to continue conversations in course. Click on it to decrypt it.\n\nhttps://passlok.com/seeonce#" + keyEncrypt(JSON.stringify(locDir)) + "=\n\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.";
-		mainMsg.innerText = 'Backup in the box.<br>If you click the same button again, it will now be wiped from this device';
+		mainBox.innerText = "The gibberish below is an encrypted backup containing data needed to continue conversations in course. Click on it to decrypt it.\n\nhttps://passlok.com/seeonce#==" + keyEncrypt(JSON.stringify(locDir)) + "==\n\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.";
+		mainMsg.textContent = 'Backup in the box.<br>If you click the same button again, it will now be wiped from this device';
 		moveBtn.style.background = '#802020';
-		moveBtn.innerText = 'Wipe';
+		moveBtn.textContent = 'Wipe';
 		wipeEnabled = true;
 		setTimeout(function() {
 			moveBtn.style.background = '';
-			moveBtn.innerText = 'Backup';
+			moveBtn.textContent = 'Backup';
 			wipeEnabled = false;
 		}, 10000)							//cancel after 10 seconds
 		if(!isMobile) selectMain();
@@ -132,7 +132,7 @@ function mergeObjects(obj1,obj2){
 
 //grab the names in locDir and put them on the given list
 function fillList(list){
-	list.innerText = '';
+	list.textContent = '';
 	var nameArray = [];
 	for(var name in locDir){								//get all the names
 		nameArray = nameArray.concat(locDir[name][3]);
@@ -153,8 +153,8 @@ function loadLock(){
 				var name  = locDir[Lock][3];
 				if(name == nameList.options[i].value){
 					theirLock = Lock;
-					selectMsg.innerText = name + ' selected';
-					mainMsg.innerText = 'Replying to ' + name;
+					selectMsg.textContent = name + ' selected';
+					mainMsg.textContent = 'Replying to ' + name;
 					theirName = name
 				}
 			}

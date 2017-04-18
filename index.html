@@ -67,7 +67,7 @@ body {
 	border: 0px;
 	margin-right: -2px;
 	color: #CACACA;
-	background: #0044cc;
+	background: #1c57cc;
 }
 .cssbutton:hover {
 	text-decoration: none;
@@ -83,36 +83,6 @@ body {
 	color: #aeaeae;
 	background: #4F6AA1;
 	cursor: default;
-}
-.custom-file-input {
-	color: #0099cc;
-}
- .custom-file-input::-webkit-file-upload-button {
- visibility: hidden;
-}
-.custom-file-input::before {
-	content: 'Select a file';
-	display: inline-block;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	font-family: Arial;
-	font-size: 22px;
-	padding: 14px;
-	border: 0px;
-	outline: none;
-	white-space: nowrap;
-	-webkit-user-select: none;
-	cursor: pointer;
-	text-decoration: none;
-	color: #CACACA;
-	background: #0044cc;
-}
-.custom-file-input:hover::before {
-	background: #003399;
-}
-.custom-file-input:active::before {
-	background: #003399;
 }
 .cssbox {
 	-webkit-border-radius: 15px;
@@ -261,13 +231,13 @@ select {
 	background: #D7FFD7;
 }
 a:link {
-	color: lime;
+	color: blue;
 }
 a:visited {
-	color: lime;
+	color: blue;
 }
 a:hover {
-	color: yellow;
+	color: magenta;
 }
 img.intLink {
 	border: 0;
@@ -277,7 +247,7 @@ img.intLink {
 	padding-left: 2px;
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
-	background: #0044cc;
+	background: #1c57cc;
 }
 #toolBar1 select {
 	font-size: 10px;
@@ -290,6 +260,11 @@ img.intLink {
 	padding: 12px;
 	margin-left: auto;
 	margin-right: auto;
+}
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+  color: #999999;
 }
 </style>
 
@@ -323,16 +298,16 @@ img.intLink {
 <script src="js-head/crypto.js"></script>
 
 <!--extra functions for mail, etc.-->
-<script src="js-head/extra.js"></script>
+<script src="js-head/mail&chat.js"></script>
 
 <!--local Directory functions-->
 <script src="js-head/localDir.js"></script>
 
 <!--functions for switching screens, etc.-->
-<script src="js-head/switching.js"></script>
+<script src="js-head/screens.js"></script>
 
 <!--text steganography-->
-<script src="js-head/stego.js"></script>
+<script src="js-head/textstego.js"></script>
 
 <!--special functions that work only with Chrome apps and extensions-->
 <script src="js-head/Chromestuff.js"></script>
@@ -347,17 +322,26 @@ img.intLink {
     <div id="logo" style="height:90px;"><img style="max-width:100%;max-height:100%;" src="data:image/png;base64,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"> </div>
 
     <!--message area and local directory box, plus buttons-->
-    <div id="mainMsg" style="font-size:x-large;height:60px;">Please paste the locked message into the box</div>
-    <br />
-    <br />
+    <div id="mainMsg" style="font-size:x-large;height:60px;">Please paste the encrypted message into the box</div>
+    <br>
+    <br>
 
     <!--buttons above the main box-->
     <div id="topBtns" style="display: block;">
       <button class="cssbutton" id="replyBtn" value="Lock" style="color:lime;" title="lock message (alt-L)" accesskey="l">Encrypt</button><!--
 --><button class="cssbutton" id="hideBtn" value="Hide" style="" title="switch recipients, or turn the message into regular text (alt-T)" accesskey="t">To...</button><!--
 --><button class="cssbutton" id="makeChatBtn" value="Chat" style="" title="send a chat invitation by email and start chat (alt-C)" accesskey="c">Chat</button><!--
---><button class="cssbutton" id="selectBtn" value="Select" style="" title="select the text in the box">Select</button><!--
+--><button class="cssbutton" id="selectBtn" value="Copy" style="" title="select the text in the box">Copy</button><!--
 --><button class="cssbutton" id="clearBtn" value="Clear" style="" title="clear the text in the box">Clear</button>
+		&nbsp;
+   <input type="checkbox" id="fileMode" title="output is turned into files" accesskey=""/>
+	&nbsp; to File
+	<span id='fileOptions' style='display:none'>
+	&nbsp; &nbsp; <input type="radio" name="fileModes" id="binaryMode" title="output file is binary" checked/>
+      &nbsp; Binary&nbsp;&nbsp;
+      <input type="radio" name="fileModes" id="textMode" title="output file is text" />
+      &nbsp; Text
+      </span>
     </div>
   </div>
 
@@ -439,7 +423,7 @@ img.intLink {
 <input type="file" id="mainFile" style="display:none" />
   </div>
   </div>
-  <div id="mainBox" contentEditable="true" class="cssbox" style=""></div>
+  <div id="mainBox" contentEditable="true" class="cssbox" style="" placeholder="Write your reply here, then click Encrypt, and then optionally Email or Hide. You will have to click To... first if this is not a reply. Click the Rich button to insert images and files."></div>
   <div align="center">
     <!--buttons below the main box-->
     <div id="botBtns" style="display: block;">
@@ -452,7 +436,7 @@ img.intLink {
 </div>
 
 <!--Key dialog-->
-<div id="keyScr" class="white_content" align="center" style="display: block;"> <br/>
+<div id="keyScr" class="white_content" align="center" style="display: block;"> <br>
   <div id="firstTimeKey" align="left" style="font-size:x-large;width:95%;display:none;">
     <h3 style="color:lime;">Welcome to SeeOnce</h3>
     <p>Before you do anything else, you must choose a secret Password, which you will memorize and <strong>won't tell anyone</strong>, and click <strong>OK</strong>.</p>
@@ -466,28 +450,29 @@ img.intLink {
     <br>
   </div>
   <div id="keyMsg" style="font-size:x-large;height:90px;"><span style="color:pink;font-weight:bold">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div>
-  <br />
-  <br />
+  <br>
+  <br>
   <input type="password" class="cssbox" autocomplete="off" id="pwd" style="width:95%;" name="text" placeholder="Enter your Password here" align="center">
-  <br />
-  <br />
+  <br>
+  <br>
   <input type="checkbox" id="showKey" title="reveal box contents">
   &nbsp;Show&nbsp;
   <button class="cssbutton" id="acceptKeyBtn" value="OK" style="" title="accept Password" disabled>OK</button>
   <span id="fiveMin">
   <p>You will need to re-enter your Password after 5 minutes</p>
-  </span> </div>
+  </span>
+</div>
 
 <!--old Password dialog-->
-<div id="oldKeyScr" class="white_content" align="center" style="display: none;"> <br/>
-  <br />
-  <br />
+<div id="oldKeyScr" class="white_content" align="center" style="display: none;"> <br>
+  <br>
+  <br>
   <div id="oldKeyMsg" style="">Looks like you changed your Password recently. If you want to continue this conversation, please supply the previous Password in the box below, then click <strong>OK</strong></div>
-  <br />
-  <br />
+  <br>
+  <br>
   <input type="password" class="cssbox" id="oldPwd" style="width:60%;" name="oldPwd" placeholder="Enter the previous Password here." align="center">
-  <br />
-  <br />
+  <br>
+  <br>
   <input type="checkbox" id="showOldKey" title="reveal box contents">
   &nbsp;Show&nbsp;
   <button class="cssbutton" id="cancelOldKeyBtn" value="Cancel" style="" title="cancel old Password">Cancel</button>
@@ -495,31 +480,31 @@ img.intLink {
 </div>
 
 <!--Name dialog-->
-<div id="nameScr" class="white_content" align="center" style="display: none;"> <br/>
-  <div id="nameMsg" style="">This message was locked with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div>
-  <br />
-  <div id='nameListSpace2'><br />
-    <br />
+<div id="nameScr" class="white_content" align="center" style="display: none;"> <br>
+  <div id="nameMsg" style="">This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div>
+  <br>
+  <div id='nameListSpace2'><br>
+    <br>
     <select id='nameList2' class="cssbox" size='10' style="width:30%;" title="select the sender">
     </select>
-    <br />
-    <br />
+    <br>
+    <br>
   </div>
   <input type="text" class="cssbox" id="nameBox" style="width:60%;" name="name" placeholder="Enter the name here." align="center">
-  <br />
-  <br />
+  <br>
+  <br>
   <button class="cssbutton" id="acceptNameBtn" value="OK" style="" title="accept name" disabled>OK</button>
 </div>
 
 <!--Select dialog-->
-<div id="selectScr" class="white_content" align="center" style="display: none;"> <br/>
+<div id="selectScr" class="white_content" align="center" style="display: none;"> <br>
   <div id="selectMsg" style="">Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button</div>
-  <div id='nameListSpace'><br />
-    <br />
+  <div id='nameListSpace'><br>
+    <br>
     <select id='nameList' class="cssbox" size='10' style="width:30%;" title="select the recipient">
     </select>
-    <br />
-    <br />
+    <br>
+    <br>
   </div>
   <button class="cssbutton" id="cancelSelectBtn" value="Cancel" style="" title="cancel selection">Cancel</button>
   <button class="cssbutton" id="acceptSelectBtn" value="OK" style="" title="accept selection" disabled>OK</button>
@@ -535,39 +520,41 @@ img.intLink {
 <div id="chatScr" class="white_content" align="center"> <br>
   <br>
   <br>
-  <span id="chatmsg" style="font-size:x-large;">Choose the type of chat, then click OK</span><br/>
-  <br />
+  <span id="chatmsg" style="font-size:x-large;">Choose the type of chat, then click OK</span><br>
+  <br>
   <input type="radio" name="chatmodes" id="dataChat"  title="chat with text messages and file exchange" checked/>
   &nbsp; Text and files&nbsp;&nbsp;
   <input type="radio" name="chatmodes" id="audioChat" title="like Text chat, plus audio"/>
   &nbsp; Audio&nbsp;&nbsp;
   <input type="radio" name="chatmodes" id="videoChat" title="like audio chat, plus video"/>
-  &nbsp; Video <br />
-  <br />
+  &nbsp; Video <br>
+  <br>
   <button class="cssbutton" id="cancelChatBtn" value="Cancel" title="cancel chat invitation">Cancel</button>
   &nbsp;
   <button class="cssbutton" id="submitChatBtn" value="OK" title="make chat invitation">OK</button>
 </div>
 
 <!--Cover text entry dialog-->
-<div id="coverScr" class="white_content" align="center" style="display: none;"> <br />
-  <div align="center"> <span id="coverMsg">Please enter the cover text for hiding and click <strong>OK</strong></span><br />
-    <br />
-    <textarea class="cssbox" rows="5" autocomplete="off" id='coverBox' style="width:95%;max-height:600px" name='coverBox' placeholder="Enter the cover text here." align="center"></textarea>
-    <br />
+<div id="coverScr" class="white_content" align="center" style="display: none;">
+	<br>
+	<span id="coverMsg">Please enter the cover text for hiding and click <strong>OK</strong></span>
+    <br>
+    <br>
+    <div contenteditable="true" align="left" class="cssbox" rows="5" autocomplete="off" id="coverBox" style="width:95%;max-height:600px" name="coverBox" placeholder="Enter the cover text here."></div>
+    <br>
     <button class="cssbutton" id="cancelCoverBtn" value="cancel" style="" title="close cover text dialog">Cancel</button>
     &nbsp;
     <button class="cssbutton" id="acceptCoverBtn" value="OK" style="" title="accept cover text">OK</button>
     <br>
     <br>
     <input type="checkbox" id="rememberCoverCheck" title="remember the text for this session">
-    &nbsp;Remember </div>
+    &nbsp;Remember
 </div>
 
 <!--Reset warning-->
-<div id="resetScr" class="white_content" align="center" style="height: 30%; display: none;"> <br />
-  <div align="center"><span id="resetMsg">If you go ahead, the current conversation with the sender will be reset<br>This may be OK if this is a new message, but if it is an old one the conversation will go out of sync</span><br />
-    <br /><br /><br />
+<div id="resetScr" class="white_content" align="center" style="height: 30%; display: none;"> <br>
+  <div align="center"><span id="resetMsg">If you go ahead, the current conversation with the sender will be reset<br>This may be OK if this is a new message, but if it is an old one the conversation will go out of sync</span><br>
+    <br><br><br>
     <button class="cssbutton" id="cancelResetBtn" value="cancel" style="" title="back to safety">Cancel</button>
     &nbsp;
     <button class="cssbutton" id="acceptResetBtn" value="OK" style="" title="go ahead, I'll take teh risk">OK</button>
@@ -581,7 +568,7 @@ img.intLink {
 <div id="helpScr" style="max-width:1200px;margin-left:auto;margin-right:auto;display:none;">
   <h2 style="color:lime;font-size:x-large;">Welcome to SeeOnce</h2>
   <button class="cssbutton" id="help2mainBtnTop" value="< Back" style="float:left;" title="return to main screen (alt-M)" accesskey='m'>&#9668; Back</button>
-  <br />
+  <br>
   &nbsp;&nbsp;&nbsp;<span id='helpmsg'>For help on how to do things, click on each title.</span><br>
   <br>
   <hr>
@@ -593,7 +580,7 @@ img.intLink {
     <p>You can also use SeeOnce for real-time secure chat sessions involving text, files, audio, or even video. The connection is direct between participants, with a server getting involved only at the start so they can find each other.</p>
     <p>SeeOnce runs on a browser, which makes it platform-independent, plus native Android, and Chrome apps. The chat component, however, does not yet run on IE or Safari, or under iOS.</p>
     <p>SeeOnce is <em>still in experimental phase</em>, as it has not yet been duly vetted by experts. Bear this in mind before entrusting sensitive information to it.</p>
-    <p>If you want more capability, you may want to try PassLok, from <a href="https://PassLok.com" target="_blank">https://PassLok.com</a>. In addition to Read-once encryption and Letters encoding for a single recipient, PassLok implements three more encryption and five more steganography modes, plus signatures and secret splitting. PassLok can also encrypt for several recipients at once, and allows multiple users (or multiple identities) on the same machine. One of its versions, PassLok for Email, integrates directly into Gmail, Yaoo Mail, and Outlook online. SeeOnce is fully compatible with PassLok Privacy, the standalone version of PassLok, but not with PassLok for Email.</p>
+    <p>If you want more capability, you may want to try PassLok, from <a href="https://passlok.com" target="_blank">https://passlok.com</a>. In addition to Read-once encryption and Letters encoding for a single recipient, PassLok implements three more encryption and five more steganography modes, plus signatures and secret splitting. PassLok can also encrypt for several recipients at once, and allows multiple users (or multiple identities) on the same machine. One of its versions, PassLok for Email, integrates directly into Gmail, Yaoo Mail, and Outlook online. SeeOnce is fully compatible with PassLok Privacy, the standalone version of PassLok, but not with PassLok for Email.</p>
   </div>
   <hr>
   <div id="aa2" class="helpitem">
@@ -601,10 +588,11 @@ img.intLink {
   </div>
   <div id="a2" class="helptext">
     <p>The first time SeeOnce ran on your machine, you were asked to come up with a secret Password. You must remember this Password and <em>never give it to anyone</em>, not even your friends. SeeOnce gives you a score as you type it and tells you how long it will take to process it. The lower the score, the longer it takes, so it is better to come up with a good Password. SeeOnce doesn't store it or send it anywhere at all.</p>
-    <p>After that, <strong>as soon as you paste</strong> into SeeOnce a locked message you have received, it decrypts automatically, and this normally <em>only once</em>. If you load SeeOnce from an email link, you don't even have to copy and paste. The first time you get a message from someone, or if the sender's Password has changed, SeeOnce will ask you to select the sender's name from a list or type in a new name.</p>
-    <p>To <strong>reply to a message</strong>, just type your reply into SeeOnce, either plain or with formatting (the formatting tools are shown by clicking the <strong>Rich</strong> button).Then click the <strong>Encrypt</strong> button. A locked message containing a link is generated. You can then send it through your default email by clicking the <strong>Email</strong> button, if enabled in your browser and the contents are not too long. SeeOnce may ask you to identify the person you are replying to, before the message is locked.</p>
-    <p>If you want your locked message to look like normal text rather than encrypted gibberish, click the <strong>Hide</strong> button after encryption. You will then be asked for a cover text, which you can store for the session by clicking a checkbox.</p>
+    <p>After that, <strong>as soon as you paste</strong> into SeeOnce a encrypted message you have received, it decrypts automatically, and this normally <em>only once</em>. If you load SeeOnce from an email link, you don't even have to copy and paste. The first time you get a message from someone, or if the sender's Password has changed, SeeOnce will ask you to select the sender's name from a list or type in a new name.</p>
+    <p>To <strong>reply to a message</strong>, just type your reply into SeeOnce, either plain or with formatting (the formatting tools are shown by clicking the <strong>Rich</strong> button).Then click the <strong>Encrypt</strong> button. A encrypted message containing a link is generated. You can then send it through your default email by clicking the <strong>Email</strong> button, if enabled in your browser and the contents are not too long. SeeOnce may ask you to identify the person you are replying to, before the message is encrypted.</p>
+    <p>If you want your encrypted message to look like normal text rather than encrypted gibberish, click the <strong>Hide</strong> button after encryption. You will then be asked for a cover text, which you can store for the session by clicking a checkbox.</p>
     <p>To send a message to a person other than the last message's sender, click <strong>To...</strong> and select the new recipient. If that person is not yet on the list, you can still send the message to him/her by clicking the <strong>Invite</strong> button. But be careful, because the contents of invitation messages are NOT SECURE.</p>
+    <p>You can encrypt images or files, or have the result converted into a file that you can send as an attachment. Just check the <strong>to File</strong> box before encrypting, plus the type of file you want (binary or text).</p>
     <p>This and more is explained in these video tutorials (warning: watching them may leak your IP number):</p>
     <p>Part 1: essentials. <a href="https://www.youtube.com/watch?v=gkkEQvLZaXA" target="_blank">https://www.youtube.com/watch?v=gkkEQvLZaXA</a></p>
     <p>Part 2: resetting, hiding, formatting. <a href="https://www.youtube.com/watch?v=N2N2r9vqUn8" target="_blank">https://www.youtube.com/watch?v=N2N2r9vqUn8</a></p>
@@ -616,8 +604,8 @@ img.intLink {
   </div>
   <div id="a3" class="helptext">
     <p>There is a fairly tight limit on the size of a message that can be sent directly to the default email client, so that clicking <strong>Email</strong> produces an error. If this happens, simply copy the contents of the main box to clipboard, start a new email in your client, and then paste.</p>
-    <p>If a new message fails to decrypt even though the Password is correct, this may be because the conversation has gone out of sync after moving to another machine without copying the stored data (see the help item on how to do this) or decrypting an old reset message. To get back in sync, click the <strong>Reset</strong> button twice and send a locked message to the other person asking to repeat the last message.</p>
-    <p>Some browsers have trouble sending locked messages to the email client (especially if it is the standalone Outlook program), and may corrupt them so that the recipient cannot decrypt them. Please make sure the email client got the entire locked message without dropping anything ("+" and "/" characters may be a problem). If something goes wrong, you can always copy the locked message to clipboard, and then paste it into your communications program.</p>
+    <p>If a new message fails to decrypt even though the Password is correct, this may be because the conversation has gone out of sync after moving to another machine without copying the stored data (see the help item on how to do this) or decrypting an old reset message. To get back in sync, click the <strong>Reset</strong> button twice and send an encrypted message to the other person asking to repeat the last message.</p>
+    <p>Some browsers have trouble sending encrypted messages to the email client (especially if it is the standalone Outlook program), and may corrupt them so that the recipient cannot decrypt them. Please make sure the email client got the entire encrypted message without dropping anything ("+" and "/" characters may be a problem). If something goes wrong, you can always copy the encrypted message to clipboard, and then paste it into your communications program.</p>
   </div>
   <hr>
   <div id="aa4" class="helpitem">
@@ -635,7 +623,7 @@ img.intLink {
   <div id="a5" class="helptext">
     <p>SeeOnce depends on ephemeral keys for its operation, and those are stored encrypted within the browser. This means that messages will fail to decrypt if you move to a new machine or a different browser (except in the Chrome app, see below), but there is a way around this:</p>
     <p>When you click the <strong>Backup</strong> button, a special backup item containing the stored data appears in the box. It is encrypted by your secret Password. You can now copy it and save it somewhere. An email draft can be handy for this. When you paste the backup into SeeOnce, the data will be loaded back so you can continue conversations on a different machine.</p>
-    <p>As soon as the backup is made SeeOnce asks if you also want to wipe the storage. If you click the button again, all SeeOnce data stored in this machine is erased.</p>
+    <p>As soon as the backup is made, SeeOnce asks if you also want to wipe the storage. If you click the button again, all SeeOnce data stored in this machine is erased.</p>
     <p>In the Chrome app version of SeeOnce, the ephemeral data is synced across devices as soon as you log into your Chrome account, so you can continue conversations in course using different machines. All the sensitive synced data is encrypted. The wipe operation only affects the local copy of the data.</p>
   </div>
   <hr>
@@ -673,15 +661,15 @@ img.intLink {
       <p><em>Click here for instructions against a "man in the middle."</em></p>
     </div>
     <div id="b8" class="helptext">
-      <p>The easy way: ask your correspondent to read over the phone (or in an audio or video SeeOnce chat session) a substantial portion of the special SeeOnce link made on his/her side when making a reply, or the beginning of any locked message, which should match what you're getting. Fifteen characters or so will be enough. But if you are communicating exclusively by email, you can send a person whom you know and who knows you the following message or something like it, which implements something called the "interlock protocol":</p>
-      <p><br />
-        <em>Dear So-and-So:</em><br />
+      <p>The easy way: ask your correspondent to read over the phone (or in an audio or video SeeOnce chat session) a substantial portion of the special SeeOnce link made on his/her side when making a reply, or the beginning of any encrypted message, which should match what you're getting. Fifteen characters or so will be enough. But if you are communicating exclusively by email, you can send a person whom you know and who knows you the following message or something like it, which implements something called the "interlock protocol":</p>
+      <p><br>
+        <em>Dear So-and-So:</em><br>
         <em>I want to make sure there is no "man in the middle" of our SeeOnce exchange. Here's what I want you to do:</em></p>
       <ol>
-        <li><em>Write me a locked reply where you ask me to take a picture or video of myself doing something of your choice. Then split the locked message (the gibberish after the link) into two and send me the first half only.</em></li>
-        <li><em>When I receive your first half, I will also write a reply asking you to do something in a picture or short video. I'll send you half of the locked message first. When you get it, go ahead and send me the other half of your locked message.</em></li>
-        <li><em>When I get your second half, I'll put the two halves together and decrypt your message. Then, following your instructions I'll send you the picture or video right away, decrypted, along with the second half of my locked request.</em></li>
-        <li><em>When you get it, please verify that what I sent conforms to your instructions. If so, put together the two halves of my locked message, decrypt it, and send me what I ask in the message as soon as possible, decrypted as well. Then I'll know that there is no one in-between us.</em></li>
+        <li><em>Write me a encrypted reply where you ask me to take a picture or video of myself doing something of your choice. Then split the encrypted message (the gibberish after the link) into two and send me the first half only.</em></li>
+        <li><em>When I receive your first half, I will also write a reply asking you to do something in a picture or short video. I'll send you half of the encrypted message first. When you get it, go ahead and send me the other half of your encrypted message.</em></li>
+        <li><em>When I get your second half, I'll put the two halves together and decrypt your message. Then, following your instructions I'll send you the picture or video right away, decrypted, along with the second half of my encrypted request.</em></li>
+        <li><em>When you get it, please verify that what I sent conforms to your instructions. If so, put together the two halves of my encrypted message, decrypt it, and send me what I ask in the message as soon as possible, decrypted as well. Then I'll know that there is no one in-between us.</em></li>
       </ol>
       <p><em>Many thanks. Sincerely, This-and-That</em></p>
     </div>
@@ -706,8 +694,8 @@ img.intLink {
     <h3>What's underneath SeeOnce?</h3>
   </div>
   <div id="a9" class="helptext">
-    <p>SeeOnce is the little sibling of PassLok privacy (<a href="https://passlok.com" target="_blank">https://passlok.com</a>), from which it takes its Read-once encryption mode. In this mode, encryption keys are changed for every message, so that previous messages become impossible to decrypt by anyone. Invitations are encrypted with the user's own Lock, which makes them not secure (users are warned of this), but they have the same feel as a regular encryption in order to maintain a consistent user experience.</p>
-    <p>Likewise, while PassLok includes a complete directory management system for other user's Locks (public keys), SeeOnce makes this automatic by including the sender's Lock with every message sent.</p>
+    <p>SeeOnce is the little sibling of PassLok Privacy (<a href="https://passlok.com" target="_blank">https://passlok.com</a>), from which it takes its Read-once encryption mode. In this mode, encryption keys are changed for every message, so that previous messages become impossible to decrypt by anyone. Invitations are encrypted with the user's own Lock, which makes them not secure (users are warned of this), but they have the same feel as a regular encryption in order to maintain a consistent user experience.</p>
+    <p>Likewise, while PassLok includes a complete directory management system for other user's Locks (public keys), SeeOnce makes this automatic by including the sender's Lock at the start of every message sent.</p>
     <p>You can get full details on SeeOnce's cryptography from the <a href="https://passlok.com/seeonce/seeonce_technical_document.pdf" target="_blank">SeeOnce technical document.</a>.</p>
   </div>
   <hr>
@@ -737,12 +725,12 @@ img.intLink {
     <p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
     <div id="canary" style="float:left;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that we have never received any requests under gag order for user data or modifications of the code. They will be absent once we receive one of such requests.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2 (March 2017) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  SeeOnce 1.1.1 &#169; F. Ruiz 2016
+  SeeOnce 1.2 &#169; F. Ruiz 2017
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>

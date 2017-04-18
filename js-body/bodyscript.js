@@ -33,7 +33,7 @@ if(isChrome){
 //clears the no JavaScript warning and displays an initial message depending on the type of source
 function showGreeting(){
 	var protocol = window.location.protocol,
-		msgStart = "<span style='color:lime;font-size:xx-large;'><strong>Welcome to SeeOnce</strong></span><br />",
+		msgStart = "<span style='color:lime;font-size:xx-large;'><strong>Welcome to SeeOnce</strong></span><br>",
 		msgEnd = "<br>Enter your Password and click OK";
 	if(protocol == 'file:'){
 		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd
@@ -53,7 +53,7 @@ function showGreeting(){
 //special instructions the first time it runs
 function introGreeting(){
 	firstTimeKey.style.display = 'block';
-	keyMsg.innerText = 'The strength will appear here\nEnter the Password and click OK';
+	keyMsg.textContent = 'The strength will appear here. Enter the Password and click OK';
 	if(isiPhone || isAndroidPhone){
 		keyScr.style.width = '100%';			//more space needed for phones
 		keyScr.style.height = '100%';
@@ -104,20 +104,17 @@ function loadFileAsURL(){
 		if(URLFromFileLoaded.length > 2000000){
 			var reply = confirm("This file is larger than 1.5MB and Chrome won't save it. Do you want to continue loading it?");
 			if(!reply){
-				mainMsg.innerText = 'File load canceled';
+				mainMsg.textContent = 'File load canceled';
 				throw('file load canceled')
 			}
 		}
 		if(fileToLoad.type.slice(0,4) == "text"){
-			if(URLFromFileLoaded.slice(0,2) == '==' && URLFromFileLoaded.slice(-2) == '=='){
-				mainBox.innerHTML += '<br><a download="' + fileName + '" href="data:,' + URLFromFileLoaded + '">' + fileName + '</a>'
-			}else{
-				mainBox.innerHTML += "<br><br>" + URLFromFileLoaded.replace(/  /g,' &nbsp;')
-			}
+			mainBox.innerHTML += "<br><br>" + URLFromFileLoaded.replace(/  /g,' &nbsp;')
 		}else{
 			mainBox.innerHTML += '<br><a download="' + fileName + '" href="' + URLFromFileLoaded + '">' + fileName + '</a>'
 		}
-	};
+		if(fileName.match(/.(plk|txt)/)) Decrypt()				//in case it is an encrypted message, attempt to decrypt it
+	}
 	if(fileToLoad.type.slice(0,4) == "text"){
 		fileReader.readAsText(fileToLoad, "UTF-8");
 		mainMsg.innerHTML = 'This is the content of file <strong>' + fileToLoad.name + '</strong>';
@@ -134,10 +131,10 @@ function loadImage(){
 	fileReader.onload = function(fileLoadedEvent){
 		var URLFromFileLoaded = fileLoadedEvent.target.result;
 		if(URLFromFileLoaded.slice(0,10) != 'data:image'){
-			mainMsg.innerText = 'This file is not a recognized image type';
+			mainMsg.textContent = 'This file is not a recognized image type';
 			return
 		}
-		mainBox.innerHTML += safeHTML('<img style="width:50%;" src="' + URLFromFileLoaded.replace(/=+$/,'') + '">')
+		mainBox.innerHTML += safeHTML('<img style="width:100%;" src="' + URLFromFileLoaded.replace(/=+$/,'') + '">')
 	};
 
 	fileReader.readAsDataURL(fileToLoad, "UTF-8");

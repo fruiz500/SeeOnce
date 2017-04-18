@@ -18,8 +18,8 @@ function showOldSec(){
 
 //for clearing the main box
 function clearMain(){
-	mainBox.innerText = '';
-	if(theirName){mainMsg.innerText = 'Replying to ' + theirName}else{mainMsg.innerText = ''}
+	mainBox.textContent = '';
+	if(theirName){mainMsg.textContent = 'Replying to ' + theirName}else{mainMsg.textContent = ''}
 	changeButtons()
 }
 
@@ -47,26 +47,37 @@ function selectUser(){
 	shadow.style.display = 'block';
 	if(nameList.length == 0){			//don't display box if there is nothing there
 		nameListSpace.style.display = 'none';
-		selectMsg.innerText = 'No stored users. Invite a new user with the lower button'
+		selectMsg.textContent = 'No stored users. Invite a new user with the lower button'
 	}else{
 		nameListSpace.style.display = 'block';
-		selectMsg.innerText = 'Please select the recipient on the list below and click OK, or invite a new user with the lower button'
+		selectMsg.textContent = 'Please select the recipient on the list below and click OK, or invite a new user with the lower button'
 	}
 }
 
 //to change or disable buttons depending on main box contents
 function changeButtons(){
-	var text = mainBox.innerText.trim(),
-		type = extractCipher(text).charAt(50);
-	if(type == '$' || type == '*' || type == ':' || type == '@' || extractCipher(text).charAt(0) == '~'){			//regular output
-		hideBtn.innerText = 'Hide';
-		replyBtn.innerText = 'Email'
+	var text = mainBox.innerHTML.replace(/&[^;]+;/g,'').replace(/<a(.*?).(plk|txt)" href="data:(.*?),/,'').replace(/">(.*?)\/a>$/,'').replace(/<br>/g,'');
+	if(text.match('==')) text = text.split('==')[1].replace(/<(.*?)>/g,'');		//remove tags
+	var cipher = extractCipher(text),
+		type = cipher.charAt(56);
+	if(type.match(/[gopr]/) || cipher.charAt(0) == 'k'){			//regular output
+		hideBtn.textContent = 'Hide';
+		replyBtn.textContent = 'Email'
 	}else if(text.match('\u2004') || text.match('\u2005') || text.match('\u2006')){		//hidden output
-		hideBtn.innerText = 'To...';
-		replyBtn.innerText = 'Email'
+		hideBtn.textContent = 'To...';
+		replyBtn.textContent = 'Email'
 	}else{
-		hideBtn.innerText = 'To...';
-		replyBtn.innerText = 'Encrypt'
+		hideBtn.textContent = 'To...';
+		replyBtn.textContent = 'Encrypt'
+	}
+}
+
+//reveals or hides file output options
+function toggleFileOptions(){
+	if(fileMode.checked){
+		fileOptions.style.display = ''
+	}else{
+		fileOptions.style.display = 'none'
 	}
 }
 
@@ -94,18 +105,18 @@ function closeBox() {
 
 function cancelOldKey(){
 	closeBox();
-	mainMsg.innerText = 'Old Password canceled';
+	mainMsg.textContent = 'Old Password canceled';
 }
 
 function cancelChat(){
 	lockForChat = false;
 	closeBox();
-	mainMsg.innerText = 'Chat canceled';
+	mainMsg.textContent = 'Chat canceled';
 }
 
 function cancelCover(){
 	closeBox();
-	mainMsg.innerText = 'Text hide canceled';
+	mainMsg.textContent = 'Text hide canceled';
 }
 
 function acceptSelect(){
@@ -129,12 +140,12 @@ function acceptReset(){
 
 function cancelReset(){
 	closeBox();
-	mainMsg.innerText = 'Decryption canceled by user'
+	mainMsg.textContent = 'Decryption canceled by user'
 }
 
 var fromSwitch = false;				//to keep track if the user change dialog was loaded by this action
 function hideBtnAction(){
-	if(hideBtn.innerText == 'Hide'){textStego();}			//nornmal hiding action
+	if(hideBtn.textContent == 'Hide'){textStego();}			//nornmal hiding action
 	else {
 		fromSwitch = true;									//display dialog to change recipient
 		selectUser()
@@ -149,10 +160,10 @@ function openNewLock(){
 	nameBox.value = '';
 	if(nameList2.length == 0){
 		nameListSpace2.style.display = 'none';
-		nameMsg.innerText = 'Please type the name of the person who sent you this invitation into the box below, then click OK'
+		nameMsg.textContent = 'Please type the name of the person who sent you this invitation into the box below, then click OK'
 	}else{
 		nameListSpace2.style.display = 'block';
-		nameMsg.innerText = 'This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click OK'
+		nameMsg.textContent = 'This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click OK'
 	}
 }
 
@@ -192,7 +203,7 @@ function any2key(){
 	cancelIntroGreeting();
 	shadow.style.display = 'block';
 	keyScr.style.display = 'block';
-	keyMsg.innerText = 'Please enter your Password';
+	keyMsg.textContent = 'Please enter your Password';
 	if(!isMobile) pwd.focus()
 }
 
@@ -219,17 +230,6 @@ function suggestKey(){
 	showKey.checked = true
 }
 
-//enables OK button if a sufficiently long cover text is loaded
-function enableCover(){
-	setTimeout(function(){
-		var text = coverBox.value.trim();
-		if(text.length > 1400){
-			acceptCoverBtn.disabled = false
-		}else{
-			coverMsg.innerText = 'The cover text must be at least 1400 characters long'
-		}
-	},20)
-}
 //for opening the help screen and back
 function main2help(){
 	if(mainScr.style.display == 'block'){
@@ -264,13 +264,13 @@ function toggleRichText() {
 		toolBar1.style.display = 'none';
 		mainBox.style.borderTopLeftRadius = '15px';
 		mainBox.style.borderTopRightRadius = '15px';
-		niceEditBtn.innerText = 'Rich';
+		niceEditBtn.textContent = 'Rich';
 		niceEditor = false
 	} else {
 		toolBar1.style.display = 'block';
 		mainBox.style.borderTopLeftRadius = '0';
 		mainBox.style.borderTopRightRadius = '0';
-		niceEditBtn.innerText = 'Plain';
+		niceEditBtn.textContent = 'Plain';
 		niceEditor = true
 	}
 	textheight();

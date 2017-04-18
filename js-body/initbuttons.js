@@ -42,6 +42,8 @@ window.onload = function() {
 
    	clearBtn.addEventListener('click', clearMain);
 
+	fileMode.addEventListener('click', toggleFileOptions);
+
 	helpBtn.addEventListener('click', main2help);
 
 	help2mainBtnTop.addEventListener('click', main2help);
@@ -67,8 +69,6 @@ window.onload = function() {
    	cancelChatBtn.addEventListener('click', cancelChat);
 
 	suggestKeyBtn.addEventListener('click', suggestKey);
-
-	coverBox.addEventListener('paste', enableCover);
 
 	cancelCoverBtn.addEventListener('click', cancelCover);
 
@@ -144,9 +144,9 @@ window.onload = function() {
 var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
 
 //mainBox.innerText = decodeURI(window.location.hash).slice(1);			//correspondent's message from address bar
-mainBox.innerText = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1]
+if(window.location.hash) mainBox.textContent = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1]
 
-var theirezLock = mainBox.innerText.slice(0,50),
+var theirezLock = mainBox.textContent.slice(0,50),
 	theirLock = changeBase(theirezLock, base36, base64, true),
 	theirName = '';
 

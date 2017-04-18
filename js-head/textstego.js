@@ -1,53 +1,61 @@
-﻿//detects that all the characters in the text are legal output
-function legalItem(text){
-	if(text.trim() == '') return false;
-	var keyAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~@$*:";		//base64 plus other characters used in SeeOnce strings
-	for (var i = 0; i < text.length; i++){
-		var index = keyAlphabet.indexOf(text[i]);
-		if(index == -1){
-			return false
-		}
-	}
-	return true
+﻿var base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+//returns true if pure base64
+function isBase64(string){
+	return !string.match(/[^a-zA-Z0-9+\/]/)
 }
 
-//This function checks for legal SeeOnce output and calls the encoder
+//This function checks for legal output and calls the encoder
 function textStego(){
-	acceptCoverBtn.disabled = true;
-	if(coverBox.value.trim() == ''){			//stop to get the cover text if empty
-		coverScr.style.display = 'block';
-		shadow.style.display = 'block';
-		if(!isMobile) coverBox.focus();
-		return
-	}else{
-		coverScr.style.display = 'none';
-		shadow.style.display = 'none';
+	var text = mainBox.innerHTML.replace(/&[^;]+;/g,'').replace(/<a(.*?).(plk|txt)" href="data:(.*?),/,'').replace(/">(.*?)\/a>$/,'').replace(/<br>/g,'');
+	if(text.match('==')) text = text.split('==')[1];					//remove tags
+	text = text.replace(/<(.*?)>/gi,'');
+	if(text == ""){
+		mainMsg.textContent = 'No text in the box';
+		throw("no text")
 	}
-
-	var cleanText = extractCipher(mainBox.innerText);
-
-	if(legalItem(cleanText)){							//legal item found: encode it
+	if(isBase64(text)){							//legal item found: encode it
 		mainMsg.innerHTML = '<span class="blink" style="color:cyan">PROCESSING</span>';		//Get blinking message started
 		setTimeout(function(){																	//the rest after a 20 ms delay
-			var turns = toLetters(cleanText);
-			if(!rememberCoverCheck.checked) coverBox.value = '';
+			var turns = toLetters(text);
+			if(!rememberCoverCheck.checked) coverBox.textContent = '';
 			if(turns){var turnText = 'It was repeated ' + turns + ' times. '}else{var turnText = ''}
-			mainMsg.innerText = 'Message encoded into letters of this text. ' + turnText + 'Please complete it if necessary'
+			mainMsg.textContent = 'Message encoded into letters of this text. ' + turnText + 'Please complete last word if necessary'
 		},20);						//end of timeout
-	}else{												//no legal item found
-		mainMsg.innerText = 'Only SeeOnce output can be hidden'
+	}else{												//no legal item found, so try to decode
+		fromLetters(text);
+		mainMsg.textContent = 'Message extracted from Letters'
 	}
 }
 
-//makes the binary equivalent (string) of an ASCII string
+//makes the binary equivalent (array) of a base64 string. No error checking
 function toBin(input){
-	var output = "";
+	var output = new Array(input.length * 6),
+		code = '';
+	
     for (var i = 0; i < input.length; i++) {
-		var bin = input.charCodeAt(i).toString(2);
-		while(bin.length < 7) bin = '0' + bin;
-        output += bin;
+		code = ("000000" + base64.indexOf(input.charAt(i)).toString(2)).slice(-6);
+		for(var j = 0; j < 6; j++){
+			output[6 * i + j] = parseInt(code.charAt(j))
+		}
     }
 	return output
+}
+
+//retrieves base64 string from binary array. No error checking
+function fromBin(input){
+	var length = input.length - (input.length % 6)
+	var output = new Array(length / 6),
+		codeArray = new Array(6);
+	
+	for (var i = 0; i < length; i = i+6) {
+		codeArray = input.slice(i,i+6);
+		for(var j = 0; j < 6; j++){
+			codeArray[j] = input[i+j].toString()
+		}
+		output[i / 6] = base64.charAt(parseInt(codeArray.join(''),2))
+    }
+	return output.join('')
 }
 
 //Letters encoding is based on code at: http://www.irongeek.com/i.php?page=security/unicode-steganography-homoglyph-encoder, by Adrian Crenshaw, 2013
@@ -130,18 +138,29 @@ function encodableBits(cover){
 
 //encodes text as special letters and spaces in the cover text, which replace the original ones
 function toLetters(text){
-	var textBin = toBin(text),
-		coverText = addSpaces(coverBox.value.trim()).replace(/\n/g,' '),
+	if(coverBox.textContent.trim() == ''){			//stop to get the cover text if empty
+		coverScr.style.display = 'block';
+		shadow.style.display = 'block';
+		if(!isMobile) coverBox.focus();
+		throw('ready for cover input')
+	}else{
+		coverScr.style.display = 'none';
+		shadow.style.display = 'none'
+	}
+
+	var textBin = toBin(text).join(''),				//string containing 1's and 0's
+		coverText = addSpaces(coverBox.textContent.trim().replace(/[\n\s-]+/g,' ')),
 		cover = coverText,
 		capacity = encodableBits(cover);
-	if (capacity < textBin.length){						//repeat the cover text if it is too short
-		var turns = Math.ceil(textBin.length / capacity);
-		var index = 0;
+	if (capacity < textBin.length){						//repeat the cover text if it's too short
+		var turns = Math.ceil(textBin.length / capacity),
+			index = 0;
 		while (index < turns){
-			cover = cover + ' ' + coverText;
+			cover += ' ' + coverText;
 			index++;
 		};
-		capacity = encodableBits(cover)
+		capacity = encodableBits(cover);
+		mainMsg.textContent = 'Message encoded into letters of this text. It was repeated ' + turns + ' times. Please complete it.';
 	}
 	var finalString = "",
 		bitsIndex = 0,
@@ -153,38 +172,35 @@ function toLetters(text){
 		}else{
 			var tempBits = textBin.substring(bitsIndex,bitsIndex + charMappings[cover[i]].length);
 			while(tempBits.length < charMappings[cover[i]].length){tempBits = tempBits + "0";} 			//Got to pad it out
-			finalString = finalString + charMappings[cover[i] + tempBits];
-			bitsIndex = bitsIndex + charMappings[cover[i]].length;
-			doneBits = doneBits + tempBits;
+			finalString += charMappings[cover[i] + tempBits];
+			bitsIndex += charMappings[cover[i]].length;
+			doneBits += tempBits;
 		}
-		i++;
+		i++
 	}
-	mainBox.innerText = finalString;
-	hideBtn.innerText = 'Hide';
+	mainBox.textContent = finalString + '.';										//period needed because there could be spaces at the end
+	hideBtn.textContent = 'To...';
 	return turns
 }
 
 //gets the original text from Letters encoded text
 function fromLetters(text){
-	var bintemp = "",
+	var bintemp = [],
 		finalString = "",
 		tempchar = "";
-	for (i = 0; i < text.length; i++){
+	for (var i = 0; i < text.length; i++){
 		if (charMappings[text[i]] === undefined ){
 		}else{
 			tempchar = charMappings[text[i]];
-			bintemp = bintemp + tempchar;
+			bintemp.push(tempchar);
 		}
 	}
-	for (i = 0; i < bintemp.length; i=i+7){
-		var mybyte = String.fromCharCode(parseInt(bintemp.substring(i,i+7),2));
-		if (mybyte == '\0'){
-		}else{
-			finalString = finalString + mybyte;
-		}
-	}
-	mainBox.innerText = finalString;
-	hideBtn.innerText = 'To...'
+	var binStr = bintemp.join(''),
+		bin = new Array(binStr.length);
+	for(var i = 0; i < binStr.length; i++) bin[i] = parseInt(binStr.charAt(i));
+	finalString = fromBin(bin.slice(0,bin.length-(bin.length % 6)));
+	mainBox.innerHTML = safeHTML(finalString);
+	hideBtn.textContent = 'To...'
 }
 
 //adds spaces that can be encoded if Chinese, Korean, or Japanese

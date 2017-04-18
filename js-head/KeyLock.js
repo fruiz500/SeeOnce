@@ -95,12 +95,12 @@ function reduceVariants(string){
 	return string.toLowerCase().replace(/[óòöôõo]/g,'0').replace(/[!íìïîi]/g,'1').replace(/[z]/g,'2').replace(/[éèëêe]/g,'3').replace(/[@áàäâãa]/g,'4').replace(/[$s]/g,'5').replace(/[t]/g,'7').replace(/[b]/g,'8').replace(/[g]/g,'9').replace(/[úùüû]/g,'u');
 }
 
-//myKey is a 32-byte uint8 array private key deriving from the user's Password, no salt, for local saving. Sgn (Edwards curve) is 64-byte; DH (Motgomery curve, deriving from Sgn) is 32-byte. myLockbin is the public Key derived from myKeySgn. myezLock is the base36 version. Suffix "bin" means it is binary.
+//myKey is a 32-byte uint8 array private key deriving from the user's Password, no salt, for local saving. Sgn (Edwards curve) is 64-byte; DH (Motgomery curve, deriving from Sgn) is 32-byte. myLock is the public Key derived from myKeySgn. myezLock is the base36 version. Suffix "Str" means it is a base64 string.
 var	myKey,
 	KeySgn,
 	KeyDH,
-	myLockbin,
 	myLock,
+	myLockStr,
 	myezLock;
 
 //If the timer has run out, the Password is deleted from box, and the stretched binary secret key is deleted from memory
@@ -131,9 +131,9 @@ function readKey(){
 	if (key == ""){
 		any2key();
 		if(callKey == 'initkey'){
-			keyMsg.innerHTML = '<span style="color:lime"><strong>Welcome to SeeOnce</strong></span><br />Please enter your secret Password'
+			keyMsg.innerHTML = '<span style="color:lime"><strong>Welcome to SeeOnce</strong></span><br>Please enter your secret Password'
 		}else{
-			keyMsg.innerText = 'Please enter your secret Password';
+			keyMsg.textContent = 'Please enter your secret Password';
 			shadow.style.display = 'block'
 		}
 		throw ('Password needed')
@@ -144,7 +144,7 @@ function readKey(){
 function acceptKey(){
 	var key = pwd.value.trim();
 	if(key == ''){
-		keyMsg.innerText = 'Please enter your Password';
+		keyMsg.textContent = 'Please enter your Password';
 		throw("no Password")
 	}
 	if(key.length < 4){
@@ -160,15 +160,15 @@ function acceptKey(){
 		myKey = wiseHash(key,'');									//no salt used in SeeOnce
 		KeySgn = nacl.sign.keyPair.fromSeed(myKey).secretKey;		//make the Edwards curve secret key first
 		KeyDH = ed2curve.convertSecretKey(KeySgn);
-		if(!myLockbin){
-			myLockbin = nacl.sign.keyPair.fromSecretKey(KeySgn).publicKey;		//from the signing key
-			myLock = nacl.util.encodeBase64(myLockbin).replace(/=+$/,'');
-			myezLock = changeBase(myLock, base64, base36, true);
-			mainMsg.innerText = "Now paste into the box the message you got, including all the gibberish.\nOr write a new message and click Encrypt"
+		if(!myLock){
+			myLock = nacl.sign.keyPair.fromSecretKey(KeySgn).publicKey;		//from the signing key
+			myLockStr = nacl.util.encodeBase64(myLock).replace(/=+$/,'');
+			myezLock = changeBase(myLockStr, base64, base36, true);
+			mainMsg.textContent = "Now paste into the box the message you got, including all the gibberish. Or write a new message and click Encrypt"
 		}
 		if(firstInit) {
 			initSession();
-			if(mainBox.innerText != '') unlockItem();
+			if(mainBox.textContent != '') unlockItem();
 			firstInit = false
 		}
 		if (callKey == 'encrypt'){					//now complete whatever was being done when the Password was found missing
@@ -239,53 +239,48 @@ function hashTime10(){
 	return Date.now() - before
 }
 
-//makes the DH public string of a DH secret key array. Returns a base64 string
-function makePubStr(sec){
-	var pub = nacl.box.keyPair.fromSecretKey(sec).publicKey;
-	return nacl.util.encodeBase64(pub).replace(/=+$/,'')
+//makes the DH public key byte array of a DH secret key byte array. Returns a byte array
+function makePub(sec){
+	return nacl.box.keyPair.fromSecretKey(sec).publicKey
 }
 
-//Diffie-Hellman combination of a DH public key array and a DH secret key array. Returns Uint8Array
-function makeShared(pubstr,sec){
-	var	pub = nacl.util.decodeBase64(pubstr);
+//Diffie-Hellman combination of a DH public key byte array and a DH secret key byte array. Returns Uint8 byte array
+function makeShared(pub,sec){
 	return nacl.box.before(pub,sec)
 }
 
 
-//makes the DH public key (Montgomery) from a published Lock, which is a Signing public key (Edwards)
-function convertPubStr(Lock){
-	var pub = nacl.util.decodeBase64(Lock);
-	return nacl.util.encodeBase64(ed2curve.convertPublicKey(pub)).replace(/=+$/,'')
+//makes the DH public key (Montgomery) from a published Lock (string), which is a Signing public key (Edwards)
+function convertPubStr(pubStr){
+	return ed2curve.convertPublicKey(nacl.util.decodeBase64(pubStr))
 }
 
-//stretches nonce to 24 bytes
+//stretches nonce to 24 bytes by adding zeros
 function makeNonce24(nonce){
 	var	result = new Uint8Array(24);
 	for(i=0;i<nonce.length;i++){result[i] = nonce[i]};
 	return result
 }
 
-//encrypt string with a shared key
+//encrypt string with a shared Key, returns a uint8 array
 function PLencrypt(plainstr,nonce24,sharedKey,isCompressed){
-	if(isCompressed){
-		var plain = LZString.compressToUint8Array(plainstr)
-	}else{
+	if(!isCompressed || plainstr.match('="data:')){						//no compression if it includes a file
 		var plain = nacl.util.decodeUTF8(plainstr)
+	}else{
+		var plain = LZString.compressToUint8Array(plainstr)
 	}
-	var	cipher = nacl.secretbox(plain,nonce24,sharedKey);
-	return nacl.util.encodeBase64(cipher).replace(/=+$/,'')
+	return nacl.secretbox(plain,nonce24,sharedKey)
 }
 
 var needRecrypt = false;
-//decrypt string with a shared key
-function PLdecrypt(cipherstr,nonce24,sharedKey,isCompressed){
-	try{															//this may fail if the string is corrupted, hence the try
-		var cipher = nacl.util.decodeBase64(cipherstr);
-	}catch(err){
-		mainMsg.innerText = "This locked message seems to be corrupted or incomplete";
-		throw('decodeBase64 failed')
+//decrypt string (or uint8 array) with a shared Key. Var 'label' is to display messages
+function PLdecrypt(cipherStr,nonce24,sharedKey,isCompressed){
+	if(typeof cipherStr == 'string'){
+		var cipher = nacl.util.decodeBase64(cipherStr)
+	}else{
+		var cipher = cipherStr
 	}
-	var	plain = nacl.secretbox.open(cipher,nonce24,sharedKey);
+	var	plain = nacl.secretbox.open(cipher,nonce24,sharedKey);					//decryption instruction
 	if(!plain){													//failed, try old password
 		if(oldPwd.value.trim()){
 			plain = nacl.secretbox.open(cipher,nonce24,wiseHash(oldPwd.value.trim(),''));
@@ -298,16 +293,46 @@ function PLdecrypt(cipherstr,nonce24,sharedKey,isCompressed){
 			failedDecrypt()
 		}
 	}
-	if(isCompressed){
-		return LZString.decompressFromUint8Array(plain)
-	}else{
+	if(!isCompressed || plain.join().match(",61,34,100,97,116,97,58,")){		//this is '="data:' after encoding
 		return nacl.util.encodeUTF8(plain)
+	}else{
+		return LZString.decompressFromUint8Array(plain)
 	}
 }
 
-//removes stuff between angle brackets
-function removeHTMLtags(string){
-	return string.replace(/<(.*?)>/gi, "")
+//encrypts a string or uint8 array with the secret Key, 12 char nonce, padding so length for ASCII input is the same no matter what. The input can also be binary, and then it won't be padded
+function keyEncrypt(plainstr){
+	readKey();																		//make sure the Key is still alive
+	var	nonce = nacl.randomBytes(9),
+		nonce24 = makeNonce24(nonce);
+	if(typeof plainstr == 'string'){
+		plainstr = encodeURI(plainstr).replace(/%20/g,' ');
+		while (plainstr.length < 43) plainstr = plainstr + ' ';
+		var cipher = PLencrypt(plainstr,nonce24,myKey,false)
+	}else{
+		var cipher = nacl.secretbox(plainstr,nonce24,myKey)
+	}
+	return nacl.util.encodeBase64(concatUint8Arrays([144],concatUint8Arrays(nonce,cipher))).replace(/=+$/,'')		//1st character should be k
+}
+
+//decrypts a string encrypted with the secret Key, 12 char nonce. Returns original if not encrypted. If isArray set, return uint8 array
+function keyDecrypt(cipherStr,isArray){
+	var cipher = nacl.util.decodeBase64(cipherStr);
+	if (cipher[0] == 144){
+		readKey();																	//make sure the Key is still alive
+		var	nonce = cipher.slice(1,10),												//ignore the marker byte
+			nonce24 = makeNonce24(nonce),
+			cipher2 = cipher.slice(10);
+		if(isArray){
+			var plain = nacl.secretbox.open(cipher2,nonce24,myKey);
+			if(!plain) failedDecrypt();
+			return plain
+		}else{
+			return decodeURI(PLdecrypt(cipher2,nonce24,myKey,false).trim())
+		}
+	}else{
+		return cipherStr
+	}
 }
 
 //this one escapes dangerous characters, preserving non-breaking spaces
@@ -354,18 +379,18 @@ function failedDecrypt(){
 		locDirDecrypt = false
 	}else if(!locDir[theirLock]){
 		restoreTempLock();
-		mainMsg.innerText = 'Decryption has Failed. Selected sender may be wrong';
+		mainMsg.textContent = 'Decryption has Failed. Selected sender may be wrong';
 		callKey = ''		
 	}else if(locDir[theirLock][2] == 'lock'){
 		restoreTempLock();
 		mainMsg.innerHTML = '<span style="color:orange;">Messages can be decrypted <em>only once</em></span>';
 		callKey = ''
-	}else if(mainBox.innerText.charAt(0) == '~'){
-		mainMsg.innerText = 'The backup has failed to decrypt. Please check your Password';
+	}else if(mainBox.textContent.charAt(0) == 'k'){
+		mainMsg.textContent = 'The backup has failed to decrypt. Please check your Password';
 		callKey = ''
 	}else{
 		restoreTempLock();
-		mainMsg.innerText = 'Decryption has Failed. Try resetting the exchange';
+		mainMsg.textContent = 'Decryption has Failed. Try resetting the exchange';
 		callKey = ''
 	}
 	throw('decryption failed')
