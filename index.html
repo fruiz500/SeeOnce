@@ -331,7 +331,7 @@ img.intLink {
       <button class="cssbutton" id="replyBtn" value="Lock" style="color:lime;" title="lock message (alt-L)" accesskey="l">Encrypt</button><!--
 --><button class="cssbutton" id="hideBtn" value="Hide" style="" title="switch recipients, or turn the message into regular text (alt-T)" accesskey="t">To...</button><!--
 --><button class="cssbutton" id="makeChatBtn" value="Chat" style="" title="send a chat invitation by email and start chat (alt-C)" accesskey="c">Chat</button><!--
---><button class="cssbutton" id="selectBtn" value="Copy" style="" title="select the text in the box">Copy</button><!--
+--><button class="cssbutton" id="selectBtn" value="Copy" style="" title="copy the text in the box, or paste from clipboard">Paste</button><!--
 --><button class="cssbutton" id="clearBtn" value="Clear" style="" title="clear the text in the box">Clear</button>
 		&nbsp;
    <input type="checkbox" id="fileMode" title="output is turned into files" accesskey=""/>
@@ -517,7 +517,7 @@ img.intLink {
 </div>
 
 <!--Chat dialog, to enter the chat type-->
-<div id="chatScr" class="white_content" align="center"> <br>
+<div id="chatDialog" class="white_content" align="center"> <br>
   <br>
   <br>
   <span id="chatmsg" style="font-size:x-large;">Choose the type of chat, then click OK</span><br>
@@ -730,7 +730,7 @@ img.intLink {
   </div>
   <hr>
   <address>
-  SeeOnce 1.2 &#169; F. Ruiz 2017
+  SeeOnce 1.2.1 &#169; F. Ruiz 2017
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
@@ -746,6 +746,14 @@ img.intLink {
   </address>
   <br>
   <button class="cssbutton" id="help2mainBtnBottom" value="< Back" style="float:left;" title="return to main screen (alt-M)">&#9668; Back</button>
+</div>
+
+<!--Chat screen, just an iframe for https://www.passlok.com/chat-->
+<div id="chatScr" class="block_page" style="display: none;" align="center">
+  <button class="cssbutton" id="closeChatBtn" value="< Back" style="float:left;" title="returns to Main tab">&#9668; Back to SeeOnce</button>
+  <span id="chatMsg" style="color:black;">Chat session open. Please return to the Main screen to send the invitation</span>
+  <button class="cssbutton" id="resetChatBtn" value="Reset" style="float:right;" title="reset the chat">Reset Chat</button>
+  <iframe seamless id="chatFrame" src="" style="width:100%;height:900px" border=0 frameborder=0 allowfullscreen></iframe>
 </div>
 
 <!--Body script: window reformatting, special functions-->

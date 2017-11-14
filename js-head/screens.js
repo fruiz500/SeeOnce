@@ -5,7 +5,7 @@ function showSec(){
 	}else{
 		pwd.type="PASSWORD";
 	}
-};
+}
 
 //same, for old Key box
 function showOldSec(){
@@ -14,7 +14,33 @@ function showOldSec(){
 	}else{
 		oldPwd.type="PASSWORD";
 	}
-};
+}
+
+//loads the chat frame
+function main2chat(token){
+	if(isAndroid && isChrome){
+		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running PassLok as a native app.');
+		if(!reply) throw('chat canceled by user')
+	}
+	document.getElementById('chatFrame').src = 'https://www.passlok.com/chat/index.html#' + token;		//open chat iframe; remote because of the CSP
+	makeChatBtn.textContent = 'Back to Chat';
+	makeChatBtn.style.color = 'orange';
+	chatScr.style.display = 'block'
+}
+
+//to close chat frame
+function chat2main(){
+	chatScr.style.display = 'none';
+	chatMsg.textContent = ''
+}
+
+//reloads chat frame
+function resetChat(){
+	var frame = document.getElementById('chatFrame'),
+		src = frame.src;
+	frame.src = '';
+	setTimeout(function(){frame.src = src;}, 10)
+}
 
 //for clearing the main box
 function clearMain(){
@@ -23,21 +49,26 @@ function clearMain(){
 	changeButtons()
 }
 
-//for selecting the Main box contents
+//for selecting the Main box contents and copying them to clipboard, or pasting the clipboard if there is nothing
 function selectMain(){
+  if(mainBox.textContent.trim() != ''){
     var range, selection;
-    if (document.body.createTextRange) {
+    if(document.body.createTextRange){
         range = document.body.createTextRange();
         range.moveToElementText(mainBox);
-        range.select();
-    } else if (window.getSelection) {
+        range.select()
+    }else if (window.getSelection){
         selection = window.getSelection();
         range = document.createRange();
         range.selectNodeContents(mainBox);
         selection.removeAllRanges();
-        selection.addRange(range);
+        selection.addRange(range)
     }
 	document.execCommand('copy')
+  }else{
+	document.execCommand("paste")	;
+	selectBtn.textContent = 'Copy'
+  }
 }
 
 //for opening the select User screen
@@ -70,6 +101,7 @@ function changeButtons(){
 		hideBtn.textContent = 'To...';
 		replyBtn.textContent = 'Encrypt'
 	}
+	if(text){ selectBtn.textContent = 'Copy' }else{ selectBtn.textContent = 'Paste' }
 }
 
 //reveals or hides file output options
@@ -97,7 +129,7 @@ function closeBox() {
 	keyScr.style.display = "none";
 	oldKeyScr.style.display = "none";
 	coverScr.style.display = "none";
-	chatScr.style.display = "none";
+	chatDialog.style.display = "none";
 	selectScr.style.display = "none";
 	nameScr.style.display = "none";
 	resetScr.style.display = "none"

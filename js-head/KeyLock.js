@@ -325,7 +325,7 @@ function keyDecrypt(cipherStr,isArray){
 			cipher2 = cipher.slice(10);
 		if(isArray){
 			var plain = nacl.secretbox.open(cipher2,nonce24,myKey);
-			if(!plain) failedDecrypt();
+			if(!plain){	locDirDecrypt = 'true'; failedDecrypt()}
 			return plain
 		}else{
 			return decodeURI(PLdecrypt(cipher2,nonce24,myKey,false).trim())

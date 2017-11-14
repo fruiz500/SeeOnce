@@ -1,5 +1,5 @@
 ﻿        /*
-		@source: https://seeonce.net/index.html
+		@source: https://passlok.com/seeonce
 
         @licstart  The following is the entire license notice for the
         JavaScript code in this page.

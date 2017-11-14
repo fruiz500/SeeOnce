@@ -68,6 +68,10 @@ window.onload = function() {
 
    	cancelChatBtn.addEventListener('click', cancelChat);
 
+	closeChatBtn.addEventListener('click', chat2main);
+
+   	resetChatBtn.addEventListener('click', resetChat);
+
 	suggestKeyBtn.addEventListener('click', suggestKey);
 
 	cancelCoverBtn.addEventListener('click', cancelCover);
@@ -143,12 +147,14 @@ window.onload = function() {
 
 var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
 
-//mainBox.innerText = decodeURI(window.location.hash).slice(1);			//correspondent's message from address bar
-if(window.location.hash) mainBox.textContent = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1]
+var theirezLock = '', theirLock = '', theirName = '';
+if(window.location.hash){
+	mainBox.textContent = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1];		//correspondent's message from address bar
 
-var theirezLock = mainBox.textContent.slice(0,50),
+	theirezLock = mainBox.textContent.slice(0,50),
 	theirLock = changeBase(theirezLock, base36, base64, true),
-	theirName = '';
+	theirName = ''
+}
 
 //this one is for mobile only. Remove for the Chrome app
 window.addEventListener('load', function() {

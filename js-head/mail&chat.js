@@ -9,14 +9,19 @@ function sendMail() {
 }
 
 var fromChat = false;
-//opens the Chat making dialog
+//opens the Chat making dialog, or the chat itself if already started
 function startChat(){
+	if(document.getElementById('chatFrame').src.match('#')){			//chat already open, so open that screen
+		chatScr.style.display = 'block';
+		return
+	}
+	
 	checkWebRTC();						//proceed only if supported
 	if(!theirLock){						//make sure a Lock is loaded
 		fromChat = true;
 		selectUser()
 	}else{
-		chatScr.style.display = 'block'
+		chatDialog.style.display = 'block'
 	}
 	shadow.style.display = 'block'
 }
@@ -39,7 +44,8 @@ function makeChat(){
 	setTimeout(function(){
 		Encrypt(true);										//special chat output
 		changeButtons();
-		window.open('https://www.passlok.com/chat/index.html#' + type + chatRoom + password,'_blank')
+		main2chat(type + chatRoom + password);
+		mainMsg.textContent = 'Here is the chat invitation. Send it to the other party'
 	},20);
 }
 
@@ -73,8 +79,8 @@ function detectChat(){
 	if (token.length == 107 && !token.slice(-43).match(' ')){											//chat invite detected, so open chat
 		mainBox.textContent = '';
 		checkWebRTC();
-		window.open('https://www.passlok.com/chat/index.html#' + token.slice(43),'_blank');
-		mainMsg.textContent = 'Chat session open on a separate tab'
+		main2chat(token.slice(43));
+		mainMsg.textContent = 'Chat session open'
 	}
 	return
 }

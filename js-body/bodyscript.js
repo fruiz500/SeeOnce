@@ -45,6 +45,7 @@ function showGreeting(){
 		mainScr.style.backgroundColor = '#ffd0ff';
 		keyMsg.innerHTML = msgStart + '<span style="color:orange">WARNING: running from an insecure source!</span>' + msgEnd
 	}
+	if(!isMobile) pwd.focus()
 
 	//display special greeting the first time the program runs. The Chrome app does this differently
 	if(!ChromeSyncOn){if(!localStorage){introGreeting();}else if(!localStorage['locDir']){introGreeting();}}
