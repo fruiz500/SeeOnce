@@ -66,8 +66,8 @@ function selectMain(){
     }
 	document.execCommand('copy')
   }else{
-	document.execCommand("paste")	;
-	selectBtn.textContent = 'Copy'
+//	document.execCommand("paste")	;
+//	selectBtn.textContent = 'Copy'
   }
 }
 
@@ -101,7 +101,7 @@ function changeButtons(){
 		hideBtn.textContent = 'To...';
 		replyBtn.textContent = 'Encrypt'
 	}
-	if(text){ selectBtn.textContent = 'Copy' }else{ selectBtn.textContent = 'Paste' }
+//	if(text){ selectBtn.textContent = 'Copy' }else{ selectBtn.textContent = 'Paste' }
 }
 
 //reveals or hides file output options
