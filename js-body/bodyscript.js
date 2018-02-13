@@ -33,7 +33,7 @@ if(isChrome){
 //clears the no JavaScript warning and displays an initial message depending on the type of source
 function showGreeting(){
 	var protocol = window.location.protocol,
-		msgStart = "<span style='color:lime;font-size:xx-large;'><strong>Welcome to SeeOnce</strong></span><br>",
+		msgStart = "<strong>Welcome to SeeOnce</strong><br>",
 		msgEnd = "<br>Enter your Password and click OK";
 	if(protocol == 'file:'){
 		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd
@@ -43,7 +43,7 @@ function showGreeting(){
 		keyMsg.innerHTML = msgStart + 'running as a Chrome app' + msgEnd
 	}else{
 		mainScr.style.backgroundColor = '#ffd0ff';
-		keyMsg.innerHTML = msgStart + '<span style="color:orange">WARNING: running from an insecure source!</span>' + msgEnd
+		keyMsg.innerHTML = msgStart + 'WARNING: running from an insecure source!' + msgEnd
 	}
 	if(!isMobile) pwd.focus()
 
@@ -110,9 +110,13 @@ function loadFileAsURL(){
 			}
 		}
 		if(fileToLoad.type.slice(0,4) == "text"){
-			mainBox.innerHTML += "<br><br>" + URLFromFileLoaded.replace(/  /g,' &nbsp;')
+			if(URLFromFileLoaded.slice(0,2) == '==' && URLFromFileLoaded.slice(-2) == '=='){
+				mainBox.innerHTML += safeHTML('<a download="' + fileName + '" href="data:,' + URLFromFileLoaded + '">' + fileName + '</a>')						//filter before adding to the DOM
+			}else{
+				mainBox.innerHTML += DOMPurify.sanitize('<br>' + URLFromFileLoaded.replace(/  /g,' &nbsp;'))
+			}
 		}else{
-			mainBox.innerHTML += '<br><a download="' + fileName + '" href="' + URLFromFileLoaded + '">' + fileName + '</a>'
+			mainBox.innerHTML += safeHTML('<a download="' + fileName + '" href="' + URLFromFileLoaded.replace(/=+$/,'') + '">' + fileName + '</a>')
 		}
 		if(fileName.match(/.(plk|txt)/)) Decrypt()				//in case it is an encrypted message, attempt to decrypt it
 	}
@@ -135,7 +139,7 @@ function loadImage(){
 			mainMsg.textContent = 'This file is not a recognized image type';
 			return
 		}
-		mainBox.innerHTML += safeHTML('<img style="width:100%;" src="' + URLFromFileLoaded.replace(/=+$/,'') + '">')
+		mainBox.innerHTML += DOMPurify.sanitize('<img src="' + URLFromFileLoaded.replace(/=+$/,'') + '">')
 	};
 
 	fileReader.readAsDataURL(fileToLoad, "UTF-8");

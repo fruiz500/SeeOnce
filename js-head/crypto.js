@@ -11,7 +11,7 @@ function lockItem(){
 		return
 	}
 	if((text.trim() && theirName) || firstInit){
-		mainMsg.innerHTML = '<span class="blink" style="color:cyan">ENCRYPTING</span>';
+		mainMsg.innerHTML = '<span class="blink">ENCRYPTING</span>';
 		setTimeout(function(){
 			Encrypt();
 			changeButtons()
@@ -24,7 +24,7 @@ function lockItem(){
 }
 
 function unlockItem(){
-	mainMsg.innerHTML = '<span class="blink" style="color:cyan">DECRYPTING</span>';
+	mainMsg.innerHTML = '<span class="blink">DECRYPTING</span>';
 	setTimeout(function(){
 		var text = mainBox.innerHTML.replace(/&[^;]+;/g,'').replace(/<a(.*?).(plk|txt)" href="data:(.*?),/,'').replace(/">(.*?)\/a>$/,'').replace(/<br>/g,'');
 		if(text.match('==')) text = text.split('==')[1];										//remove tags
@@ -267,7 +267,7 @@ function Decrypt(){
 		}
 		var plain = PLdecrypt(cipher,nonce24,sharedKey,true);			//this one is compressed
 
-		mainBox.innerHTML = safeHTML(plain.trim());
+		mainBox.innerHTML = decryptSanitizer(plain.trim());
 		if(needRecrypt && lastKeyCipher){
 			locDir[theirLock][0] = keyEncrypt(lastKey);
 			needRecrypt = false
@@ -299,9 +299,9 @@ function Decrypt(){
 
 		var plain = PLdecrypt(cipher,nonce24,nacl.util.decodeBase64(theirLock),true);
 		if(!plain) failedDecrypt();
-		mainBox.innerHTML = "This is my message to you:<blockquote><em>" + safeHTML(plain.trim()) + "</em></blockquote><br>SeeOnce is now ready to encrypt your reply so that only I can decrypt it.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Encrypt</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower right.<br><br>It will be possible to decrypt this reply again, but every message exchanged after that will be decrypted <em>only once</em>.";
+		mainBox.innerHTML = "This is my message to you:<blockquote><em>" + decryptSanitizer(plain.trim()) + "</em></blockquote><br>SeeOnce is now ready to encrypt your reply so that only I can decrypt it.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Encrypt</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower right.<br><br>It will be possible to decrypt this reply again, but every message exchanged after that will be decrypted <em>only once</em>.";
 		if(isNewLock){
-			mainMsg.innerHTML = '<span style="color:orange">This is a new invitation</span><br>It <em>can</em> be decrypted again'
+			mainMsg.innerHTML = 'This is a new invitation<br>It <em>can</em> be decrypted again'
 		}else{
 			mainMsg.innerHTML = 'Invitation message from ' + name + ' decrypted<br>It <em>can</em> be decrypted again, by <em>anyone</em>'
 		}

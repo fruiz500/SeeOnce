@@ -22,7 +22,7 @@ function main2chat(token){
 		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running PassLok as a native app.');
 		if(!reply) throw('chat canceled by user')
 	}
-	document.getElementById('chatFrame').src = 'https://www.passlok.com/chat/index.html#' + token;		//open chat iframe; remote because of the CSP
+	document.getElementById('chatFrame').src = 'https://www.passlok.com/chat/index.html#' + token;				//open chat iframe; remote because of the CSP
 	makeChatBtn.textContent = 'Back to Chat';
 	makeChatBtn.style.color = 'orange';
 	chatScr.style.display = 'block'
@@ -66,8 +66,8 @@ function selectMain(){
     }
 	document.execCommand('copy')
   }else{
-//	document.execCommand("paste")	;
-//	selectBtn.textContent = 'Copy'
+	document.execCommand("paste")	;
+	selectBtn.textContent = 'Copy'
   }
 }
 
@@ -101,7 +101,7 @@ function changeButtons(){
 		hideBtn.textContent = 'To...';
 		replyBtn.textContent = 'Encrypt'
 	}
-//	if(text){ selectBtn.textContent = 'Copy' }else{ selectBtn.textContent = 'Paste' }
+	if(text){ selectBtn.textContent = 'Copy' }else{ selectBtn.textContent = 'Paste' }
 }
 
 //reveals or hides file output options
@@ -308,18 +308,21 @@ function toggleRichText() {
 	textheight();
 }
 
-//to open and close items
-function openClose(theID) {
-	if (document.getElementById(theID).style.display == "block") {
-		document.getElementById(theID).style.display = "none"
-	} else {
-		document.getElementById(theID).style.display = "block"
-	}
-}
-
-//as above, but closes everything else in help
+//closes everything else in help
 function openHelp(theID){
 	var helpItems = document.getElementsByClassName('helptext');
+	for(var i=0; i < helpItems.length; i++){
+		helpItems[i].style.display = 'none'
+	}
+	document.getElementById(theID).style.display = "block";
+	if(isMobile){									//scroll to the item
+		location.href = '#';
+		location.href = '#a' + theID
+	}
+}
+//2nd level
+function openHelp2(theID){
+	var helpItems = document.getElementsByClassName('helptext2');
 	for(var i=0; i < helpItems.length; i++){
 		helpItems[i].style.display = 'none'
 	}

@@ -7,27 +7,39 @@ var keytime = new Date().getTime();
 function keyStrength(pwd,display) {
 	var entropy = entropycalc(pwd);
 
+if(display){
 	if(entropy == 0){
-		var msg = 'This is a known <span style="color:magenta">bad Password!</span>';
+		var msg = 'This is a known bad Key!';
+		var colorName = 'magenta'
 	}else if(entropy < 20){
-		var msg = '<span style="color:magenta">Terrible!</span>';
+		var msg = 'Terrible!';
+		var colorName = 'magenta'
 	}else if(entropy < 40){
-		var msg = '<span style="color:red">Weak!</span>';
+		var msg = 'Weak!';
+		var colorName = 'pink'
 	}else if(entropy < 60){
-		var msg = '<span style="color:orange">Medium</span>';
+		var msg = 'Medium';
+		var colorName = 'orange'
 	}else if(entropy < 90){
-		var msg = '<span style="color:lime">Good!</span>';
+		var msg = 'Good!';
+		var colorName = 'lime'
 	}else if(entropy < 120){
-		var msg = '<span style="color:blue">Great!</span>';
+		var msg = 'Great!';
+		var colorName = 'white'
 	}else{
-		var msg = '<span style="color:cyan">Overkill  !!</span>';
+		var msg = 'Overkill  !';
+		var colorName = 'yellow'
 	}
+}
 
 	var iter = Math.max(1,Math.min(20,Math.ceil(24 - entropy/5)));			//set the scrypt iteration exponent based on entropy: 1 for entropy >= 120, 20(max) for entropy <= 20
 
 	var seconds = time10/10000*Math.pow(2,iter-8);			//to tell the user how long it will take, in seconds
 
+if(display){																//display the appropriate message
 	keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process';
+	keyMsg.style.color = colorName
+}
 	return iter
 };
 
@@ -131,7 +143,7 @@ function readKey(){
 	if (key == ""){
 		any2key();
 		if(callKey == 'initkey'){
-			keyMsg.innerHTML = '<span style="color:lime"><strong>Welcome to SeeOnce</strong></span><br>Please enter your secret Password'
+			keyMsg.innerHTML = '<strong>Welcome to SeeOnce</strong><br>Please enter your secret Password'
 		}else{
 			keyMsg.textContent = 'Please enter your secret Password';
 			shadow.style.display = 'block'
@@ -148,11 +160,11 @@ function acceptKey(){
 		throw("no Password")
 	}
 	if(key.length < 4){
-		keyMsg.innerHTML = '<span style="color:orange">This Password is too short</span>';
+		keyMsg.textContent = 'This Password is too short';
 		throw("short Password")
 	}
 	if(firstInit){
-		mainMsg.innerHTML = '<span class="blink" style="color:orange">LOADING...</span> for best speed, use at least a Medium Password'
+		mainMsg.innerHTML = '<span class="blink">LOADING...</span> for best speed, use at least a Medium Password'
 	}
 	key2any();
 
@@ -201,7 +213,7 @@ function initSession(){
 		resetBtn.disabled = true
 
 	}else if(theirLock.length != 43){				//public key is malformed, bail out and display message
-		keyMsg.innerHTML = "<span style='color:orange;'>The link is corrupted. Please check it and try again</span>";
+		keyMsg.textContent = "The link is corrupted. Please check it and try again";
 		throw('malformed link')
 
 	}else if(!locDir[theirLock]){					//new public key, store it
@@ -371,6 +383,20 @@ function safeHTML(string){
 	return string
 }
 
+//detects the presence of data URI scheme and offers to use the safeHTML filter rather than DOMPurify, which removes that content
+function decryptSanitizer(string){
+	if(string.indexOf('href="data:') == -1){		//check the absence of a link containing data
+		var result = DOMPurify.sanitize(string)
+	}else{											//otherwise ask the user what to do
+		if(confirm('The decrypted material seems to contain binary data, which might lead to unsafe execution in Firefox. If you click OK, it will be preserved, otherwise it will be removed.')){
+			var result = safeHTML(string)
+		}else{
+			var result = DOMPurify.sanitize(string)
+		}		
+	}
+	return result
+}
+
 //takes appropriate UI action if decryption fails
 function failedDecrypt(){
 	if((callKey == 'encrypt' || callKey == 'decrypt') && locDirDecrypt){
@@ -383,7 +409,7 @@ function failedDecrypt(){
 		callKey = ''		
 	}else if(locDir[theirLock][2] == 'lock'){
 		restoreTempLock();
-		mainMsg.innerHTML = '<span style="color:orange;">Messages can be decrypted <em>only once</em></span>';
+		mainMsg.textContent = 'Messages can be decrypted <em>only once</em>';
 		callKey = ''
 	}else if(mainBox.textContent.charAt(0) == 'k'){
 		mainMsg.textContent = 'The backup has failed to decrypt. Please check your Password';

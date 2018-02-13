@@ -140,16 +140,22 @@ window.onload = function() {
 	aa10.addEventListener('click', function() {openHelp('a10')});
 	aa11.addEventListener('click', function() {openHelp('a11')});
 
-	bb8.addEventListener('click', function() {openClose('b8')});
-	bb9.addEventListener('click', function() {openClose('b9')});
+	bb8.addEventListener('click', function() {openHelp2('b8')});
+	bb9.addEventListener('click', function() {openHelp2('b9')});
+	
+//fixes after inline styles were moved to css file
 
+	mainScr.style.display = 'block';
+	b8.style.display = 'none';
+	b9.style.display = 'none'
 };
 
 var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
 
+//mainBox.innerText = decodeURI(window.location.hash).slice(1);			//correspondent's message from address bar
 var theirezLock = '', theirLock = '', theirName = '';
 if(window.location.hash){
-	mainBox.textContent = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1];		//correspondent's message from address bar
+	mainBox.textContent = (decodeURI(window.location.hash).slice(1).match('==(.*)==') || [' ',' '])[1]
 
 	theirezLock = mainBox.textContent.slice(0,50),
 	theirLock = changeBase(theirezLock, base36, base64, true),

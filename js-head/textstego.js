@@ -15,7 +15,7 @@ function textStego(){
 		throw("no text")
 	}
 	if(isBase64(text)){							//legal item found: encode it
-		mainMsg.innerHTML = '<span class="blink" style="color:cyan">PROCESSING</span>';		//Get blinking message started
+		mainMsg.innerHTML = '<span class="blink">PROCESSING</span>';		//Get blinking message started
 		setTimeout(function(){																	//the rest after a 20 ms delay
 			var turns = toLetters(text);
 			if(!rememberCoverCheck.checked) coverBox.textContent = '';
@@ -199,7 +199,7 @@ function fromLetters(text){
 		bin = new Array(binStr.length);
 	for(var i = 0; i < binStr.length; i++) bin[i] = parseInt(binStr.charAt(i));
 	finalString = fromBin(bin.slice(0,bin.length-(bin.length % 6)));
-	mainBox.innerHTML = safeHTML(finalString);
+	mainBox.innerHTML = decryptSanitizer(finalString);
 	hideBtn.textContent = 'To...'
 }
 

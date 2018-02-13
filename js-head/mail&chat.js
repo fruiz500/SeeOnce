@@ -40,10 +40,11 @@ function makeChat(){
 	var password = nacl.util.encodeBase64(nacl.randomBytes(32)).replace(/=+$/,'');
 	var chatRoom = makeChatRoom();
 	mainBox.textContent = 'noDate                                     ' + type + chatRoom + password;
-	mainMsg.innerHTML = '<span class="blink" style="color:cyan">ENCRYPTING</span>';
+	mainMsg.innerHTML = '<span class="blink">ENCRYPTING</span>';
 	setTimeout(function(){
 		Encrypt(true);										//special chat output
 		changeButtons();
+//		window.open('https://www.passlok.com/chat/index.html#' + type + chatRoom + password,'_blank')
 		main2chat(type + chatRoom + password);
 		mainMsg.textContent = 'Here is the chat invitation. Send it to the other party'
 	},20);
@@ -79,6 +80,7 @@ function detectChat(){
 	if (token.length == 107 && !token.slice(-43).match(' ')){											//chat invite detected, so open chat
 		mainBox.textContent = '';
 		checkWebRTC();
+//		window.open('chat/index.html#' + token.slice(43),'_blank');
 		main2chat(token.slice(43));
 		mainMsg.textContent = 'Chat session open'
 	}

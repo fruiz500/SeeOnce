@@ -2,7 +2,7 @@
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" manifest="seeonce.appcache">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>SeeOnce</title>
+    <title>SeeOnce Privacy</title>
 
     <meta name="Keywords" content="passlok, URSA, browser, encryption, decryption, symmetric, public key, signature, AES, ECDH, Diffie, Hellman, elliptic curve, advanced, javascript, PGP, PRISM, PassLok">
     <meta name="Description" content="SeeOnce privacy">
@@ -16,257 +16,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
 <!--CSS stylesheet containing the Blue color scheme-->
-<style>
-html {
-	-webkit-text-size-adjust: 100%;
-	overflow-y: scroll;
-}
-body {
-	font-family: Sans-Serif;
-	font-size: large;
-	margin-left: 1%;
-	margin-right: 1%;
-	overflow: auto;
-	background-color: #0099cc;
-	color: #ffffff;
-}
-.black_overlay {
-	display: none;
-	position: absolute;
-	top: 0%;
-	left: 0%;
-	width: 100%;
-	height: 100%;
-	z-index: 1001;
-	-moz-opacity: 0.5;
-	opacity: .50;
-	filter: alpha(opacity=50);
-	background-color: black;
-}
-.white_content {
-	display: none;
-	position: absolute;
-	top: 10%;
-	left: 10%;
-	width: 80%;
-	height: 80%;
-	padding: 0px;
-	border: 0px solid gray;
-	z-index: 1002;
-	overflow: auto;
-	background-color: #0099cc;
-}
-.cssbutton {
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
-	border-radius: 10px;
-	font-family: Arial;
-	font-size: 22px;
-	padding: 14px;
-	text-decoration: none;
-	border: 0px;
-	margin-right: -2px;
-	color: #CACACA;
-	background: #1c57cc;
-}
-.cssbutton:hover {
-	text-decoration: none;
-	cursor: pointer;
-	background: #003399;
-}
-.cssbutton:disabled {
-	color: #aeaeae;
-	background: #4F6AA1;
-	cursor: default;
-}
-.cssbutton:disabled:hover {
-	color: #aeaeae;
-	background: #4F6AA1;
-	cursor: default;
-}
-.cssbox {
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	font-size: medium;
-	padding: 15px;
-	text-decoration: none;
-	width: 100%;
-	-webkit-appearance: none;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-	color: #000000;
-	background: #D7FFD7;
-	border: 1px solid #D3D3D3;
-	overflow: auto;
-}
-.helpitem {
-	font-size: medium;
-	cursor: pointer;
-	padding: 1px;
-}
-.helpitem:hover {
-	background-color: #0088bb;
-}
-.helptext {
-	font-size: medium;
-	display: none;
-}
-.intLink {
-	cursor: pointer;
-}
-.blink {
-	-webkit-animation: blink .75s linear infinite;
-	-moz-animation: blink .75s linear infinite;
-	-ms-animation: blink .75s linear infinite;
-	-o-animation: blink .75s linear infinite;
-	animation: blink .75s linear infinite;
-}
- @-webkit-keyframes blink {
- 0% {
-opacity: 1;
-}
- 50% {
-opacity: 1;
-}
- 50.01% {
-opacity: 0;
-}
- 100% {
-opacity: 0;
-}
-}
- @-moz-keyframes blink {
- 0% {
-opacity: 1;
-}
- 50% {
-opacity: 1;
-}
- 50.01% {
-opacity: 0;
-}
- 100% {
-opacity: 0;
-}
-}
- @-ms-keyframes blink {
- 0% {
-opacity: 1;
-}
- 50% {
-opacity: 1;
-}
- 50.01% {
-opacity: 0;
-}
- 100% {
-opacity: 0;
-}
-}
- @-o-keyframes blink {
- 0% {
-opacity: 1;
-}
- 50% {
-opacity: 1;
-}
- 50.01% {
-opacity: 0;
-}
- 100% {
-opacity: 0;
-}
-}
- @keyframes blink {
- 0% {
-opacity: 1;
-}
- 50% {
-opacity: 1;
-}
- 50.01% {
-opacity: 0;
-}
- 100% {
-opacity: 0;
-}
-}
-input[type=checkbox] {
-	/* Larger checkboxes */
-	-ms-transform: scale(1.7); /* IE */
-	-moz-transform: scale(1.7); /* FF */
-	-webkit-transform: scale(1.7); /* Safari and Chrome */
-	-o-transform: scale(1.7); /* Opera */
-	padding: 0px;
-	cursor: pointer;
-	border: 1px solid #eeeeee;
-}
-input[type=radio] {
-	/* Larger radio buttons */
-	-ms-transform: scale(1.7); /* IE */
-	-moz-transform: scale(1.7); /* FF */
-	-webkit-transform: scale(1.7); /* Safari and Chrome */
-	-o-transform: scale(1.7); /* Opera */
-	padding: 0px;
-	cursor: pointer;
-	border: 1px solid #eeeeee;
-}
-select {
-	-webkit-appearance: button;
-	-moz-appearance: button;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	font-size: medium;
-	width: 30%;
-	margin: 0;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	border: 1px solid #dedede;
-	color: #666666;
-	background: #D7FFD7;
-}
-a:link {
-	color: blue;
-}
-a:visited {
-	color: blue;
-}
-a:hover {
-	color: magenta;
-}
-img.intLink {
-	border: 0;
-}
-#toolBar1 {
-	padding-top: 1px;
-	padding-left: 2px;
-	border-top-left-radius: 15px;
-	border-top-right-radius: 15px;
-	background: #1c57cc;
-}
-#toolBar1 select {
-	font-size: 10px;
-	width: 80px;
-	padding: 4px;
-	border-radius: 8px;
-}
-#mainBox {
-	width: 100%;
-	padding: 12px;
-	margin-left: auto;
-	margin-right: auto;
-}
-[contenteditable=true]:empty:before{
-  content: attr(placeholder);
-  display: block; /* For Firefox */
-  color: #999999;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 
 <!--License notice and SSL force-->
 <script src="js-head/license.js"></script>
@@ -282,6 +32,9 @@ img.intLink {
 
 <!--lz-string compression algorithm. https://github.com/pieroxy/lz-string-->
 <script src="js-opensrc/lz-string.js"></script>
+
+<!--dompurify, used to sanitize decrypted material before putting in DOM. https://github.com/cure53/DOMPurify-->
+<script src="js-opensrc/purify.js"></script>
 
 <!--FastClick, used only on mobile devices. https://github.com/ftlabs/fastclick-->
 <script src="js-opensrc/fastclick.js"></script>
@@ -317,26 +70,26 @@ img.intLink {
 <body>
 
 <!--Main screen-->
-<div id="mainScr" style="max-width: 1000px;	margin-left: auto; margin-right: auto; display:block;">
+<div id="mainScr">
   <div align="center">
-    <div id="logo" style="height:90px;"><img style="max-width:100%;max-height:100%;" src="data:image/png;base64,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"> </div>
+    <div id="logo"><img id="logoImg" src="data:image/png;base64,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"> </div>
 
     <!--message area and local directory box, plus buttons-->
-    <div id="mainMsg" style="font-size:x-large;height:60px;">Please paste the encrypted message into the box</div>
+    <div id="mainMsg">Please paste the encrypted message into the box</div>
     <br>
     <br>
 
     <!--buttons above the main box-->
-    <div id="topBtns" style="display: block;">
-      <button class="cssbutton" id="replyBtn" value="Lock" style="color:lime;" title="lock message (alt-L)" accesskey="l">Encrypt</button><!--
---><button class="cssbutton" id="hideBtn" value="Hide" style="" title="switch recipients, or turn the message into regular text (alt-T)" accesskey="t">To...</button><!--
---><button class="cssbutton" id="makeChatBtn" value="Chat" style="" title="send a chat invitation by email and start chat (alt-C)" accesskey="c">Chat</button><!--
---><button class="cssbutton" id="selectBtn" value="Copy" style="" title="copy the text in the box">Copy</button><!--
---><button class="cssbutton" id="clearBtn" value="Clear" style="" title="clear the text in the box">Clear</button>
+    <div id="topBtns">
+      <button class="cssbutton" id="replyBtn" value="Lock" title="lock message (alt-L)" accesskey="l">Encrypt</button><!--
+--><button class="cssbutton" id="hideBtn" value="Hide" title="switch recipients, or turn the message into regular text (alt-T)" accesskey="t">To...</button><!--
+--><button class="cssbutton" id="makeChatBtn" value="Chat" title="send a chat invitation by email and start chat (alt-C)" accesskey="c">Chat</button><!--
+--><button class="cssbutton" id="selectBtn" value="Copy" title="copy the text in the box, or paste from clipboard">Paste</button><!--
+--><button class="cssbutton" id="clearBtn" value="Clear" title="clear the text in the box">Clear</button>
 		&nbsp;
    <input type="checkbox" id="fileMode" title="output is turned into files" accesskey=""/>
 	&nbsp; to File
-	<span id='fileOptions' style='display:none'>
+	<span id='fileOptions'>
 	&nbsp; &nbsp; <input type="radio" name="fileModes" id="binaryMode" title="output file is binary" checked/>
       &nbsp; Binary&nbsp;&nbsp;
       <input type="radio" name="fileModes" id="textMode" title="output file is text" />
@@ -346,7 +99,7 @@ img.intLink {
   </div>
 
   <!--toolbar for rich text editing; this first section contains lists for style, fonts, etc.-->
-  <div id="toolBar1" style="display:none;">
+  <div id="toolBar1">
     <select id="formatBlock" title="headings, etc.">
       <option selected>- formatting -</option>
       <option value="h1">Title 1 &lt;h1&gt;</option>
@@ -416,29 +169,29 @@ img.intLink {
 <label for="imgFile">
 <img class="intLink" title="Insert image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAbFBMVEUAAAAAAAAmJibm5uaJiYnZ2dnn5+e5ubmBgYHNzc3z8/Pr6+vW1ta2trZ/f3/y8vLQ0NDPz8/Dw8OgoKCOjo54eHgcHBwGBgb+/v7T09PIyMi+vr6srKyEhIRqampiYmJbW1tPT08qKioRERGLOctyAAAAAXRSTlMAQObYZgAAAHJJREFUGNOtzkkShCAQRNFKbLsVsZ3nWe9/R8EAYeHSv6u3qEh6qo0/TkUiKULNbCglfZGSjf0vCvWZLTmxwBBXVGG1NO2D+hoIQ6IHmrKrciJDfgxIBGbPId12E//pUjOiyHydCGtFyQG3kWTcc4ro1U7vPAUU4TAxJQAAAABJRU5ErkJggg==" />
 </label>
-<input type="file" id="imgFile" style="display:none" />
+<input type="file" id="imgFile"/>
 <label for="mainFile">
 <img class="intLink" title="Load a file" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAATlBMVEUAAAAAAAD19fVcXFwbGxsTExP8/PzT09NxcXFaWlo4ODg1NTUEBAT5+fnw8PDr6+vU1NTIyMi+vr6Xl5dsbGxnZ2dXV1dISEghISEMDAw0f0rSAAAAAXRSTlMAQObYZgAAAFBJREFUGNO9yEkOgCAQBMBmUxDc9/9/VJ2EjgkHb9axcJuceqQRtMq4aAdWkDr6xtW5jJRFx2MBu23fdS7eG6Vz0U8VytrKmhMnVoDQlOfbBQLIAl4FF2fyAAAAAElFTkSuQmCC" />
 </label>
-<input type="file" id="mainFile" style="display:none" />
+<input type="file" id="mainFile"/>
   </div>
   </div>
-  <div id="mainBox" contentEditable="true" class="cssbox" style="" placeholder="Write your reply here, then click Encrypt, and then optionally Email or Hide. You will have to click To... first if this is not a reply. Click the Rich button to insert images and files."></div>
+  <div id="mainBox" contentEditable="true" class="cssbox" placeholder="Write your reply here, then click Encrypt, and then optionally Email or Hide. You will have to click To... first if this is not a reply. Click the Rich button to insert images and files."></div>
   <div align="center">
     <!--buttons below the main box-->
-    <div id="botBtns" style="display: block;">
-      <button class="cssbutton" id="helpBtn" value="Help" style="" title="get help on using SeeOnce (alt-H)" accesskey="h">Help</button><!--
---><button class="cssbutton" id="niceEditBtn" value="Rich" style="" title="toggle rich text editor (alt-R)" accesskey="r">Rich</button><!--
---><button class="cssbutton" id="resetBtn" value="Reset" style="" title="reset this conversation, use if decrypting fails" disabled>Reset</button><!--
---><button class="cssbutton" id="moveBtn" value="Move" style="" title="backup and optionally delete all data">Backup</button>
+    <div id="botBtns">
+      <button class="cssbutton" id="helpBtn" value="Help" title="get help on using SeeOnce (alt-H)" accesskey="h">Help</button><!--
+--><button class="cssbutton" id="niceEditBtn" value="Rich" title="toggle rich text editor (alt-R)" accesskey="r">Rich</button><!--
+--><button class="cssbutton" id="resetBtn" value="Reset" title="reset this conversation, use if decrypting fails" disabled>Reset</button><!--
+--><button class="cssbutton" id="moveBtn" value="Move" title="backup and optionally delete all data">Backup</button>
 </div>
   </div>
 </div>
 
 <!--Key dialog-->
-<div id="keyScr" class="white_content" align="center" style="display: block;"> <br>
-  <div id="firstTimeKey" align="left" style="font-size:x-large;width:95%;display:none;">
-    <h3 style="color:lime;">Welcome to SeeOnce</h3>
+<div id="keyScr" class="white_content" align="center"> <br>
+  <div id="firstTimeKey" align="left">
+    <h3 id="welcome">Welcome to SeeOnce</h3>
     <p>Before you do anything else, you must choose a secret Password, which you will memorize and <strong>won't tell anyone</strong>, and click <strong>OK</strong>.</p>
     <p>Its measured strength will appear above it as you begin to type. If it is worse than Medium, <em>things will be very slow.</em></p>
     <p>Make sure to use $ymbol$, numb3rs, caPiTals, unusual words and mespelingss.</p>
@@ -449,78 +202,78 @@ img.intLink {
     </div>
     <br>
   </div>
-  <div id="keyMsg" style="font-size:x-large;height:90px;"><span style="color:pink;font-weight:bold">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div>
+  <div id="keyMsg"><span id="JSmsg">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div>
   <br>
   <br>
-  <input type="password" class="cssbox" autocomplete="off" id="pwd" style="width:95%;" name="text" placeholder="Enter your Password here" align="center">
+  <input type="password" class="cssbox" autocomplete="off" id="pwd" name="text" placeholder="Enter your Password here" align="center">
   <br>
   <br>
   <input type="checkbox" id="showKey" title="reveal box contents">
   &nbsp;Show&nbsp;
-  <button class="cssbutton" id="acceptKeyBtn" value="OK" style="" title="accept Password" disabled>OK</button>
+  <button class="cssbutton" id="acceptKeyBtn" value="OK" title="accept Password" disabled>OK</button>
   <span id="fiveMin">
   <p>You will need to re-enter your Password after 5 minutes</p>
   </span>
 </div>
 
 <!--old Password dialog-->
-<div id="oldKeyScr" class="white_content" align="center" style="display: none;"> <br>
+<div id="oldKeyScr" class="white_content" align="center"> <br>
   <br>
   <br>
-  <div id="oldKeyMsg" style="">Looks like you changed your Password recently. If you want to continue this conversation, please supply the previous Password in the box below, then click <strong>OK</strong></div>
+  <div id="oldKeyMsg">Looks like you changed your Password recently. If you want to continue this conversation, please supply the previous Password in the box below, then click <strong>OK</strong></div>
   <br>
   <br>
-  <input type="password" class="cssbox" id="oldPwd" style="width:60%;" name="oldPwd" placeholder="Enter the previous Password here." align="center">
+  <input type="password" class="cssbox" id="oldPwd" name="oldPwd" placeholder="Enter the previous Password here." align="center">
   <br>
   <br>
   <input type="checkbox" id="showOldKey" title="reveal box contents">
   &nbsp;Show&nbsp;
-  <button class="cssbutton" id="cancelOldKeyBtn" value="Cancel" style="" title="cancel old Password">Cancel</button>
-  <button class="cssbutton" id="acceptOldKeyBtn" value="OK" style="" title="accept old Password">OK</button>
+  <button class="cssbutton" id="cancelOldKeyBtn" value="Cancel" title="cancel old Password">Cancel</button>
+  <button class="cssbutton" id="acceptOldKeyBtn" value="OK" title="accept old Password">OK</button>
 </div>
 
 <!--Name dialog-->
-<div id="nameScr" class="white_content" align="center" style="display: none;"> <br>
-  <div id="nameMsg" style="">This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div>
+<div id="nameScr" class="white_content" align="center"> <br>
+  <div id="nameMsg">This message was encrypted with a new Password. Please select the sender on the list (old data will be overwritten) or type a new name in the box below, then click <strong>OK</strong></div>
   <br>
   <div id='nameListSpace2'><br>
     <br>
-    <select id='nameList2' class="cssbox" size='10' style="width:30%;" title="select the sender">
+    <select id='nameList2' class="cssbox" size='10' title="select the sender">
     </select>
     <br>
     <br>
   </div>
-  <input type="text" class="cssbox" id="nameBox" style="width:60%;" name="name" placeholder="Enter the name here." align="center">
+  <input type="text" class="cssbox" id="nameBox" name="name" placeholder="Enter the name here." align="center">
   <br>
   <br>
-  <button class="cssbutton" id="acceptNameBtn" value="OK" style="" title="accept name" disabled>OK</button>
+  <button class="cssbutton" id="acceptNameBtn" value="OK" title="accept name" disabled>OK</button>
 </div>
 
 <!--Select dialog-->
-<div id="selectScr" class="white_content" align="center" style="display: none;"> <br>
-  <div id="selectMsg" style="">Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button</div>
+<div id="selectScr" class="white_content" align="center"> <br>
+  <div id="selectMsg">Please select the recipient on the list below and click <strong>OK</strong>, or invite a new user with the lower button</div>
   <div id='nameListSpace'><br>
     <br>
-    <select id='nameList' class="cssbox" size='10' style="width:30%;" title="select the recipient">
+    <select id='nameList' class="cssbox" size='10' title="select the recipient">
     </select>
     <br>
     <br>
   </div>
-  <button class="cssbutton" id="cancelSelectBtn" value="Cancel" style="" title="cancel selection">Cancel</button>
-  <button class="cssbutton" id="acceptSelectBtn" value="OK" style="" title="accept selection" disabled>OK</button>
+  <button class="cssbutton" id="cancelSelectBtn" value="Cancel" title="cancel selection">Cancel</button>
+  <button class="cssbutton" id="acceptSelectBtn" value="OK" title="accept selection" disabled>OK</button>
   <br>
   <br>
   Warning: the contents of invitations are <strong>NOT SECURE</strong><br>
   If the main box contains sensitive information, you should cancel now and try again after changing it.<br>
   <br>
-  <button class="cssbutton" id="inviteBtn" value="Invite" style="" title="make an invitation for a new user">Invite a new user</button>
+  <button class="cssbutton" id="inviteBtn" value="Invite" title="make an invitation for a new user">Invite a new user</button>
 </div>
 
 <!--Chat dialog, to enter the chat type-->
 <div id="chatDialog" class="white_content" align="center"> <br>
   <br>
   <br>
-  <span id="chatmsg" style="font-size:x-large;">Choose the type of chat, then click OK</span><br>
+  <span id="chatmsg">Choose the type of chat, then click OK</span><br>
   <br>
   <input type="radio" name="chatmodes" id="dataChat"  title="chat with text messages and file exchange" checked/>
   &nbsp; Text and files&nbsp;&nbsp;
@@ -535,16 +288,16 @@ img.intLink {
 </div>
 
 <!--Cover text entry dialog-->
-<div id="coverScr" class="white_content" align="center" style="display: none;">
+<div id="coverScr" class="white_content" align="center">
 	<br>
 	<span id="coverMsg">Please enter the cover text for hiding and click <strong>OK</strong></span>
     <br>
     <br>
-    <div contenteditable="true" align="left" class="cssbox" rows="5" autocomplete="off" id="coverBox" style="width:95%;max-height:600px" name="coverBox" placeholder="Enter the cover text here."></div>
+    <div contenteditable="true" align="left" class="cssbox" rows="5" autocomplete="off" id="coverBox" name="coverBox" placeholder="Enter the cover text here."></div>
     <br>
-    <button class="cssbutton" id="cancelCoverBtn" value="cancel" style="" title="close cover text dialog">Cancel</button>
+    <button class="cssbutton" id="cancelCoverBtn" value="cancel" title="close cover text dialog">Cancel</button>
     &nbsp;
-    <button class="cssbutton" id="acceptCoverBtn" value="OK" style="" title="accept cover text">OK</button>
+    <button class="cssbutton" id="acceptCoverBtn" value="OK" title="accept cover text">OK</button>
     <br>
     <br>
     <input type="checkbox" id="rememberCoverCheck" title="remember the text for this session">
@@ -552,22 +305,22 @@ img.intLink {
 </div>
 
 <!--Reset warning-->
-<div id="resetScr" class="white_content" align="center" style="height: 30%; display: none;"> <br>
+<div id="resetScr" class="white_content" align="center"> <br>
   <div align="center"><span id="resetMsg">If you go ahead, the current conversation with the sender will be reset<br>This may be OK if this is a new message, but if it is an old one the conversation will go out of sync</span><br>
     <br><br><br>
-    <button class="cssbutton" id="cancelResetBtn" value="cancel" style="" title="back to safety">Cancel</button>
+    <button class="cssbutton" id="cancelResetBtn" value="cancel" title="back to safety">Cancel</button>
     &nbsp;
-    <button class="cssbutton" id="acceptResetBtn" value="OK" style="" title="go ahead, I'll take teh risk">OK</button>
+    <button class="cssbutton" id="acceptResetBtn" value="OK" title="go ahead, I'll take teh risk">OK</button>
   </div>
 </div>
 
 <!--Shadow backdrop-->
-<div id="shadow" class="black_overlay" style="display: block;"> </div>
+<div id="shadow" class="black_overlay"> </div>
 
 <!--Help screen-->
-<div id="helpScr" style="max-width:1200px;margin-left:auto;margin-right:auto;display:none;">
-  <h2 style="color:lime;font-size:x-large;">Welcome to SeeOnce</h2>
-  <button class="cssbutton" id="help2mainBtnTop" value="< Back" style="float:left;" title="return to main screen (alt-M)" accesskey='m'>&#9668; Back</button>
+<div id="helpScr">
+  <h2 id="helpWelcome">Welcome to SeeOnce</h2>
+  <button class="cssbutton" id="help2mainBtnTop" value="< Back" title="return to main screen (alt-M)" accesskey='m'>&#9668; Back</button>
   <br>
   &nbsp;&nbsp;&nbsp;<span id='helpmsg'>For help on how to do things, click on each title.</span><br>
   <br>
@@ -660,7 +413,7 @@ img.intLink {
     <div id='bb8' class="helpitem">
       <p><em>Click here for instructions against a "man in the middle."</em></p>
     </div>
-    <div id="b8" class="helptext">
+    <div id="b8" class="helptext2">
       <p>The easy way: ask your correspondent to read over the phone (or in an audio or video SeeOnce chat session) a substantial portion of the special SeeOnce link made on his/her side when making a reply, or the beginning of any encrypted message, which should match what you're getting. Fifteen characters or so will be enough. But if you are communicating exclusively by email, you can send a person whom you know and who knows you the following message or something like it, which implements something called the "interlock protocol":</p>
       <p><br>
         <em>Dear So-and-So:</em><br>
@@ -676,7 +429,7 @@ img.intLink {
     <div id='bb9' class="helpitem">
       <p><em>Click here for instructions to verify the SeeOnce code.</em></p>
     </div>
-    <div id="b9" class="helptext">
+    <div id="b9" class="helptext2">
       <p>Warning: following the links in these instructions may give away your location; proceed with caution.</p>
       <p>1. Head to Online-convert.com <a href="http://hash.online-convert.com/sha256-generator" target="_blank">http://hash.online-convert.com/sha256-generator</a> and write https://passlok.com/seeonce in the second box from the top, then type Enter or click "Convert File". This will instruct this website to fetch the SeeOnce code from its server and perform a SHA256 operation on it.</p>
       <p>2. A new screen should appear, displaying the SHA256 string in several formats. Now you want to compare this with the published value, which is available at different places. If both strings are the same, the code is tamper-free. Here are a few locations where this string in published:</p>
@@ -724,19 +477,20 @@ img.intLink {
     <p><strong>4. We will never weaken the cryptography methods contained within SeeOnce at the request of a third party, private or public.</strong> This also means no backdoors will ever be added. We would rather shut down SeeOnce than be forced to do this, which would betray the very essence of our efforts. If we learn that a counterfeit version of SeeOnce is circulating, whether placed by hackers or government agencies, we will make the fact known to users.</p>
     <p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
-    <div id="canary" style="float:left;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2 (March 2017) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.2 (February 2018) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  SeeOnce 1.2.1 &#169; F. Ruiz 2017
+  SeeOnce 1.2.2 &#169; F. Ruiz 2018
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
     <li> tweetNaCl JavaScript implementation by D. Chestnykh and D. Mandiri 2015</li>
     <li> scrypt key stretching implementation by D. Chestnykh 2014</li>
     <li> lz-string compression by pieroxy 2014</li>
+    <li> DOMPurify XSS sanitizer by cure53 2017</li>
     <li> file In/Out based on an article from the This Could Be Better blog 2012</li>
     <li> webRTC chat by Muaz Khan, modified by F. Ruiz 2015</li>
     <li> unicode hiding algorithm by Adrian Crenshaw 2013</li>
@@ -745,15 +499,15 @@ img.intLink {
   This document may be used, modified or redistributed under GNU GPL license, version 3.0 or higher.
   </address>
   <br>
-  <button class="cssbutton" id="help2mainBtnBottom" value="< Back" style="float:left;" title="return to main screen (alt-M)">&#9668; Back</button>
+  <button class="cssbutton" id="help2mainBtnBottom" value="< Back" title="return to main screen (alt-M)">&#9668; Back</button>
 </div>
 
 <!--Chat screen, just an iframe for https://www.passlok.com/chat-->
-<div id="chatScr" class="block_page" style="display: none;" align="center">
-  <button class="cssbutton" id="closeChatBtn" value="< Back" style="float:left;" title="returns to Main tab">&#9668; Back to SeeOnce</button>
-  <span id="chatMsg" style="color:black;">Chat session open. Please return to the Main screen to send the invitation</span>
-  <button class="cssbutton" id="resetChatBtn" value="Reset" style="float:right;" title="reset the chat">Reset Chat</button>
-  <iframe seamless id="chatFrame" src="" style="width:100%;height:900px" border=0 frameborder=0 allowfullscreen></iframe>
+<div id="chatScr" class="block_page" align="center">
+  <button class="cssbutton" id="closeChatBtn" value="< Back" title="returns to Main tab">&#9668; Back to SeeOnce</button>
+  <span id="chatMsg">Chat session open. Please return to the Main screen to send the invitation</span>
+  <button class="cssbutton" id="resetChatBtn" value="Reset" title="reset the chat">Reset Chat</button>
+  <iframe seamless id="chatFrame" src="" border=0 frameborder=0 allowfullscreen></iframe>
 </div>
 
 <!--Body script: window reformatting, special functions-->
