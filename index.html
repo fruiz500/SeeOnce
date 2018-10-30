@@ -84,7 +84,7 @@
       <button class="cssbutton" id="replyBtn" value="Lock" title="lock message (alt-L)" accesskey="l">Encrypt</button><!--
 --><button class="cssbutton" id="hideBtn" value="Hide" title="switch recipients, or turn the message into regular text (alt-T)" accesskey="t">To...</button><!--
 --><button class="cssbutton" id="makeChatBtn" value="Chat" title="send a chat invitation by email and start chat (alt-C)" accesskey="c">Chat</button><!--
---><button class="cssbutton" id="selectBtn" value="Copy" title="copy the text in the box, or paste from clipboard">Paste</button><!--
+--><button class="cssbutton" id="selectBtn" value="Copy" title="copy the text in the box into clipboard">Copy</button><!--
 --><button class="cssbutton" id="clearBtn" value="Clear" title="clear the text in the box">Clear</button>
 		&nbsp;
    <input type="checkbox" id="fileMode" title="output is turned into files" accesskey=""/>
@@ -205,11 +205,9 @@
   <div id="keyMsg"><span id="JSmsg">JAVASCRIPT OFF, SEEONCE CANNOT RUN</span></div>
   <br>
   <br>
-  <input type="password" class="cssbox" autocomplete="off" id="pwd" name="text" placeholder="Enter your Password here" align="center">
+  <input type="password" class="cssbox" autocomplete="off" id="pwd" name="text" placeholder="Enter your Password here" align="center"><img id='showKey' class="field-icon" src="" title="click this to see/hide the Password">
   <br>
   <br>
-  <input type="checkbox" id="showKey" title="reveal box contents">
-  &nbsp;Show&nbsp;
   <button class="cssbutton" id="acceptKeyBtn" value="OK" title="accept Password" disabled>OK</button>
   <span id="fiveMin">
   <p>You will need to re-enter your Password after 5 minutes</p>
@@ -223,11 +221,9 @@
   <div id="oldKeyMsg">Looks like you changed your Password recently. If you want to continue this conversation, please supply the previous Password in the box below, then click <strong>OK</strong></div>
   <br>
   <br>
-  <input type="password" class="cssbox" id="oldPwd" name="oldPwd" placeholder="Enter the previous Password here." align="center">
+  <input type="password" class="cssbox" id="oldPwd" name="oldPwd" placeholder="Enter the previous Password here." align="center"><img id='showOldKey' class="field-icon" src="" title="click this to see/hide the Password">
   <br>
   <br>
-  <input type="checkbox" id="showOldKey" title="reveal box contents">
-  &nbsp;Show&nbsp;
   <button class="cssbutton" id="cancelOldKeyBtn" value="Cancel" title="cancel old Password">Cancel</button>
   <button class="cssbutton" id="acceptOldKeyBtn" value="OK" title="accept old Password">OK</button>
 </div>
@@ -478,12 +474,12 @@
     <p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
     <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.3 (May 2018) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.4 (October 2018) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  SeeOnce 1.2.3 &#169; F. Ruiz 2018
+  SeeOnce 1.2.4 &#169; F. Ruiz 2018
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>

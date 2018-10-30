@@ -79,7 +79,7 @@ function Encrypt(isChat){
 	var nonce = nacl.randomBytes(9),
 		nonce24 = makeNonce24(nonce),
 		text = mainBox.innerHTML.trim();
-	readKey();
+	if(!readKey()) return;	
 	if(!theirLock) selectUser();
 
 	var lastKeyCipher = locDir[theirLock][0],			//retrieve stored data
@@ -207,13 +207,13 @@ function Decrypt(){
 	}
 
 	if(type.match(/[opr]/)){
-		readKey();
+		if(!readKey()) return;	
 	
 		if(type == 'r' && !isNewLock){									//if reset, delete local data except new, after confirmation
 			if(!resetOK){
 				resetScr.style.display = 'block';
 				shadow.style.display = 'block';
-				throw('stopped for user confirmation');
+				return
 			}
 			resetOK = false;
 			locDir[theirLock][0] = locDir[theirLock][1] = null

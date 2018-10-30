@@ -11,6 +11,20 @@ body {
 	background-color: #0099cc;
 	color: #ffffff;
 }
+input:focus {
+    outline: none !important;
+    border:1px solid #ff9494;
+    box-shadow: 0 0 10px #fddada;
+}
+div:focus {
+    outline: none !important;
+    border:1px solid #ff9494;
+    box-shadow: 0 0 10px #fddada;
+}
+button:focus {
+    outline: none !important;
+    box-shadow: 0 0 10px #fddada;
+}
 .black_overlay {
 	display: none;
 	position: absolute;
@@ -127,6 +141,11 @@ body {
 	background: #D7FFD7;
 	border: 1px solid #D3D3D3;
 	overflow: auto;
+}
+.field-icon {
+  margin-left: -30px;
+  height: 18px;
+  z-index: 2;
 }
 .helpitem {
 	font-size: medium;

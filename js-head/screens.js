@@ -1,18 +1,22 @@
 ﻿//this is for showing and hiding text in key box and other password input boxes
 function showSec(){
-	if(showKey.checked){
-		pwd.type="TEXT";
+	if(pwd.type=="password"){
+		pwd.type="text";
+		showKey.src = hideImg
 	}else{
-		pwd.type="PASSWORD";
+		pwd.type="password";
+		showKey.src = eyeImg
 	}
 }
 
 //same, for old Key box
 function showOldSec(){
-	if(showOldKey.checked){
-		oldPwd.type="TEXT";
+	if(oldPwd.type=="password"){
+		oldPwd.type="text";
+		showOldKey.src = hideImg
 	}else{
-		oldPwd.type="PASSWORD";
+		oldPwd.type="password";
+		showOldKey.src = eyeImg
 	}
 }
 
@@ -20,7 +24,7 @@ function showOldSec(){
 function main2chat(token){
 	if(isAndroid && isChrome){
 		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running PassLok as a native app.');
-		if(!reply) throw('chat canceled by user')
+		if(!reply) return
 	}
 	document.getElementById('chatFrame').src = 'https://www.passlok.com/chat/index.html#' + token;				//open chat iframe; remote because of the CSP
 	makeChatBtn.textContent = 'Back to Chat';
@@ -49,7 +53,7 @@ function clearMain(){
 	changeButtons()
 }
 
-//for selecting the Main box contents and copying them to clipboard, or pasting the clipboard if there is nothing
+//for selecting the Main box contents and copying them to clipboard
 function selectMain(){
   if(mainBox.textContent.trim() != ''){
     var range, selection;
@@ -64,12 +68,14 @@ function selectMain(){
         selection.removeAllRanges();
         selection.addRange(range)
     }
-	document.execCommand('copy')
-  }else{
-	document.execCommand("paste")	;
-	selectBtn.textContent = 'Copy'
+	document.execCommand('copy');
+	mainMsg.textContent = "main Box copied to clipboard"
   }
 }
+
+//for showing.hiding password fields
+var eyeImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAASFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACrhKybAAAAF3RSTlMA5Qyz9kEFh3rd1sjDoGsfHRKwQIp+Qzv02bEAAACJSURBVCjPvVBJEoQgDMwCAfeFmfH/P51KkFKL0qN9SXdDVngRy8joHPK4XGyJbtvhohz+3G0ndHPxp0b1mojSqqyZsk+tqphFVN6S8cH+g3wQgwCrGtT3VjhB0BB26QGgN0aAGhDIZP/wUHLrUrk5g4RT83rcbxn3WJA90Y/zgs8nqY94d/b38AeFUhCT+3yIqgAAAABJRU5ErkJggg==",
+	hideImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAb1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt6r1GAAAAJHRSTlMAFNTiDPTNBvnaulFBAe/osrGBZCXSwIdnLhzIqKd7XFRLSjAYduwyAAAAuklEQVQoz62QRxbDIAwFhWkhwb07PeH+Z4wQPMjCS89KegP6AjiWSbF9oVzBQNyNlKZZ/s+wwpvLyXlkp7P5umiIcYDIwB0ZLWzrTb3GSQYbMsjDl3wj0fj6TDmpK7F60nnLeDCW2h6rgioBVZgmwlwUJoo6bkC7KRQ9iQ/MzuWtXyjKKcTpmVc8mht4Nu5NV+Y/UAKItaY7byHsOeSkp48uQSahO+kiISfD+ha/nbcLwxwFuzB1hUP5AR4JF1hy2DV7AAAAAElFTkSuQmCC";
 
 //for opening the select User screen
 function selectUser(){
@@ -101,7 +107,6 @@ function changeButtons(){
 		hideBtn.textContent = 'To...';
 		replyBtn.textContent = 'Encrypt'
 	}
-	if(text){ selectBtn.textContent = 'Copy' }else{ selectBtn.textContent = 'Paste' }
 }
 
 //reveals or hides file output options

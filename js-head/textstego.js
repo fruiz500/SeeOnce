@@ -12,7 +12,7 @@ function textStego(){
 	text = text.replace(/<(.*?)>/gi,'');
 	if(text == ""){
 		mainMsg.textContent = 'No text in the box';
-		throw("no text")
+		return
 	}
 	if(isBase64(text)){							//legal item found: encode it
 		mainMsg.innerHTML = '<span class="blink">PROCESSING</span>';		//Get blinking message started
@@ -28,34 +28,41 @@ function textStego(){
 	}
 }
 
+//retrieves base64 string from binary array. No error checking
+function fromBin(input){
+	var length = input.length - (input.length % 6),
+		output = new Array(length / 6),
+		index = 0;
+	
+	for(var i = 0; i < length; i = i+6) {
+		index = 0;
+		for(var j = 0; j < 6; j++){
+			index = 2 * index + input[i+j]
+		}
+		output[i / 6] = base64.charAt(index)
+    }
+	return output.join('')
+}
+
 //makes the binary equivalent (array) of a base64 string. No error checking
 function toBin(input){
 	var output = new Array(input.length * 6),
-		code = '';
+		code = 0,
+		digit = 0,
+		divider = 32;
 	
-    for (var i = 0; i < input.length; i++) {
-		code = ("000000" + base64.indexOf(input.charAt(i)).toString(2)).slice(-6);
-		for(var j = 0; j < 6; j++){
-			output[6 * i + j] = parseInt(code.charAt(j))
+    for(var i = 0; i < input.length; i++) {
+		code = base64.indexOf(input.charAt(i));
+		divider = 32;
+		for(var j = 0; j < 5; j++){
+			digit = code >= divider ? 1 : 0;
+			code -= digit * divider;
+			divider = divider / 2;
+			output[6 * i + j] = digit
 		}
+		output[6 * i + 5] = code;
     }
 	return output
-}
-
-//retrieves base64 string from binary array. No error checking
-function fromBin(input){
-	var length = input.length - (input.length % 6)
-	var output = new Array(length / 6),
-		codeArray = new Array(6);
-	
-	for (var i = 0; i < length; i = i+6) {
-		codeArray = input.slice(i,i+6);
-		for(var j = 0; j < 6; j++){
-			codeArray[j] = input[i+j].toString()
-		}
-		output[i / 6] = base64.charAt(parseInt(codeArray.join(''),2))
-    }
-	return output.join('')
 }
 
 //Letters encoding is based on code at: http://www.irongeek.com/i.php?page=security/unicode-steganography-homoglyph-encoder, by Adrian Crenshaw, 2013
@@ -142,7 +149,7 @@ function toLetters(text){
 		coverScr.style.display = 'block';
 		shadow.style.display = 'block';
 		if(!isMobile) coverBox.focus();
-		throw('ready for cover input')
+		return
 	}else{
 		coverScr.style.display = 'none';
 		shadow.style.display = 'none'

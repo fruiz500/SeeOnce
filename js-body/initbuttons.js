@@ -14,6 +14,10 @@ window.onload = function() {
 	}
 	if(isiOS || isSafari || isIE) makeChatBtn.style.display = 'none';		//webRTC not supported in these
 
+  //load field icons
+	showKey.src = eyeImg;
+	showOldKey.src = eyeImg;
+	
   //event listeners for buttons etc.
 	window.addEventListener('resize',textheight);
 

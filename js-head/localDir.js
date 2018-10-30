@@ -67,7 +67,7 @@ function resetPFS(){
 		var name = theirLock;
 		if ((locDir[name][0] == null) && (locDir[name][1] == null)){
 			mainMsg.textContent = 'Nothing to reset';
-			throw('no Read-once data')
+			return
 		}
 		locDir[name][0] = locDir[name][1] = null;
 		locDir[name][2] = 'reset';
@@ -93,7 +93,7 @@ function moveDB(){
 
 	}else{													//normal backup
 		callKey = 'movedb';
-		readKey();
+		if(!readKey()) return;	
 
 		//first clean out keys in locDir that don't have any real data
 		for (var Lock in locDir){

@@ -37,7 +37,7 @@ if(display){
 	var seconds = time10/10000*Math.pow(2,iter-8);			//to tell the user how long it will take, in seconds
 
 if(display){																//display the appropriate message
-	keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process';
+	keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process<br>' + hashili(pwd);
 	keyMsg.style.color = colorName
 }
 	return iter
@@ -107,6 +107,22 @@ function reduceVariants(string){
 	return string.toLowerCase().replace(/[óòöôõo]/g,'0').replace(/[!íìïîi]/g,'1').replace(/[z]/g,'2').replace(/[éèëêe]/g,'3').replace(/[@áàäâãa]/g,'4').replace(/[$s]/g,'5').replace(/[t]/g,'7').replace(/[b]/g,'8').replace(/[g]/g,'9').replace(/[úùüû]/g,'u');
 }
 
+//makes 'pronounceable' hash of a string, so user can be sure the password was entered correctly
+var vowel = 'aeiou',
+	consonant = 'bcdfghjklmnprstvwxyz';
+function hashili(string){
+	var code = nacl.hash(nacl.util.decodeUTF8(string.trim())).slice(-4),			//take last 8 bytes of the SHA512		
+		code10 = ((((code[0]*256)+code[1])*256+code[2])*256+code[3]) % 100000000,		//convert to decimal
+		output = '';
+
+	for(var i = 0; i < 4; i++){
+		var remainder = code10 % 100;								//there are 5 vowels and 20 consonants; encode every 2 digits into a pair
+		output += consonant[Math.floor(remainder / 5)] + vowel[remainder % 5];
+		code10 = (code10 - remainder) / 100
+	}
+	return output
+}
+
 //myKey is a 32-byte uint8 array private key deriving from the user's Password, no salt, for local saving. Sgn (Edwards curve) is 64-byte; DH (Motgomery curve, deriving from Sgn) is 32-byte. myLock is the public Key derived from myKeySgn. myezLock is the base36 version. Suffix "Str" means it is a base64 string.
 var	myKey,
 	KeySgn,
@@ -148,8 +164,9 @@ function readKey(){
 			keyMsg.textContent = 'Please enter your secret Password';
 			shadow.style.display = 'block'
 		}
-		throw ('Password needed')
+		return false
 	}
+	return true
 }
 
 //converts user Password into binary format, resumes operation
@@ -157,11 +174,11 @@ function acceptKey(){
 	var key = pwd.value.trim();
 	if(key == ''){
 		keyMsg.textContent = 'Please enter your Password';
-		throw("no Password")
+		return
 	}
 	if(key.length < 4){
 		keyMsg.textContent = 'This Password is too short';
-		throw("short Password")
+		return
 	}
 	if(firstInit){
 		mainMsg.innerHTML = '<span class="blink">LOADING...</span> for best speed, use at least a Medium Password'
@@ -214,7 +231,7 @@ function initSession(){
 
 	}else if(theirLock.length != 43){				//public key is malformed, bail out and display message
 		keyMsg.textContent = "The link is corrupted. Please check it and try again";
-		throw('malformed link')
+		return
 
 	}else if(!locDir[theirLock]){					//new public key, store it
 		var newEntry = JSON.parse('{"' + theirLock + '":[]}');
@@ -314,7 +331,7 @@ function PLdecrypt(cipherStr,nonce24,sharedKey,isCompressed){
 
 //encrypts a string or uint8 array with the secret Key, 12 char nonce, padding so length for ASCII input is the same no matter what. The input can also be binary, and then it won't be padded
 function keyEncrypt(plainstr){
-	readKey();																		//make sure the Key is still alive
+	if(!readKey()) return;																		//make sure the Key is still alive
 	var	nonce = nacl.randomBytes(9),
 		nonce24 = makeNonce24(nonce);
 	if(typeof plainstr == 'string'){
@@ -331,7 +348,7 @@ function keyEncrypt(plainstr){
 function keyDecrypt(cipherStr,isArray){
 	var cipher = nacl.util.decodeBase64(cipherStr);
 	if (cipher[0] == 144){
-		readKey();																	//make sure the Key is still alive
+		if(!readKey()) return;																		//make sure the Key is still alive
 		var	nonce = cipher.slice(1,10),												//ignore the marker byte
 			nonce24 = makeNonce24(nonce),
 			cipher2 = cipher.slice(10);
@@ -419,7 +436,7 @@ function failedDecrypt(){
 		mainMsg.textContent = 'Decryption has Failed. Try resetting the exchange';
 		callKey = ''
 	}
-	throw('decryption failed')
+	return
 }
 
 //restores the original data if decrypting from a new Lock fails

@@ -91,10 +91,10 @@ function detectChat(){
 function checkWebRTC(){
 	if(isSafari || isIE || isiOS){
 		mainMsg.textContent = 'Sorry, but chat is not yet supported by your browser or OS';
-		throw('browser does not support webRTC')
+		return
 	}
 	if(isAndroid){
 		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running SeeOnce as a native app.');
-		if(!reply) throw('chat canceled by user');
+		if(!reply) return
 	}
 }
