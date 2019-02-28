@@ -1,23 +1,33 @@
-﻿//this is for showing and hiding text in key box and other password input boxes
+﻿var hashiliOn = false;			//to display hashili
+
+//this is for showing and hiding text in key box and other password input boxes
 function showSec(){
 	if(pwd.type=="password"){
-		pwd.type="text";
-		showKey.src = hideImg
+		if(hashiliOn){
+			pwd.type="text";
+			showKey.src = hideImg
+		}else{hashiliOn = true}
 	}else{
 		pwd.type="password";
-		showKey.src = eyeImg
+		showKey.src = eyeImg;
+		hashiliOn = false
 	}
+	keyStrength(pwd.value,true)
 }
 
 //same, for old Key box
 function showOldSec(){
 	if(oldPwd.type=="password"){
-		oldPwd.type="text";
-		showOldKey.src = hideImg
+		if(hashiliOn){
+			oldPwd.type="text";
+			showOldKey.src = hideImg
+		}else{hashiliOn = true}
 	}else{
 		oldPwd.type="password";
-		showOldKey.src = eyeImg
+		showOldKey.src = eyeImg;
+		hashiliOn = false
 	}
+	keyStrength(oldPwd.value,true)
 }
 
 //loads the chat frame
@@ -143,17 +153,18 @@ function closeBox() {
 function cancelOldKey(){
 	closeBox();
 	mainMsg.textContent = 'Old Password canceled';
+	oldPwd.value = ''
 }
 
 function cancelChat(){
 	lockForChat = false;
 	closeBox();
-	mainMsg.textContent = 'Chat canceled';
+	mainMsg.textContent = 'Chat canceled'
 }
 
 function cancelCover(){
 	closeBox();
-	mainMsg.textContent = 'Text hide canceled';
+	mainMsg.textContent = 'Text hide canceled'
 }
 
 function acceptSelect(){
@@ -224,6 +235,8 @@ function oldPwdKeyup(evt){
 	var key = evt.keyCode || evt.which || evt.keyChar;
 	if (key == 13){acceptOldKey()}
 	else if(oldPwd.value.trim() == ''){return}
+	else{return keyStrength(oldPwd.value,true);
+	}
 }
 
 //stores new name from box or disables OK button

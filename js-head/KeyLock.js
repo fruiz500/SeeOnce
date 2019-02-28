@@ -37,8 +37,21 @@ if(display){
 	var seconds = time10/10000*Math.pow(2,iter-8);			//to tell the user how long it will take, in seconds
 
 if(display){																//display the appropriate message
-	keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process<br>' + hashili(pwd);
-	keyMsg.style.color = colorName
+	if(oldKeyScr.style.display != 'block'){
+		if(hashiliOn){
+			keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process<br>' + hashili(pwd)
+		}else{
+			keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process'
+		}
+		keyMsg.style.color = colorName
+	}else{
+		if(hashiliOn){
+			oldKeyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process<br>' + hashili(pwd)
+		}else{
+			oldKeyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process'
+		}
+		oldKeyMsg.style.color = colorName
+	}
 }
 	return iter
 };
@@ -111,11 +124,11 @@ function reduceVariants(string){
 var vowel = 'aeiou',
 	consonant = 'bcdfghjklmnprstvwxyz';
 function hashili(string){
-	var code = nacl.hash(nacl.util.decodeUTF8(string.trim())).slice(-4),			//take last 8 bytes of the SHA512		
-		code10 = ((((code[0]*256)+code[1])*256+code[2])*256+code[3]) % 100000000,		//convert to decimal
+	var code = nacl.hash(nacl.util.decodeUTF8(string.trim())).slice(-2),			//take last 4 bytes of the SHA512		
+		code10 = ((code[0]*256)+code[1]) % 10000,								//convert to decimal
 		output = '';
 
-	for(var i = 0; i < 4; i++){
+	for(var i = 0; i < 2; i++){
 		var remainder = code10 % 100;								//there are 5 vowels and 20 consonants; encode every 2 digits into a pair
 		output += consonant[Math.floor(remainder / 5)] + vowel[remainder % 5];
 		code10 = (code10 - remainder) / 100
