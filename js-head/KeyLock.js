@@ -19,7 +19,7 @@ if(display){
 		var colorName = 'pink'
 	}else if(entropy < 60){
 		var msg = 'Medium';
-		var colorName = 'orange'
+		var colorName = 'darkorange'
 	}else if(entropy < 90){
 		var msg = 'Good!';
 		var colorName = 'lime'
@@ -38,19 +38,13 @@ if(display){
 
 if(display){																//display the appropriate message
 	if(oldKeyScr.style.display != 'block'){
-		if(hashiliOn){
-			keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process<br>' + hashili(pwd)
-		}else{
-			keyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process'
-		}
-		keyMsg.style.color = colorName
+		keyMsg.textContent = 'Password strength: ' + msg + '\r\nUp to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process'
+		keyMsg.style.color = colorName;
+		hashili('keyMsg',pwd)
 	}else{
-		if(hashiliOn){
-			oldKeyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process<br>' + hashili(pwd)
-		}else{
-			oldKeyMsg.innerHTML = 'Password strength: ' + msg + '<br>Up to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process'
-		}
-		oldKeyMsg.style.color = colorName
+		oldKeyMsg.textContent = 'Password strength: ' + msg + '\r\nUp to ' + Math.max(0.01,seconds.toPrecision(3)) + ' sec. to process'
+		oldKeyMsg.style.color = colorName;
+		hashili('oldKeyMsg',pwd)
 	}
 }
 	return iter
@@ -122,18 +116,28 @@ function reduceVariants(string){
 
 //makes 'pronounceable' hash of a string, so user can be sure the password was entered correctly
 var vowel = 'aeiou',
-	consonant = 'bcdfghjklmnprstvwxyz';
-function hashili(string){
-	var code = nacl.hash(nacl.util.decodeUTF8(string.trim())).slice(-2),			//take last 4 bytes of the SHA512		
-		code10 = ((code[0]*256)+code[1]) % 10000,								//convert to decimal
-		output = '';
+	consonant = 'bcdfghjklmnprstvwxyz',
+	hashiliTimer;
+function hashili(msgID,string){
+	var element = document.getElementById(msgID);
+	clearTimeout(hashiliTimer);
+	hashiliTimer = setTimeout(function(){
+		if(!string.trim()){
+			element.innerText += ''
+		}else{
+			var code = nacl.hash(nacl.util.decodeUTF8(string.trim())).slice(-2),			//take last 4 bytes of the SHA512		
+				code10 = ((code[0]*256)+code[1]) % 10000,		//convert to decimal
+				output = '';
 
-	for(var i = 0; i < 2; i++){
-		var remainder = code10 % 100;								//there are 5 vowels and 20 consonants; encode every 2 digits into a pair
-		output += consonant[Math.floor(remainder / 5)] + vowel[remainder % 5];
-		code10 = (code10 - remainder) / 100
-	}
-	return output
+			for(var i = 0; i < 2; i++){
+				var remainder = code10 % 100;								//there are 5 vowels and 20 consonants; encode every 2 digits into a pair
+				output += consonant[Math.floor(remainder / 5)] + vowel[remainder % 5];
+				code10 = (code10 - remainder) / 100
+			}
+//	return output
+			element.innerText += '\n' + output
+		}
+	}, 1000);						//one second delay to display hashili
 }
 
 //myKey is a 32-byte uint8 array private key deriving from the user's Password, no salt, for local saving. Sgn (Edwards curve) is 64-byte; DH (Motgomery curve, deriving from Sgn) is 32-byte. myLock is the public Key derived from myKeySgn. myezLock is the base36 version. Suffix "Str" means it is a base64 string.
@@ -172,7 +176,7 @@ function readKey(){
 	if (key == ""){
 		any2key();
 		if(callKey == 'initkey'){
-			keyMsg.innerHTML = '<strong>Welcome to SeeOnce</strong><br>Please enter your secret Password'
+			keyMsg.textContent = 'Welcome to SeeOnce\r\nPlease enter your secret Password'
 		}else{
 			keyMsg.textContent = 'Please enter your secret Password';
 			shadow.style.display = 'block'
@@ -194,7 +198,14 @@ function acceptKey(){
 		return
 	}
 	if(firstInit){
-		mainMsg.innerHTML = '<span class="blink">LOADING...</span> for best speed, use at least a Medium Password'
+		mainMsg.textContent = '';
+		var blinker = document.createElement('span'),
+			msgText = document.createElement('span');
+		blinker.className = "blink";
+		blinker.textContent = "LOADING...";
+		msgText.textContent = " for best speed, use at least a Medium Key";
+		mainMsg.appendChild(blinker);
+		mainMsg.appendChild(msgText)
 	}
 	key2any();
 
@@ -439,7 +450,7 @@ function failedDecrypt(){
 		callKey = ''		
 	}else if(locDir[theirLock][2] == 'lock'){
 		restoreTempLock();
-		mainMsg.textContent = 'Messages can be decrypted <em>only once</em>';
+		mainMsg.textContent = 'Messages can be decrypted ONLY ONCE';
 		callKey = ''
 	}else if(mainBox.textContent.charAt(0) == 'k'){
 		mainMsg.textContent = 'The backup has failed to decrypt. Please check your Password';

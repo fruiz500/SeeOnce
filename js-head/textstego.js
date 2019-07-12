@@ -7,7 +7,7 @@ function isBase64(string){
 
 //This function checks for legal output and calls the encoder
 function textStego(){
-	var text = mainBox.innerHTML.replace(/&[^;]+;/g,'').replace(/<a(.*?).(plk|txt)" href="data:(.*?),/,'').replace(/">(.*?)\/a>$/,'').replace(/<br>/g,'');
+	var text = mainBox.innerHTML.replace(/&[^;]+;/g,'').replace(/<a(.*?).(plk|txt)" href="data:(.*?),/,'').replace(/">(.*?)\/a>$/,'').replace(/<br>/g,'').replace(/[\r\n]/g,'');
 	if(text.match('==')) text = text.split('==')[1];					//remove tags
 	text = text.replace(/<(.*?)>/gi,'');
 	if(text == ""){
@@ -15,7 +15,7 @@ function textStego(){
 		return
 	}
 	if(isBase64(text)){							//legal item found: encode it
-		mainMsg.innerHTML = '<span class="blink">PROCESSING</span>';		//Get blinking message started
+		blinkMsg(mainMsg);
 		setTimeout(function(){																	//the rest after a 20 ms delay
 			var turns = toLetters(text);
 			if(!rememberCoverCheck.checked) coverBox.textContent = '';

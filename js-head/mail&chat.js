@@ -40,11 +40,10 @@ function makeChat(){
 	var password = nacl.util.encodeBase64(nacl.randomBytes(32)).replace(/=+$/,'');
 	var chatRoom = makeChatRoom();
 	mainBox.textContent = 'noDate                                     ' + type + chatRoom + password;
-	mainMsg.innerHTML = '<span class="blink">ENCRYPTING</span>';
+	blinkMsg(mainMsg);
 	setTimeout(function(){
 		Encrypt(true);										//special chat output
 		changeButtons();
-//		window.open('https://www.passlok.com/chat/index.html#' + type + chatRoom + password,'_blank')
 		main2chat(type + chatRoom + password);
 		mainMsg.textContent = 'Here is the chat invitation. Send it to the other party'
 	},20);

@@ -33,17 +33,17 @@ if(isChrome){
 //clears the no JavaScript warning and displays an initial message depending on the type of source
 function showGreeting(){
 	var protocol = window.location.protocol,
-		msgStart = "<strong>Welcome to SeeOnce</strong><br>",
-		msgEnd = "<br>Enter your Password and click OK";
+		msgStart = "Welcome to SeeOnce\r\n",
+		msgEnd = "\r\nEnter your Password and click OK";
 	if(protocol == 'file:'){
-		keyMsg.innerHTML = msgStart + 'running from a local file' + msgEnd
+		keyMsg.textContent = msgStart + 'running from a local file' + msgEnd
 	}else if(protocol == 'https:'){
-		keyMsg.innerHTML = msgStart + 'downloaded from a secure server' + msgEnd
+		keyMsg.textContent = msgStart + 'downloaded from a secure server' + msgEnd
 	}else if(protocol == 'chrome-extension:'){
-		keyMsg.innerHTML = msgStart + 'running as a Chrome app' + msgEnd
+		keyMsg.textContent = msgStart + 'running as a Chrome app' + msgEnd
 	}else{
 		mainScr.style.backgroundColor = '#ffd0ff';
-		keyMsg.innerHTML = msgStart + 'WARNING: running from an insecure source!' + msgEnd
+		keyMsg.textContent = msgStart + 'WARNING: running from an insecure source!' + msgEnd
 	}
 	if(!isMobile) pwd.focus()
 
@@ -111,21 +111,33 @@ function loadFileAsURL(){
 		}
 		if(fileToLoad.type.slice(0,4) == "text"){
 			if(URLFromFileLoaded.slice(0,2) == '==' && URLFromFileLoaded.slice(-2) == '=='){
-				mainBox.innerHTML += safeHTML('<a download="' + fileName + '" href="data:,' + URLFromFileLoaded + '">' + fileName + '</a>')						//filter before adding to the DOM
+				var fileLink = document.createElement("a");
+				fileLink.download = fileName;
+				fileLink.href = "data:," + safeHTML(URLFromFileLoaded);			//filter before adding to the DOM
+				fileLink.textContent = fileName;
+				mainBox.appendChild(fileLink)
 			}else{
-				mainBox.innerHTML += DOMPurify.sanitize('<br>' + URLFromFileLoaded.replace(/  /g,' &nbsp;'))
+				var spacer = document.createElement("br"),
+					textDiv = document.createElement("div");
+				textDiv.textContent = safeHTML(URLFromFileLoaded).replace(/  /g,' &nbsp;');
+				mainBox.appendChild(spacer);
+				mainBox.appendChild(textDiv)
 			}
 		}else{
-			mainBox.innerHTML += safeHTML('<a download="' + fileName + '" href="' + URLFromFileLoaded.replace(/=+$/,'') + '">' + fileName + '</a>')
+			var fileLink = document.createElement("a");
+			fileLink.download = fileName;
+			fileLink.href = safeHTML(URLFromFileLoaded).replace(/=+$/,'');
+			fileLink.textContent = fileName;
+			mainBox.appendChild(fileLink)
 		}
 		if(fileName.match(/.(plk|txt)/)) Decrypt()				//in case it is an encrypted message, attempt to decrypt it
 	}
 	if(fileToLoad.type.slice(0,4) == "text"){
 		fileReader.readAsText(fileToLoad, "UTF-8");
-		mainMsg.innerHTML = 'This is the content of file <strong>' + fileToLoad.name + '</strong>';
+		mainMsg.textContent = 'This is the content of file: ' + fileToLoad.name;
 	}else{
 		fileReader.readAsDataURL(fileToLoad, "UTF-8");
-		mainMsg.innerHTML = 'The file has been loaded in encoded form. It is <strong>not encrypted.</strong>';
+		mainMsg.textContent = 'The file has been loaded in encoded form. It is NOT ENCRYPTED';
 	}
 }
 
@@ -139,7 +151,9 @@ function loadImage(){
 			mainMsg.textContent = 'This file is not a recognized image type';
 			return
 		}
-		mainBox.innerHTML += DOMPurify.sanitize('<img src="' + URLFromFileLoaded.replace(/=+$/,'') + '">')
+		var image = document.createElement("img");
+		image.src = safeHTML(URLFromFileLoaded).replace(/=+$/,'');
+		mainBox.appendChild(image)
 	};
 
 	fileReader.readAsDataURL(fileToLoad, "UTF-8");

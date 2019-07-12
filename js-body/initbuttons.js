@@ -151,7 +151,8 @@ window.onload = function() {
 
 	mainScr.style.display = 'block';
 	b8.style.display = 'none';
-	b9.style.display = 'none'
+	b9.style.display = 'none';
+	fileOptions.style.display = 'none'
 };
 
 var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10

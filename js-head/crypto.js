@@ -11,7 +11,7 @@ function lockItem(){
 		return
 	}
 	if((text.trim() && theirName) || firstInit){
-		mainMsg.innerHTML = '<span class="blink">ENCRYPTING</span>';
+		blinkMsg(mainMsg);
 		setTimeout(function(){
 			Encrypt();
 			changeButtons()
@@ -24,7 +24,7 @@ function lockItem(){
 }
 
 function unlockItem(){
-	mainMsg.innerHTML = '<span class="blink">DECRYPTING</span>';
+	blinkMsg(mainMsg);
 	setTimeout(function(){
 		var text = mainBox.innerHTML.replace(/&[^;]+;/g,'').replace(/<a(.*?).(plk|txt)" href="data:(.*?),/,'').replace(/">(.*?)\/a>$/,'').replace(/<br>/g,'');
 		if(text.match('==')) text = text.split('==')[1];										//remove tags
@@ -47,10 +47,16 @@ function makeInvite(){
 		nonce24 = makeNonce24(nonce),
 		text = mainBox.innerHTML.trim(),
   		cipher = PLencrypt(text,nonce24,myLock,true);
-	setTimeout(function(){mainMsg.innerHTML = "This invitation can be decrypted by anyone<br>It is <span class='blink'>NOT SECURE</span><br>Copy and send or click <strong>Email</strong>"},20);
+	setTimeout(function(){
+		mainMsg.textContent = "Invitation created. Invitations are ";
+		var blinker = document.createElement('span');
+		blinker.className = "blink";
+		blinker.textContent = "NOT SECURELY ENCRYPTED";
+		mainMsg.appendChild(blinker);
+	},20);
 
 	var outStr = nacl.util.encodeBase64(concatUint8Arrays([128],concatUint8Arrays(nonce,cipher))).replace(/=+$/,'');		//first character will be g
-	mainBox.innerHTML = "The gibberish below is my invitation to communicate securely using SeeOnce. Click on it to decrypt it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.<br><br>https://passlok.com/seeonce#==" + myezLock + "//////" + outStr + "==<br><br>If the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.<br><br>Get SeeOnce at https://passlok.com/seeonce<br><br>Chrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
+	mainBox.textContent = "The gibberish below is my invitation to communicate securely using SeeOnce. Click on it to decrypt it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.\r\n\r\nhttps://passlok.com/seeonce#==" + myezLock + "//////" + outStr + "==\r\n\r\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.\r\n\r\nGet SeeOnce at https://passlok.com/seeonce\r\n\r\nChrome app: https://chrome.google.com/webstore/detail/jbcllagadcpaafoeknfklbenimcopnfc";
 
 	closeBox();
 	replyBtn.textContent = 'Email';
@@ -144,19 +150,26 @@ function Encrypt(isChat){
 	
 	var outStr =  myezLock + '//////' + nacl.util.encodeBase64(concatUint8Arrays(typeByte,concatUint8Arrays(nonce,concatUint8Arrays(newLockCipher,cipher)))).replace(/=+$/,'');
 	
+	mainBox.textContent = '';
 	if(fileMode.checked){
+		var fileLink = document.createElement('a');
 		if(textMode.checked){
-			mainBox.innerHTML = '<a download="SO12msg.txt" href="data:,' + outStr + '"><b>SeeOnce 1.2 encrypted message (text file)</b></a>'
+			fileLink.download = "SO12msg.txt";
+			fileLink.href = "data:," + outStr;
+			fileLink.textContent = "SeeOnce 1.2 encrypted message (text file)"
 		}else{
-			mainBox.innerHTML = '<a download="SO12msg.plk" href="data:binary/octet-stream;base64,' + outStr + '"><b>SeeOnce 1.2 encrypted message (binary file)</b></a>'
+			fileLink.download = "SO12msg.plk";
+			fileLink.href = "data:binary/octet-stream;base64," + outStr;
+			fileLink.textContent = "SeeOnce 1.2 encrypted message (binary file)"
 		}
+		mainBox.appendChild(fileLink)
 	}else{
 		if(isChat){
 			mainMsg.textContent = 'Invitation to chat for ' + name + ' in the box. Copy and send or click Email'
-			mainBox.innerText = "The gibberish below is an encrypted invitation to a secure real-time chat with SeeOnce. Click on it to decrypt it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.\n\nhttps://passlok.com/seeonce#==" + outStr + "==\n\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.\n\nGet SeeOnce at https://passlok.com/seeonce\n\nAlso available in the Chrome and Android app stores.";
+			mainBox.textContent = "The gibberish below is an encrypted invitation to a secure real-time chat with SeeOnce. Click on it to decrypt it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.\r\n\r\nhttps://passlok.com/seeonce#==" + outStr + "==\r\n\r\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.\r\n\r\nGet SeeOnce at https://passlok.com/seeonce\r\n\r\nAlso available in the Chrome and Android app stores.";
 
 		}else{
-			mainBox.innerText = "The gibberish below is a secure message for you, which I have encrypted with SeeOnce. Click on it to decrypt it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.\n\nhttps://passlok.com/seeonce#==" + outStr + "==\n\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.\n\nGet SeeOnce at https://passlok.com/seeonce\n\nAlso available in the Chrome and Android app stores.";
+			mainBox.textContent = "The gibberish below is a secure message for you, which I have encrypted with SeeOnce. Click on it to decrypt it. You will be asked to supply a Password or passphrase, which won't be sent or even stored, but you must remember it. You may be asked for my name as well.\r\n\r\nhttps://passlok.com/seeonce#==" + outStr + "==\r\n\r\nIf the link fails or you want to use the standalone app instead, copy the gibberish and paste it into the SeeOnce box.\r\n\r\nGet SeeOnce at https://passlok.com/seeonce\r\n\r\nAlso available in the Chrome and Android app stores.";
 		}
 	}
 
@@ -288,10 +301,10 @@ function Decrypt(){
 		resetBtn.disabled = false;
 
 	}else if(type == 'g'){												//it's an invitation; decrypt with theirLock as Key
-	if(needsName){														//make new entry if it is new
-		isInvite = true;
-		openNewLock()
-	}
+		if(needsName){														//make new entry if it is new
+			isInvite = true;
+			openNewLock()
+		}
 
 		var nonce = fullArray.slice(1,10),
 			nonce24 = makeNonce24(nonce),
@@ -299,11 +312,20 @@ function Decrypt(){
 
 		var plain = PLdecrypt(cipher,nonce24,nacl.util.decodeBase64(theirLock),true);
 		if(!plain) failedDecrypt();
-		mainBox.innerHTML = "This is my message to you:<blockquote><em>" + decryptSanitizer(plain.trim()) + "</em></blockquote><br>SeeOnce is now ready to encrypt your reply so that only I can decrypt it.<br><br>To do this, click <strong>Clear</strong>, type your message, and then click <strong>Encrypt</strong>. Then you can copy and paste it into your favorite communications program or click <strong>Email</strong> to send it with your default email.<br><br>If this is a computer, you can use rich formatting if you click the <strong>Rich</strong> button, or load a file with the button at the lower right.<br><br>It will be possible to decrypt this reply again, but every message exchanged after that will be decrypted <em>only once</em>.";
+
+		var prefaceMsg = document.createElement('div'),
+			plainMsg = document.createTextNode(plain),
+			epilogueMsg = document.createElement('div');
+		prefaceMsg.textContent = "This is my message to you:\r\n----------\r\n";
+		epilogueMsg.textContent = "----------\r\nSeeOnce is now ready to encrypt your reply so that only I can decrypt it.\r\n\r\nTo do this, click *Clear*, type your message, and then click *Encrypt*. Then you can copy and paste it into your favorite communications program or click *Email* to send it with your default email.\r\n\r\nIf this is a computer, you can use rich formatting if you click the *Rich* button.";
+		mainBox.textContent = "";
+		mainBox.appendChild(prefaceMsg);
+		mainBox.appendChild(plainMsg);
+		mainBox.appendChild(epilogueMsg)
 		if(isNewLock){
-			mainMsg.innerHTML = 'This is a new invitation<br>It <em>can</em> be decrypted again'
+			mainMsg.textContent = 'This is a new invitation\r\nIt *can* be decrypted again'
 		}else{
-			mainMsg.innerHTML = 'Invitation message from ' + name + ' decrypted<br>It <em>can</em> be decrypted again, by <em>anyone</em>'
+			mainMsg.textContent = 'Invitation message from ' + name + ' decrypted\r\nIt *can* be decrypted again, by anyone'
 		}
 
 	}else if(type2 == 'k'){												//it's a data backup; decrypt with myKey and merge

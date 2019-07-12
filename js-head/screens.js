@@ -1,16 +1,20 @@
-﻿var hashiliOn = false;			//to display hashili
+﻿//start blinking message, for Msg elements
+function blinkMsg(element){
+	element.textContent = '';
+	var blinker = document.createElement('span');
+	blinker.className = "blink";
+	blinker.textContent = 'PROCESSING';
+	element.appendChild(blinker)
+}
 
 //this is for showing and hiding text in key box and other password input boxes
 function showSec(){
 	if(pwd.type=="password"){
-		if(hashiliOn){
-			pwd.type="text";
-			showKey.src = hideImg
-		}else{hashiliOn = true}
+		pwd.type="text";
+		showKey.src = hideImg
 	}else{
 		pwd.type="password";
-		showKey.src = eyeImg;
-		hashiliOn = false
+		showKey.src = eyeImg
 	}
 	keyStrength(pwd.value,true)
 }
@@ -18,14 +22,11 @@ function showSec(){
 //same, for old Key box
 function showOldSec(){
 	if(oldPwd.type=="password"){
-		if(hashiliOn){
-			oldPwd.type="text";
-			showOldKey.src = hideImg
-		}else{hashiliOn = true}
+		oldPwd.type="text";
+		showOldKey.src = hideImg
 	}else{
 		oldPwd.type="password";
-		showOldKey.src = eyeImg;
-		hashiliOn = false
+		showOldKey.src = eyeImg
 	}
 	keyStrength(oldPwd.value,true)
 }
