@@ -280,7 +280,7 @@ function Decrypt(){
 		}
 		var plain = PLdecrypt(cipher,nonce24,sharedKey,true);			//this one is compressed
 
-		mainBox.innerHTML = decryptSanitizer(plain.trim());
+		mainBox.innerHTML = safeHTML(plain.trim());
 		if(needRecrypt && lastKeyCipher){
 			locDir[theirLock][0] = keyEncrypt(lastKey);
 			needRecrypt = false
