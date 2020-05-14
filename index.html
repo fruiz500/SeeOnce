@@ -33,6 +33,9 @@
 <!--lz-string compression algorithm 1.4.4. https://github.com/pieroxy/lz-string-->
 <script src="js-opensrc/lz-string.js"></script>
 
+<!--DOMPurify, used to sanitize decrypted material before putting in DOM v2.0.11. https://github.com/cure53/DOMPurify-->
+<script src="js-opensrc/purify.js"></script>
+
 <!--this used to be in TweetNaCl, but they dropped it-->
 <script src="js-opensrc/nacl-util.js"></script>
 
@@ -42,7 +45,7 @@
 <script src="js-head/wordlist.js"></script>
 
 <!--Key and Lock functions-->
-<script src="js-head/KeyLock.js"></script>
+<script src="js-head/keylock.js"></script>
 
 <!--cryptographic functions-->
 <script src="js-head/crypto.js"></script>
@@ -477,18 +480,19 @@
     <p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
     <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.8 (April 2020) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.8.1 (May 2020) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  SeeOnce 1.2.8 &#169; F. Ruiz 2020
+  SeeOnce 1.2.8.1 &#169; F. Ruiz 2020
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
     <li> tweetNaCl JavaScript implementation by D. Chestnykh and D. Mandiri 2015</li>
     <li> scrypt key stretching implementation by D. Chestnykh 2014</li>
     <li> lz-string compression by pieroxy 2014</li>
+    <li> DOMPurify XSS sanitizer by cure53 2020</li>
     <li> file In/Out based on an article from the This Could Be Better blog 2012</li>
     <li> webRTC chat by Muaz Khan 2019</li>
     <li> Jitsi chat by jitsi.org 2020</li>
