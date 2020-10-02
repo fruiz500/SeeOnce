@@ -88,7 +88,7 @@ function detectChat(){
 		var reply = confirm(msgStart + "If you go ahead, the chat session will open now.\nWARNING: this involves going online, which might give away your location. If you cancel, a link for the chat will be made, which you can save and use later.");
 		if(!reply){
 			var chatLink = document.createElement('a');
-			chatLink.href = 'https://passlok.com/chat2/index.html#' + chatToken;
+			chatLink.href = 'https://passlok.com/chat/chat.html#' + chatToken;
 			chatLink.textContent = 'Right-click to open the chat';
 			mainBox.textContent = '';
 			mainBox.appendChild(chatLink);
