@@ -17,16 +17,16 @@ These are the open source libraries used in SeeOnce, which can be found in the j
 * Tweet NaCl in JavaScript: https://github.com/dchest/tweetnacl-js
 * SCRYPT key stretching, edited to make it synchronous. https://github.com/dchest/scrypt-async-js
 * lz-string compression algorithm: https://github.com/pieroxy/lz-string
-* FastClick, used only in mobile devices: https://github.com/ftlabs/fastclick
+* DOMPurify, used to sanitize decrypted material before putting in DOM v2.1.1. https://github.com/cure53/DOMPurify
 
 The SeeOnce original code is in directories js-head and js-body (note: names are the same as their PassLok equivalents, but they are different libraries):
 * this only loads two word arrays: wordlist and blacklist: dictionary_en.js
-* Key and Lock functions: KeyLock.js
+* Key and Lock functions: keylock.js
 * cryptographic functions: crypto.js
-* extra functions for mail, etc.: extra.js
+* extra functions for mail, etc.: mail&chat.js
 * local Directory functions: localDir.js
-* functions for switching screens, etc.: switching.js
-* text steganograghy: stego.js
+* functions for switching screens, etc.: screens.js
+* text steganograghy: textstego.js
 * special functions that work only with Chrome apps and extensions: Chromestuff.js
 * window reformatting, special functions: bodyscript.js
 * initialization, button connections: initbuttons.js
