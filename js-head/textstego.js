@@ -205,8 +205,7 @@ function fromLetters(text){
 	var binStr = bintemp.join(''),
 		bin = new Array(binStr.length);
 	for(var i = 0; i < binStr.length; i++) bin[i] = parseInt(binStr.charAt(i));
-	finalString = fromBin(bin.slice(0,bin.length-(bin.length % 6)));
-	mainBox.innerHTML = decryptSanitizer(finalString);
+	mainBox.textContent = fromBin(bin.slice(0,bin.length-(bin.length % 6)));
 	hideBtn.textContent = 'To...'
 }
 

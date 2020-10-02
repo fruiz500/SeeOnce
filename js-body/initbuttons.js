@@ -1,10 +1,6 @@
 ﻿// initialize things
 window.onload = function() {
 
-	if(isMobile){
-		niceEditBtn.style.display = 'none';		//no rich text editing on mobile
-		selectBtn.style.display = 'none';
-	}
 	if(isiPhone || isAndroidPhone){				//screen is narrow, so use smaller type and buttons
 		keyMsg.style.fontSize = 'medium';
 		mainMsg.style.fontSize = 'medium';
@@ -72,10 +68,6 @@ window.onload = function() {
 
    	cancelChatBtn.addEventListener('click', cancelChat);
 
-	closeChatBtn.addEventListener('click', chat2main);
-
-   	resetChatBtn.addEventListener('click', resetChat);
-
 	suggestKeyBtn.addEventListener('click', suggestKey);
 
 	cancelCoverBtn.addEventListener('click', cancelCover);
@@ -117,7 +109,7 @@ window.onload = function() {
 	document.images[6].addEventListener("click", function() {formatDoc('superscript')});
 	document.images[7].addEventListener("click", function() {formatDoc('justifyleft')});
 	document.images[8].addEventListener("click", function() {formatDoc('justifycenter')});
-	document.images[9].addEventListener("click", function() {ormatDoc('justifyright')});
+	document.images[9].addEventListener("click", function() {formatDoc('justifyright')});
 	document.images[10].addEventListener("click", function() {formatDoc('justifyfull')});
 	document.images[11].addEventListener("click", function() {formatDoc('insertorderedlist')});
 	document.images[12].addEventListener("click", function() {formatDoc('insertunorderedlist')});
@@ -131,31 +123,26 @@ window.onload = function() {
 	document.images[20].addEventListener("click", function() {formatDoc('undo')});
 	document.images[21].addEventListener("click", function() {formatDoc('redo')});
 
-//for the collapsible help items
-	aa1.addEventListener('click', function() {openHelp('a1')});
-	aa2.addEventListener('click', function() {openHelp('a2')});
-	aa3.addEventListener('click', function() {openHelp('a3')});
-	aa4.addEventListener('click', function() {openHelp('a4')});
-	aa5.addEventListener('click', function() {openHelp('a5')});
-	aa6.addEventListener('click', function() {openHelp('a6')});
-	aa7.addEventListener('click', function() {openHelp('a7')});
-	aa8.addEventListener('click', function() {openHelp('a8')});
-	aa9.addEventListener('click', function() {openHelp('a9')});
-	aa10.addEventListener('click', function() {openHelp('a10')});
-	aa11.addEventListener('click', function() {openHelp('a11')});
+//for the help screens
+	var helpHeaders = document.getElementsByClassName("helpHeading");		//add listeners to all the help headers
 
-	bb8.addEventListener('click', function() {openHelp2('b8')});
-	bb9.addEventListener('click', function() {openHelp2('b9')});
+	for (var i = 0; i < helpHeaders.length; i++) {
+		helpHeaders[i].addEventListener('click', openHelp);
+	}
+	
+	var helpHeaders2 = document.getElementsByClassName("helpHeading2");		//2nd level help
+	
+	for (var i = 0; i < helpHeaders2.length; i++) {
+		helpHeaders2[i].addEventListener('click', openHelp2);
+	}
 	
 //fixes after inline styles were moved to css file
-
 	mainScr.style.display = 'block';
-	b8.style.display = 'none';
-	b9.style.display = 'none';
 	fileOptions.style.display = 'none'
 };
 
-var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
+//var time10 = hashTime10();											//get milliseconds for 10 wiseHash at iter = 10
+var time10 = 200									//valid for core2 duo. Should be smaller for more recent machines
 
 //mainBox.innerText = decodeURI(window.location.hash).slice(1);			//correspondent's message from address bar
 var theirezLock = '', theirLock = '', theirName = '';
@@ -166,11 +153,5 @@ if(window.location.hash){
 	theirLock = changeBase(theirezLock, base36, base64, true),
 	theirName = ''
 }
-
-//this one is for mobile only. Remove for the Chrome app
-window.addEventListener('load', function() {
-	FastClick.attach(document.body);
-}, false);
-
 
 //end of body script.

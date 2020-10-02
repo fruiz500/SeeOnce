@@ -31,16 +31,12 @@ function showOldSec(){
 	keyStrength(oldPwd.value,true)
 }
 
-//loads the chat frame
+//opens a chat page
 function main2chat(token){
-	if(isAndroid && isChrome){
-		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running PassLok as a native app.');
-		if(!reply) return
+	if(token){
+		window.open("https://passlok.com/chat/chat.html#" + token);
+		mainMsg.textContent = 'Chat session open in a separate tab'
 	}
-	document.getElementById('chatFrame').src = 'https://www.passlok.com/chat/index.html#' + token;				//open chat iframe; remote because of the CSP
-	makeChatBtn.textContent = 'Back to Chat';
-	makeChatBtn.style.color = 'orange';
-	chatScr.style.display = 'block'
 }
 
 //to close chat frame
@@ -327,29 +323,28 @@ function toggleRichText() {
 	textheight();
 }
 
-//closes everything else in help
-function openHelp(theID){
-	var helpItems = document.getElementsByClassName('helptext');
-	for(var i=0; i < helpItems.length; i++){
-		helpItems[i].style.display = 'none'
+//for opening one item at a time in the Help screen, with animation
+function openHelp(){
+	var helpItems = document.getElementsByClassName('helpHeading');
+	for(var i = 0; i < helpItems.length; i++){					//hide all help texts
+		var panel = helpItems[i].nextElementSibling;
+		panel.style.maxHeight = null;
 	}
-	document.getElementById(theID).style.display = "block";
-	if(isMobile){									//scroll to the item
-		location.href = '#';
-		location.href = '#a' + theID
+	helpItems = document.getElementsByClassName('helpHeading2');
+	for(var i = 0; i < helpItems.length; i++){					//hide also secondary texts
+		var panel = helpItems[i].nextElementSibling;
+		panel.style.maxHeight = null;
 	}
+	var panel = this.nextElementSibling;							//except for the one clicked
+	panel.style.maxHeight = panel.scrollHeight + "px"	     
 }
-//2nd level
-function openHelp2(theID){
-	var helpItems = document.getElementsByClassName('helptext2');
-	for(var i=0; i < helpItems.length; i++){
-		helpItems[i].style.display = 'none'
-	}
-	document.getElementById(theID).style.display = "block";
-	if(isMobile){									//scroll to the item
-		location.href = '#';
-		location.href = '#a' + theID
-	}
+
+//for secondary help items
+function openHelp2(){
+	var panel = this.nextElementSibling,
+		parent = this.parentElement;
+	panel.style.maxHeight = panel.scrollHeight + "px";
+	setTimeout(function(){parent.style.maxHeight = parent.scrollHeight + "px"},301)
 }
 
 //narrower buttons for phones
