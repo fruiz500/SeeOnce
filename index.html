@@ -21,7 +21,7 @@
 <!--License notice and SSL force-->
 <script src="js-head/license.js"></script>
 
-<!--Tweet NaCl crypto library 1.0.1 by Dmitry Chestnykh. https://github.com/dchest/tweetnacl-js-->
+<!--Tweet NaCl crypto library 1.0.3 by Dmitry Chestnykh. https://github.com/dchest/tweetnacl-js-->
 <script src="js-opensrc/nacl.js"></script>
 
 <!--ed2curve-js conversion of curve coordinates 0.2.1 by Dmitry Chestnykh. https://github.com/dchest/ed2curve-js-->
@@ -33,7 +33,7 @@
 <!--lz-string compression algorithm 1.4.4. https://github.com/pieroxy/lz-string-->
 <script src="js-opensrc/lz-string.js"></script>
 
-<!--DOMPurify, used to sanitize decrypted material before putting in DOM v2.1.1. https://github.com/cure53/DOMPurify-->
+<!--DOMPurify, used to sanitize decrypted material before putting in DOM v2.3.6. https://github.com/cure53/DOMPurify-->
 <script src="js-opensrc/purify.js"></script>
 
 <!--this used to be in TweetNaCl, but they dropped it-->
@@ -174,6 +174,7 @@
 <img class="intLink" title="Load a file" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAATlBMVEUAAAAAAAD19fVcXFwbGxsTExP8/PzT09NxcXFaWlo4ODg1NTUEBAT5+fnw8PDr6+vU1NTIyMi+vr6Xl5dsbGxnZ2dXV1dISEghISEMDAw0f0rSAAAAAXRSTlMAQObYZgAAAFBJREFUGNO9yEkOgCAQBMBmUxDc9/9/VJ2EjgkHb9axcJuceqQRtMq4aAdWkDr6xtW5jJRFx2MBu23fdS7eG6Vz0U8VytrKmhMnVoDQlOfbBQLIAl4FF2fyAAAAAElFTkSuQmCC" />
 </label>
 <input type="file" id="mainFile"/>
+<img class="intLink" title="Download files" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAaVBMVEUAAAAAAACvr6+AgIAgICD9/f0XFxf4+Ph2dnYGBgbLy8uysrKrq6t+fn7v7+/r6+vR0dG5ubmtra2fn59dXV0nJyff39/Y2NjV1dXFxcXBwcG3t7empqaDg4Nzc3NsbGxbW1tVVVUPDw+yjklHAAAAAXRSTlMAQObYZgAAAHhJREFUGNPNzMkKgzAUheF7NKZJ2ljr0NZ5eP+HFJIgXhDEnf/mwLc4dFo5JweayOVxxELegdOyIyEpn96Mv0BRiQL4EeupoTXwYuida6oy717/yv9/MLitGzcWUWBFu+LALeceudsMwsZbtoIhlwJrpJCJdhm63AoNwARvWGrNBAAAAABJRU5ErkJggg==" />
   </div>
   </div>
   <div id="mainBox" contentEditable="true" class="cssbox" placeholder="Write your reply here, then click Encrypt, and then optionally Email or Hide. You will have to click To... first if this is not a reply. Click the Rich button to insert images and files."></div>
@@ -399,9 +400,8 @@
   <div class="helpText">
     <p>Chat has its own secure file-sending process, so we refer here to sending files by email. You have two choices:</p>
     <p>1. Encrypt the files using AES with a utility such as <a href="http://www.7-zip.org/" target="_blank">7-zip</a> (Windows), <a href="http://www.kekaosx.com/" target="_blank">Keka</a> (OSX), or p7zip (Linux), then encrypt the encryption password inside a URSA-encrypted message, and attach the encrypted archive to your email.</p>
-    <p>2. You can also load files using the icon at the right corner of the rich text toolbar (you may need toi display the toolbar by clicking <b>Rich</b>), which will load each file as a link, and then encrypt them as a regular message. After decryption, the recipient can save each file by right-clicking it and selecting Save Link as... If the file is an image and you want it to display as such, click the icon directly to the left of that one.</p>
+    <p>2. You can also load files using the icon second from the right of the rich text toolbar (you may need to display the toolbar by clicking <b>Rich</b>), which will load each file as a link, and then encrypt them as a regular message. After decryption, the recipient can save all files with the toolbar button on the right, or each file by right-clicking it and selecting Save Link as... If the file is an image and you want it to display as such, click the icon directly to the left of the one for loading files.</p>
     <p>If the file loaded is text, it will load as text rather than as a link, which may be a problem if the file is large.</p>
-    <p>Be aware that Chrome cannot save files larger than 1.5MB, even if they have been correctly decrypted. Firefox and Safari don't have this limitation.</p>
   </div>
   <hr>
   <div class="helpHeading">
@@ -480,19 +480,19 @@
     <p><strong>Notice:</strong> Since SeeOnce is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of SeeOnce, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>SeeOnce contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using SeeOnce.</p>
     <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.9 (October 2020) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 1.2.11 (April 2022) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  SeeOnce 1.2.9 &#169; F. Ruiz 2020
+  SeeOnce 1.2.11 &#169; F. Ruiz 2022
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
     <li> tweetNaCl JavaScript implementation by D. Chestnykh and D. Mandiri 2015</li>
     <li> scrypt key stretching implementation by D. Chestnykh 2014</li>
     <li> lz-string compression by pieroxy 2014</li>
-    <li> DOMPurify XSS sanitizer by cure53 2020</li>
+    <li> DOMPurify XSS sanitizer by cure53 2022</li>
     <li> file In/Out based on an article from the This Could Be Better blog 2012</li>
     <li> webRTC chat by Muaz Khan 2019</li>
     <li> Jitsi chat by jitsi.org 2020</li>

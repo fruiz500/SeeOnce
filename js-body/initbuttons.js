@@ -122,6 +122,7 @@ window.onload = function() {
 	document.images[19].addEventListener("click", function() {formatDoc('removeFormat')});
 	document.images[20].addEventListener("click", function() {formatDoc('undo')});
 	document.images[21].addEventListener("click", function() {formatDoc('redo')});
+	document.images[24].addEventListener("click", saveFiles);
 
 //for the help screens
 	var helpHeaders = document.getElementsByClassName("helpHeading");		//add listeners to all the help headers
