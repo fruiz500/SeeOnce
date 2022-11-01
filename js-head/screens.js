@@ -34,7 +34,7 @@ function showOldSec(){
 //opens a chat page
 function main2chat(token){
 	if(token){
-		window.open("https://passlok.com/chat/chat.html#" + token);
+		chrome.tabs.create({url: "chat.html#" + token});					//use extension tab so it's isolated from other extensions
 		mainMsg.textContent = 'Chat session open in a separate tab'
 	}
 }

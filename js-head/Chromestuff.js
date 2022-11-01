@@ -54,7 +54,7 @@ function retrieveAllSync(){
 					chrome.storage.sync.get(syncName2.toLowerCase(), function (obj) {
 						lockdata2 = obj[syncName2.toLowerCase()];
 						locDir[ChromeSyncList[i]] = JSON.parse(lockdata2);
-						localStorage['locDir'] = JSON.stringify(locDir);
+						chrome.storage.local['locDir'] = JSON.stringify(locDir);
 					});
 					loop();					
     			},
