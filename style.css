@@ -50,6 +50,8 @@ button:focus {
 	z-index: 1002;
 	overflow: auto;
 	background-color: #0099cc;
+	text-align: center;
+	margin: auto;
 }
 .block_page {
 	display: none;
@@ -63,6 +65,15 @@ button:focus {
 	z-index: 1002;
 	overflow: auto;
 	background-color: white;
+	margin: auto;
+}
+.centered {
+	text-align: center;
+	margin: auto;
+}
+.left {
+	text-align: left;
+	margin: auto;
 }
 .cssbutton {
 	-webkit-border-radius: 0;
@@ -110,7 +121,6 @@ button:focus {
 	border: 0px;
 	outline: none;
 	white-space: nowrap;
-	-webkit-user-select: none;
 	cursor: pointer;
 	text-decoration: none;
 	color: #CACACA;
@@ -130,7 +140,6 @@ button:focus {
 	padding: 15px;
 	text-decoration: none;
 	width: 100%;
-	-webkit-appearance: none;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -250,6 +259,7 @@ input[type=checkbox] {
 	-moz-transform: scale(1.7); /* FF */
 	-webkit-transform: scale(1.7); /* Safari and Chrome */
 	-o-transform: scale(1.7); /* Opera */
+	transform: scale(1.7);
 	padding: 0px;
 	cursor: pointer;
 	border: 1px solid #eeeeee;
@@ -260,6 +270,7 @@ input[type=radio] {
 	-moz-transform: scale(1.7); /* FF */
 	-webkit-transform: scale(1.7); /* Safari and Chrome */
 	-o-transform: scale(1.7); /* Opera */
+	transform: scale(1.7);
 	padding: 0px;
 	cursor: pointer;
 	border: 1px solid #eeeeee;
@@ -267,8 +278,10 @@ input[type=radio] {
 select {
 	-webkit-appearance: button;
 	-moz-appearance: button;
+	appearance: button;
 	-webkit-user-select: none;
 	-moz-user-select: none;
+	user-select: none;
 	font-size: medium;
 	width: 30%;
 	margin: 0;

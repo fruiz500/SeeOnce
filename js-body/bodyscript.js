@@ -130,6 +130,8 @@ function loadFileAsURL(){
 			fileLink.textContent = fileName;
 			mainBox.appendChild(fileLink)
 		}
+		mainFile.type = '';
+        mainFile.type = 'file'            //reset file input
 		if(fileName.match(/.(plk|txt)/)) Decrypt()				//in case it is an encrypted message, attempt to decrypt it
 	}
 	if(fileToLoad.type.slice(0,4) == "text"){
@@ -153,7 +155,9 @@ function loadImage(){
 		}
 		var image = document.createElement("img");
 		image.src = decryptSanitizer(URLFromFileLoaded).replace(/=+$/,'');
-		mainBox.appendChild(image)
+		mainBox.appendChild(image);
+		imgFile.type = '';
+        imgFile.type = 'file'            //reset file input
 	};
 
 	fileReader.readAsDataURL(fileToLoad, "UTF-8");
